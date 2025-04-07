@@ -1,6 +1,5 @@
-# LibraryProject
+# Online Library Website
 
-Online Library Website
 ##Team Members:
 
 - Mariam
