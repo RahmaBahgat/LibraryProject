@@ -1,0 +1,144 @@
+/* Variables */
+:root {
+  --brownish-gray: #322d29;
+  --reddish-brown: #72383d;
+  --muted-beige: #ac9c8d;
+  --light-gray: #d9d9d9;
+  --cream: #efe9e1;
+
+  --roboto: "Roboto", sans-serif;
+  --poppins: "Poppins", sans-serif;
+}
+
+/* Font Classes */
+.roboto {
+  font-family: "Roboto", sans-serif;
+}
+.poppins {
+  font-family: "Poppins", sans-serif;
+}
+
+/* Color Classes */
+.brownish-gray {
+  color: #322d29;
+}
+.reddish-brown {
+  color: #72383d;
+}
+.muted-beige {
+  color: #ac9c8d;
+}
+.light-gray {
+  color: #d9d9d9;
+}
+.cream {
+  color: #efe9e1;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--light-gray);
+}
+
+img {
+  width: 100%;
+}
+
+.content {
+  padding: 50px 0;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  margin: auto;
+  width: 90%;
+  max-width: 1200px;
+
+  box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  overflow: auto;
+}
+
+.img-container {
+  display: flex;
+  background-color: blue;
+  width: 42.5%;
+}
+.details-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  background-color: var(--cream);
+  padding: 3%;
+  width: 55%;
+}
+
+.details-container .book-category {
+  font-family: var(--poppins);
+  color: var(--brownish-gray);
+  margin: 0;
+  opacity: 65%;
+}
+.details-container .book-title {
+  font-family: var(--roboto);
+  color: var(--reddish-brown);
+  margin: 10px 0;
+  font-weight: 900;
+  font-size: 35px;
+}
+.details-container .book-author {
+  font-family: var(--roboto);
+  color: var(--brownish-gray);
+  margin: 0 0 25px 0;
+}
+.details-container .book-description {
+  font-family: var(--poppins);
+  color: var(--brownish-gray);
+  font-weight: 600;
+  margin: 5px 0;
+}
+.details-container .p-description {
+  font-family: var(--poppins);
+  color: var(--brownish-gray);
+  margin: 0;
+  padding-bottom: 5px;
+  border-bottom: solid var(--cream) 2px;
+  font-size: 14px;
+  max-width: 80%;
+}
+
+.details-container .btns-avl {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.details-container .btns-avl .btn {
+  color: var(--cream);
+  background-color: var(--reddish-brown);
+  font-family: var(--poppins);
+  font-size: 14px;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 16px;
+  transition: all 150ms;
+  cursor: pointer;
+}
+.details-container .btns-avl .btn:hover {
+  background-color: #55292d;
+}
+.details-container .btns-avl .icons {
+  font-family: var(--poppins);
+}
+.details-container .btns-avl .icn {
+  font-size: 20px;
+}
+.details-container .btns-avl .fa-xmark {
+  color: rgb(192, 4, 4);
+}
+.details-container .btns-avl .fa-check {
+  color: rgb(21, 177, 21);
+}
