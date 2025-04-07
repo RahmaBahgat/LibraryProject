@@ -1,19 +1,5 @@
 # Online Library Website
 
-## Team Members:
-
-- Mariam
-
-- Rahma
-
-- Doha
-
-- Maya
-
-- Mazen 
-
-- Zeyad
-
 ## Project Overview
 The Online Library Website allows users to browse and borrow books online. It features two user roles: Admin and User.
 
@@ -42,3 +28,17 @@ The website includes essential features like authentication, book management, an
 - Responsive Navigation Bar (changes based on user role)
 - User Profile Management
 - Book Review System (Users can review books)
+
+## Team Members:
+
+- Mariam
+
+- Rahma
+
+- Doha
+
+- Maya
+
+- Mazen 
+
+- Zeyad
