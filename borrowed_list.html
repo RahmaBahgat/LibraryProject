@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Borrowed Books</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="borrowed_list.html">My Borrowed Books</a></li>
+                <li><a href="login.html">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>My Borrowed Books</h1>
+
+        <!-- Borrowed Books Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th>Borrowed On</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="borrowed-books-list">
+                <!-- Books will be dynamically inserted here by JavaScript -->
+            </tbody>
+        </table>
+
+        <footer>
+            <p>&copy; 2025 Online Library</p>
+        </footer>
+    </main>
+
+</body>
+</html>
