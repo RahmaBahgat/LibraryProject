@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Page</title>
+
+    <!-- CSS Style -->
+    <link rel="stylesheet" href="bookPage.css" />
+
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Roboto Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section class="content">
+      <div class="container">
+        <div class="img-container">
+          <img src="books/1984 by George Orwell.jpeg" alt="1984 by George Orwell.jpeg" />
+        </div>
+
+        <div class="details-container">
+          <div class="head-details">
+            <h5 class="book-category">Dystopian Fiction</h5>
+            <h2 class="book-title">1984</h2>
+            <h4 class="book-author">George Orwell</h4>
+          </div>
+          <div class="description">
+            <p class="book-description">Book Description :</p>
+            <p class="p-description">
+              "1984" is a dystopian novel set in a totalitarian society controlled by the Party,
+               led by the omnipresent and omnipotent figure known as Big Brother. <br> The story follows Winston Smith,
+               an employee of the Ministry of Truth, who begins to question the oppressive regime and its control over every aspect of life, 
+               including language, thought, and history. <br> The novel explores themes such as surveillance, censorship, individuality versus state control, 
+               and the manipulation of truth. Orwell's chilling vision of a future society dominated by propaganda and authoritarianism remains relevant and thought-provoking, 
+               warning against the dangers of absolute power and the loss of personal freedoms.
+            </p>
+
+            <div class="btns-avl">
+              <div class="btns">
+                <button id="borrow-btn" class="btn" disabled>Borrow</button>
+                <button id="fav-btn" class="btn" disabled>
+                  Add to Favorites
+                </button>
+              </div>
+
+              <div class="icons">
+                <span class="avl">Is it Available?</span>
+                <i class="fa-solid fa-xmark icn"></i>
+                <i class="fa-solid fa-check icn"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

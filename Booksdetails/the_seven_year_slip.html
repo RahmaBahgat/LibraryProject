@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Page</title>
+
+    <!-- CSS Style -->
+    <link rel="stylesheet" href="bookPage.css" />
+
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Roboto Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section class="content">
+      <div class="container">
+        <div class="img-container">
+          <img src="books/The Seven Year Slip.jpeg" />
+        </div>
+
+        <div class="details-container">
+          <div class="head-details">
+            <h5 class="book-category"> Romance, Fantasy, Contemporary Fiction</h5>
+            <h2 class="book-title">The Seven Year Slip</h2>
+            <h4 class="book-author"> Ashley Poston</h4>
+          </div>
+          <div class="description">
+            <p class="book-description">Book Description :</p>
+            <p class="p-description">
+              The Seven Year Slip is a novel that combines elements of romance and fantasy. <br>
+              The story follows Clementine West, who, after a breakup, inherits her grandmother's a partment in New York City. <br>
+              There, she discovers a mysterious diary that allows her to communicate with a man from seven years in the past. <br>
+              As she navigates this unexpected connection, Clementine explores themes of love, time, and self-discovery. <br>
+              The novel weaves together past and present, creating a unique narrative that keeps readers engaged.
+            </p>
+
+            <div class="btns-avl">
+              <div class="btns">
+                <button id="borrow-btn" class="btn" disabled>Borrow</button>
+                <button id="fav-btn" class="btn" disabled>
+                  Add to Favorites
+                </button>
+              </div>
+
+              <div class="icons">
+                <span class="avl">Is it Available?</span>
+                <i class="fa-solid fa-xmark icn"></i>
+                <i class="fa-solid fa-check icn"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
