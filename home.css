@@ -1,4 +1,4 @@
-/* style.css */
+/* home.css */
 :root {
     --dark-brown: #322D29;
     --brand-red: #72383D;
@@ -61,24 +61,34 @@ body {
 
 .hero {
     display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 70vh;
     padding: 4rem 5%;
-    background: linear-gradient(45deg, var(--cream) 50%, var(--warm-taupe) 50.1%);
+    background: linear-gradient(45deg, var(--cream) 50%, var(--warm-taupe) 50%);
 }
 
 .hero-content {
-    text-align: center;
+    max-width: 600px;
 }
 
 .hero-content h1 {
     font-size: 3.5rem;
     color: var(--dark-brown);
-    margin-bottom: 1.5rem;
+    /* margin-bottom: 1.5rem; */
     font-family: 'Playfair Display', serif;
+    padding: 30px;
+}
+
+.hero-content p {
+    font-size: 1.3rem;
+    color: var(--dark-brown);
+    padding: 30px;
+
 }
 
 .book-search {
     position: relative;
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 
 .book-search input {
@@ -104,26 +114,35 @@ body {
 
 .hero-decor {
     position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
 }
 
 .book-stack {
     position: absolute;
     width: 300px;
     height: 400px;
-    background: url('https://images.unsplash.com/photo-1495446815901-a7297e633e8d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+    background: url('book8.jpeg') center/cover;
     border-radius: 10px;
     box-shadow: 10px 10px 30px rgba(0,0,0,0.2);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
 }
 
-.floral-accent {
+/* .floral-accent {
     position: absolute;
-    bottom: -30px;
-    right: -30px;
-    width: 200px;
-    height: 200px;
-    background: url('floral-pattern.png') center/contain;
+    bottom: -60px;
+    right: 0;
+    width: 500px;
+    height: 500px;
+    background: url('flower.png') no-repeat right bottom/contain;
     opacity: 0.2;
-}
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+} */
 
 .featured-section {
     padding: 4rem 5%;
