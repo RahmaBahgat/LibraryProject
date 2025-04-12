@@ -15,7 +15,7 @@
 }
 
 body {
-  background: #f5f0e8;
+  background: var(--cream);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -147,8 +147,8 @@ body {
   border-color: #AC9C8D;
 }
 .add-book-form {
-  max-width: 400px; /* Set a fixed width for the form */
-  margin: 0 auto; /* Center the form */
+  max-width: 400px; 
+  margin: 0 auto;
 }
 
 .add-book-btn {
@@ -177,16 +177,16 @@ body {
   background: #f5f0e8;
   padding: 15px;
   border-radius: 8px;
-  margin-bottom: 30px; /* Consistent spacing */
+  margin-bottom: 30px; 
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   width: fit-content;
 }
 
 
-/* Your card styles with improved transitions */
+
 .card {
   width: 220px;
-  height: 254px;
+  height: 280px;
   border-radius: 4px;
   background: #f5f0e8;
   display: flex;
@@ -195,7 +195,7 @@ body {
 }
 
 .card p {
-  height: 88%;
+  height: 100%;
   flex: 1;
   overflow: hidden;
   cursor: pointer;
@@ -227,7 +227,7 @@ body {
   width: 100%;
 }
 
-/* Improved image handling */
+
 .card p span img.spine {
   height: 100%;
   width: auto;
@@ -238,7 +238,7 @@ body {
 }
 
 .card p span img.cover {
-  width: 100%;
+  width: 80%;
   height: 100%;
   object-fit: contain;
   opacity: 0;
@@ -247,7 +247,7 @@ body {
   position: absolute;
 }
 
-/* Enhanced hover states */
+
 .card p:hover span {
   transform: rotate(0deg);
 }
@@ -262,18 +262,18 @@ body {
   transform: rotate(0deg) scale(1);
 }
 
-/* Add this to your CSS */
+
 .static-card .spine {
-  display: none; /* Hide spine */
+  display: none; 
 }
 .static-card .cover {
-  opacity: 1 !important; /* Show cover */
-  transform: rotate(0) !important; /* No rotation */
+  opacity: 1 !important; 
+  transform: rotate(0) !important; 
 }
 .static-card:hover {
-  flex: 1 !important; /* Disable expansion */
+  flex: 1 !important; 
 }
-/* Add this to your CSS file */
+
 .static-book {
   pointer-events: none;
 }
@@ -289,23 +289,26 @@ body {
 }
 .static-card {
   width: 220px;
-  height: 254px;
+  height: 280px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; 
+  align-items: center; 
   overflow: hidden;
+  margin: 0 auto; 
 }
 
 .static-card img {
-  width: 70%;
-  height: auto;
-  max-height: 100%;
+  width: 80%; 
+  height: 100%; 
+  max-width: 100%; 
   object-fit: contain;
+  display: block; 
+  margin: 0 auto; 
 }
 .books-row {
   display: flex;
-  align-items: flex-start; /* Aligns cards at the top */
-  margin-bottom: 30px; /* Space below the row */
+  align-items: flex-start; 
+  margin-bottom: 30px;
 }
 /* Horizontal Books Container */
 .horizontal-group {
@@ -324,7 +327,7 @@ body {
 }
 
 .adjacent-book {
-  margin-top: 0; /* Remove default top margin */
+  margin-top: 0; 
 }
 .book-info {
   margin-top: 10px;
@@ -384,7 +387,7 @@ body {
   right: 0;
   z-index: 0;
 }
-/* Tiny Horizontal Form */
+
 .add-book-form {
   max-width: 500px;
   margin: 0 auto;
@@ -430,5 +433,102 @@ body {
   padding: 6px 12px;
   font-size: 12px;
   margin-left: 5px;
-  height: 31px; /* Matches input height */
+  height: 31px; 
+}
+.manage-books-btn {
+  background-color: var(--brand-red);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Quicksand';
+  transition: all 0.2s ease;
+}
+
+.manage-books-btn:hover {
+  background-color: var(--brand-red);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
+}
+
+.manage-books-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+.cover-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  text-align: center; 
+}
+
+.cover-link img {
+  width: 80%;
+  height: auto;
+  border: none;
+}
+
+.static-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.book-link {
+display: flex;
+position: relative;
+height: 110%;
+width: 100%;
+justify-content: center;
+align-items: center;
+}
+
+/* Spine image */
+.book-link .spine {
+height: 100%;
+width: auto;
+transform: rotate(-90deg);
+transition: all 0.5s ease-in-out;
+position: absolute;
+object-fit: contain;
+}
+
+.book-link .cover {
+width: 100%;
+height: 100%;
+object-fit: contain;
+opacity: 0;
+transform: rotate(0deg) scale(0.9);
+transition: all 0.5s ease-in-out;
+position: absolute;
+}
+
+.card p:hover .book-link .spine {
+opacity: 0;
+transform: rotate(-90deg) scale(0.8);
+}
+
+.card p:hover .book-link .cover {
+opacity: 1;
+transform: rotate(0deg) scale(1);
+}
+.container h1 {
+color: var(--brand-red);
+position: relative;
+display: inline-block;
+font-family: 'Merriweather';
+padding-bottom: 10px;
+}
+
+.container h1::after {
+content: '';
+  bottom: 0;
+left: 0;
+width: 100%;
+height: 3px;
+background: var(--warm-taupe);
 }
