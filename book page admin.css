@@ -18,10 +18,10 @@
     background: var(--cream);
     font-family: 'Merriweather', serif;
     min-height: 100vh;
-    display: flex;
+    display: block;
     justify-content: center;
     align-items: center;
-    padding: 2rem;
+    padding: 0rem;
   }
   
   /* Container Layout */
@@ -33,6 +33,7 @@
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
     border-radius: 20px;
     overflow: hidden;
+    margin: 2rem auto
   }
   
   /* Form Section */
@@ -177,4 +178,59 @@
     background: url('bookstore.jpg') center/cover no-repeat;
     min-height: 100%;
   }
+
+
+  .navbar {
+    background: var(--dark-brown);
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.brand {
+    color: var(--cream);
+    font-size: 2rem;
+    font-weight: 700;
+    text-decoration: none;
+    font-family: 'Playfair Display', serif;
+}
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-links a {
+    color: var(--warm-taupe);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--cream);
+}
+
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .search-bar {
+        width: 100%;
+        margin: 0;
+    }
+}
+
   
