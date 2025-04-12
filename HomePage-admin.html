@@ -17,7 +17,6 @@
             <button><i class="fas fa-search"></i></button>
         </div>
         <ul class="nav-links">
-            <li><a href="#"><i class="fas fa-book-open"></i> My Books</a></li>
             <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
             <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
             <link href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap" trel="stylesheet">
@@ -30,12 +29,14 @@
 
   <div class="container">
     <center>
-      <h1>Admin access granted. Proceed to enlighten the shelves!</h1>
+      <h1>Access confirmed. The archive awaits your command </h1>
 
       <br>
 <br>
 
-<button class="manage-books-btn">Manage Books</button>
+<a href="book page admin.html">
+  <button class="manage-books-btn">Manage Books</button>
+</a>
       
       <!-- <div class="add-book-container">
         <div class="add-book-form">
@@ -74,18 +75,30 @@
     <div class="horizontal-group">
       <div class="series-card">
         <div class="card">
-          <p><span>
-            <img class="spine" src="books/Fouth Wing spine.jpg" alt="Fourth Wing Spine">
-            <img class="cover" src="books/Fourth Wing (International Edition).jpeg" alt="Fourth Wing Cover">
-          </span></p>
-          <p><span>
-            <img class="spine" src="books/Iron Flame spine.png" alt="Iron Flame Spine">
-            <img class="cover" src="books/Iron Flame (The Empyrean Book 2).jpeg" alt="Iron Flame Cover">
-          </span></p>
-          <p><span>
-            <img class="spine" src="books/Onyx Storm spine.jpg" alt="Onyx Storm Spine">
-            <img class="cover" src="books/Onyx Storm von Rebecca Yarros - Taschenbuch - 978-0-349-43707-1 _ Thalia.jpeg" alt="Onyx Storm Cover">
-          </span></p>
+          <p>
+            <span>
+              <a href="booksdetails/onyx_storm.html" class="book-link">
+                <img class="spine" src="books/Fouth Wing spine.jpg" alt="Fourth Wing Spine">
+                <img class="cover" src="books/Fourth Wing (International Edition).jpeg" alt="Fourth Wing Cover">
+              </a>
+            </span>
+          </p>
+          <p>
+            <span>
+              <a href="booksdetails/onyx_storm.html" class="book-link">
+                <img class="spine" src="books/Iron Flame spine.png" alt="Fourth Wing Spine">
+                <img class="cover" src="books/Iron Flame (The Empyrean Book 2).jpeg" alt="Fourth Wing Cover">
+              </a>
+            </span>
+          </p>
+          <p>
+            <span>
+              <a href="booksdetails/onyx_storm.html" class="book-link">
+                <img class="spine" src="books/Onyx Storm spine.jpg" alt="Fourth Wing Spine">
+                <img class="cover" src="books/Onyx Storm von Rebecca Yarros - Taschenbuch - 978-0-349-43707-1 _ Thalia.jpeg" alt="Fourth Wing Cover">
+              </a>
+            </span>
+          </p>
         </div>
         
         <div class="book-info">Rebecca Yarros</div>
@@ -94,37 +107,43 @@
       
       <!-- The Kite Runner -->
       <div class="standalone-card">
-        <div class="static-card">
-          <img src="books/عداء الطائرة الورقية.jpeg" alt="عداء الطائرةالورقية ">
-        </div>
-        <br>
-        <div class="book-info">خالد حسيني
-        </div>
+        
+          <div class="static-card">
+            <a href="Booksdetails/عداء الطائرة الورقية.html" class="card-link">
+            <img src="books/عداء الطائرة الورقية.jpeg" alt="عداء الطائرة الورقية">
+          </a>
+          </div>
+          <div class="book-info">خالد حسيني</div>
+        </a>
       </div>
-
-      <!-- Never Lie Book -->
+      <!-- Never Lie -->
       <div class="standalone-card">
+        
         <div class="static-card">
-          <img src="books/Never Lie.jpeg" alt="Never Lie">
+          <a href="Booksdetails/onyx_storm.html" class="card-link">
+          <img src="books/Never Lie.jpeg" alt="عداء الطائرة الورقية">
+        </a>
         </div>
-        <br>
         <div class="book-info">Freida McFadden</div>
+      </a>
       </div>
 
-
-      <!-- كافكا على الشاطئ -->
-      <div class="standalone-card">
-        <div class="static-card">
-          <img src="books/كافكا على الشاطئ - هاروكي موراكامي _ books4all_net _ Free Download, Borrow, and Streaming _ Internet Archive.jpeg" alt="كافكاعلى الشاطئ">
-        </div>
-        <br>
-        <div class="book-info">هاروكي موراكامي
-        </div>
-      </div>
+      <!-- Kafka on the Shore -->
+<div class="standalone-card">
+  
+  <div class="static-card">
+    <a href="Booksdetails/كافكا على الشاطئ.html" class="card-link">
+    <img src="books/كافكا على الشاطئ - هاروكي موراكامي _ books4all_net _ Free Download, Borrow, and Streaming _ Internet Archive.jpeg" alt="عداء الطائرة الورقية">
+  </a>
+  </div>
+  <div class="book-info">هاروكي موراكامي</div>
+</a>
+</div>
 
     </div>
 
     <br>
+    <!-- -------------------------------------------------- -->
     <div class="section-header">
       <h2>Most Borrowed This Month</h2>
       <div class="header-decoration"></div>
@@ -132,43 +151,56 @@
 
 
     <div class="horizontal-group">
-       <!-- 1984 -->
+       <!-- Al-Tantouriyya -->
        <div class="standalone-card">
+  
         <div class="static-card">
-          <img src="books/رواية الطنطورية.jpeg" alt="الطنطورية">
+          <a href="Booksdetails/رواية الطنطورية.html" class="card-link">
+          <img src="books/رواية الطنطورية.jpeg" alt="عداء الطائرة الورقية">
+        </a>
         </div>
-        <br>
         <div class="book-info">رضوى عاشور</div>
+      </a>
       </div>
 
 
-      <!-- القصر الأسود -->
-      <div class="standalone-card">
-        <div class="static-card">
-          <img src="books/القصر الأسود.jpg" alt="القصر الأسود">
-        </div>
-        <br>
-        <div class="book-info">منى سلامة</div>
-      </div>
+      
 
       <!-- Reckless -->
       <div class="standalone-card">
+  
         <div class="static-card">
-          <img src="books/New Fantasy Release - July 2024.jpeg" alt="Reckless">
+          <a href="Booksdetails/reckless.html" class="card-link">
+          <img src="books/Reckless.jpeg" alt="عداء الطائرة الورقية">
+        </a>
         </div>
-        <br>
-        <div class="book-info">Lauren Roberts
-        </div>
+        <div class="book-info">Lauren Roberts</div>
+      </a>
       </div>
-      <!-- As long as the lemon trees grow -->
+      <!-- As Long as the Lemon Trees Grow -->
       <div class="standalone-card">
+  
         <div class="static-card">
-          <img src="books/As long as the lemon trees grow.jpeg" alt="As Long as the Lemon Trees Grow">
+          <a href="Booksdetails/As_long_as_the_lemonTree.html" class="card-link">
+          <img src="books/As long as the lemon trees grow.jpeg" alt="عداء الطائرة الورقية">
+        </a>
         </div>
-        <br>
         <div class="book-info">Zoulfa Katouh
-
         </div>
+        
+      </a>
+      </div>
+
+      <!-- Fe Mamamr al Fe'ran-->
+      <div class="standalone-card">
+  
+        <div class="static-card">
+          <a href="Booksdetails/فى ممر الفئران.html" class="card-link">
+          <img src="books/أحمد خالد توفيق_ في ممر الفئران.jpeg" alt="عداء الطائرة الورقية">
+        </a>
+        </div>
+        <div class="book-info">أحمد خالد توفيق</div>
+      </a>
       </div>
 
 
@@ -185,41 +217,52 @@
 
     <div class="horizontal-group">
       <!-- 1984 -->
-      <div class="standalone-card">
-       <div class="static-card">
-         <img src="books/books I recommend.jpeg" alt="The Silent Patient">
-       </div>
-       <br>
-       <div class="book-info">Alex Michaelides</div>
-     </div>
+<div class="standalone-card">
+  
+  <div class="static-card">
+    <a href="Booksdetails/1984.html" class="card-link">
+    <img src="books/1984 by George Orwell.jpeg" alt="عداء الطائرة الورقية">
+  </a>
+  </div>
+  <div class="book-info">George Orwell</div>
+</a>
+</div>
 
 
-     <!-- القصر الأسود -->
-     <div class="standalone-card">
-       <div class="static-card">
-         <img src="books/Pride and Prejudice Book Covers - Choose Your Favorite! - Book Review - Hasty Book List.jpeg" alt="Pride and Prejudice">
-       </div>
-       <br>
-       <div class="book-info">Jane Austen</div>
-     </div>
+     <!-- The Seven Year Slip-->
+<div class="standalone-card">
+  
+  <div class="static-card">
+    <a href="Booksdetails/the_seven_year_slip.html" class="card-link">
+    <img src="books/The Seven Year Slip.jpeg" alt="عداء الطائرة الورقية">
+  </a>
+  </div>
+  <div class="book-info">Ashley Poston</div>
+</a>
+</div>
 
      
-      <!-- 1984 -->
-      <div class="standalone-card">
-       <div class="static-card">
-         <img src="books/1984 by George Orwell.jpeg" alt="1984">
-       </div>
-       <br>
-       <div class="book-info">George Orwell</div>
-     </div>
-
+      <!-- Murder on the Orient Express -->
+<div class="standalone-card">
+  
+  <div class="static-card">
+    <a href="Booksdetails/جريمة في قطار الشرق.html" class="card-link">
+    <img src="books/جريمة في قطار الشرق.jpeg" alt="عداء الطائرة الورقية">
+  </a>
+  </div>
+  <div class="book-info">أجاثا كريستي</div>
+</a>
+</div>
      <!-- The Great Gatsby -->
      <div class="standalone-card">
+  
       <div class="static-card">
-        <img src="books/The Great Gatsby (Paper Mill Press Classics).jpeg" alt="The Great Gatsby">
+        <a href="Booksdetails/the_Great_Gatsby.html" class="card-link">
+        <img src="books/The Great Gatsby (Paper Mill Press Classics).jpeg" alt="عداء الطائرة الورقية">
+      </a>
       </div>
-      <br>
       <div class="book-info">F. Scott Fitzgerald</div>
+    </a>
     </div>
 
    </div>
