@@ -1,11 +1,13 @@
 
 /* Variables */
 :root {
-  --brownish-gray: #322d29;
-  --reddish-brown: #72383d;
-  --muted-beige: #ac9c8d;
-  --light-gray: #d9d9d9;
-  --cream: #efe9e1;
+  
+  --dark-brown: #322D29;
+  --brand-red: #72383D;
+  --warm-taupe: #AC9C8D;
+  --light-gray: #D9D9D9;
+  --cream: #EFE9E1;
+    
 
   --roboto: "Roboto", sans-serif;
   --poppins: "Poppins", sans-serif;
@@ -19,21 +21,12 @@
   font-family: "Poppins", sans-serif;
 }
 
-/* Color Classes */
-.brownish-gray {
-  color: #322d29;
-}
-.reddish-brown {
-  color: #72383d;
-}
-.muted-beige {
-  color: #ac9c8d;
-}
-.light-gray {
-  color: #d9d9d9;
-}
-.cream {
-  color: #efe9e1;
+:root {
+  --dark-brown: #322D29;
+  --brand-red: #72383D;
+  --warm-taupe: #AC9C8D;
+  --light-gray: #D9D9D9;
+  --cream: #EFE9E1;
 }
 
 body {
@@ -79,20 +72,20 @@ img {
 
 .details-container .book-category {
   font-family: var(--poppins);
-  color: var(--brownish-gray);
+  color: #322D29;
   margin: 0;
   opacity: 65%;
 }
 .details-container .book-title {
   font-family: var(--roboto);
-  color: var(--reddish-brown);
+  color: var(--brand-red);
   margin: 10px 0;
   font-weight: 900;
   font-size: 35px;
 }
 .details-container .book-author {
   font-family: var(--roboto);
-  color: var(--brownish-gray);
+  color: #322D29;
   margin: 0 0 25px 0;
 }
 .details-container .book-description {
@@ -119,7 +112,7 @@ img {
 }
 .details-container .btns-avl .btn {
   color: var(--cream);
-  background-color: var(--reddish-brown);
+  background-color: var(--brand-red);
   font-family: var(--poppins);
   font-size: 14px;
   border: none;
@@ -143,4 +136,59 @@ img {
 .details-container .btns-avl .fa-check {
   color: rgb(21, 177, 21);
 }
+
+.navbar {
+  background: var(--dark-brown);
+  padding: 1rem 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.brand {
+  color: var(--cream);
+  font-size: 2rem;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: 'Playfair Display', serif;
+}
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--warm-taupe);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--cream);
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+      flex-direction: column;
+      gap: 1rem;
+  }
+
+  .search-bar {
+      width: 100%;
+      margin: 0;
+  }
+}
+
+
 
