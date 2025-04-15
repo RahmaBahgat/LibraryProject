@@ -122,7 +122,7 @@ body {
   position: absolute;
   width: 300px;
   height: 400px;
-  background: url("book8.jpeg") center/cover;
+  background: url("../images/book8.jpeg") center/cover;
   border-radius: 10px;
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
   -webkit-border-radius: 10px;
