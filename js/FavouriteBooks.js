@@ -1,0 +1,340 @@
+// DOM Elements
+const booksContainer = document.getElementById('booksContainer');
+const reviewFormTemplate = document.getElementById('reviewFormTemplate');
+const modal = document.getElementById('bookModal');
+const modalBody = modal.querySelector('.modal-body');
+
+// Modal Functions
+function showBookDetails(bookId) {
+    const book = books.find(b => b.id === bookId);
+    if (!book) return;
+
+    modalBody.innerHTML = `
+        <div class="modal-book-cover">
+            <img src="${book.cover}" alt="${book.title}">
+        </div>
+        <div class="modal-book-info">
+            <h2 class="book-title">${book.title}</h2>
+            <p class="book-author">${book.author}</p>
+            <div class="book-rating">
+                ${createStarRating(book.rating).outerHTML}
+                <span>(${book.rating})</span>
+            </div>
+            <p class="book-description">${book.description}</p>
+            
+            <div class="reviews-section">
+                <h3 class="section-title">Reviews</h3>
+                <div class="reviews-list">
+                    ${book.reviews.map(review => `
+                        <div class="review-item">
+                            ${createStarRating(review.rating).outerHTML}
+                            <p>${review.text}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            
+            <div class="related-books">
+                <h3 class="section-title">Related Books</h3>
+                <div class="related-books-grid">
+                    ${getRelatedBooks(book.id).map(relatedBook => `
+                        <div class="related-book">
+                            <div class="related-book-cover">
+                                <img src="${relatedBook.cover}" alt="${relatedBook.title}">
+                            </div>
+                            <div class="related-book-info">
+                                <h4>${relatedBook.title}</h4>
+                                <p>${relatedBook.author}</p>
+                                <button class="view-details" data-book-id="${relatedBook.id}">
+                                    View Details
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    `;
+
+    // nested view details
+    modalBody.querySelectorAll('.view-details').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const relatedBookId = e.target.dataset.bookId;
+            showBookDetails(relatedBookId);
+        });
+    });
+
+    modal.style.display = 'block';
+}
+
+
+function createStarRating(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    const starsContainer = document.createElement('div');
+    starsContainer.className = 'star-rating';
+    
+    // Add full stars
+    for (let i = 0; i < fullStars; i++) {
+        const star = document.createElement('span');
+        star.className = 'star';
+        // el mafrood hena a3mel star ................................
+        starsContainer.appendChild(star);
+    }
+    
+    // Add half star
+    if (hasHalfStar) {
+        const halfStar = document.createElement('span');
+        halfStar.className = 'star';
+        // el mafrood hena a3mel star ................................
+        starsContainer.appendChild(halfStar);
+    }
+    
+    return starsContainer;
+}
+
+function createRelatedBooks(bookId) {
+    const relatedBooksElement = document.createElement('div');
+    relatedBooksElement.className = 'related-books';
+    
+    const title = document.createElement('h3');
+    title.className = 'section-title';
+    title.textContent = 'Related Books';
+    relatedBooksElement.appendChild(title);
+
+    const grid = document.createElement('div');
+    grid.className = 'related-books-grid';
+
+    getRelatedBooks(bookId).forEach(book => {
+        const relatedBook = document.createElement('div');
+        relatedBook.className = 'related-book';
+        relatedBook.innerHTML = `
+            <div class="related-book-cover">
+                <img src="${book.cover}" alt="${book.title}">
+            </div>
+            <div class="related-book-info">
+                <h4>${book.title}</h4>
+                <p>${book.author}</p>
+                <button class="add-to-favorites" data-book-id="${book.id}">
+                    ${book.isFavorite ? '❤️ Remove Favorite' : '♡ Add to Favorites'}
+                </button>
+            </div>
+        `;
+        grid.appendChild(relatedBook);
+    });
+
+    relatedBooksElement.appendChild(grid);
+    return relatedBooksElement;
+}
+
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('add-to-favorites')) {
+        const bookId = e.target.dataset.bookId;
+        const book = books.find(b => b.id === bookId);
+        const wasFavorite = book.isFavorite;
+        
+        // Toggle favorite status
+        book.isFavorite = !book.isFavorite;
+        
+        document.querySelectorAll(`[data-book-id="${bookId}"]`).forEach(button => {
+            button.textContent = book.isFavorite ? 
+                '❤️ Remove Favorite' : 
+                '♡ Add to Favorites';
+        });
+
+        if (book.isFavorite && !wasFavorite) {
+            // Add newly favorited book to the page
+            if (!document.querySelector(`.book-card[data-book-id="${bookId}"]`)) {
+                const bookCard = createBookCard(book);
+                bookCard.dataset.bookId = bookId;
+                bookCard.style.opacity = '0';
+                booksContainer.prepend(bookCard);
+                
+                setTimeout(() => {
+                    bookCard.style.transform = 'translateY(0)';
+                    bookCard.style.opacity = '1';
+                }, 10);
+            }
+        }
+        else if (!book.isFavorite && wasFavorite) {
+            // Remove from page
+            const bookCard = document.querySelector(`.book-card[data-book-id="${bookId}"]`);
+            if (bookCard) {
+                bookCard.style.transform = 'translateX(-100%)';
+                bookCard.style.opacity = '0';
+                setTimeout(() => bookCard.remove(), 300);
+            }
+        }
+
+        // Refresh related books
+        const currentModalBookId = document.querySelector('.modal-book-info')?.querySelector('.book-title')?.dataset?.bookId;
+        if (currentModalBookId) {
+            showBookDetails(currentModalBookId);
+        }
+    }
+});
+
+function handleToggleExpand(bookElement, book) {
+    const expandedContent = bookElement.querySelector('.expanded-content');
+    const toggleBtn = bookElement.querySelector('.toggle-btn');
+    
+    book.expanded = !book.expanded;
+    expandedContent.classList.toggle('active');
+    
+    toggleBtn.innerHTML = book.expanded 
+    ? `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>`
+    : `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
+}
+
+function handleAddReview(bookElement, book) {
+    const reviewsSection = bookElement.querySelector('.reviews-section');
+    const existingForm = reviewsSection.querySelector('.review-form');
+    
+    if (existingForm) {
+        existingForm.remove();
+        return;
+    }
+    
+    const reviewForm = reviewFormTemplate.content.cloneNode(true);
+    const formElement = reviewForm.querySelector('.review-form');
+    
+    formElement.querySelector('.btn-cancel').addEventListener('click', () => {
+        formElement.remove();
+    });
+    
+    formElement.querySelector('.btn-submit').addEventListener('click', () => {
+        const reviewText = formElement.querySelector('textarea').value.trim();
+        if (!reviewText) return;
+        
+        const review = {
+            id: Date.now(),
+            text: reviewText,
+            rating: 5
+        };
+        
+        book.reviews.push(review);
+        renderReviews(bookElement, book);
+        formElement.remove();
+    });
+    
+    reviewsSection.insertBefore(formElement, reviewsSection.querySelector('.reviews-list'));
+}
+
+function renderReviews(bookElement, book) {
+    const reviewsList = bookElement.querySelector('.reviews-list');
+    reviewsList.innerHTML = '';
+    
+    book.reviews.forEach(review => {
+        const reviewElement = document.createElement('div');
+        reviewElement.className = 'review-item';
+        reviewElement.innerHTML = `
+        <div class="book-rating">
+        ${createStarRating(review.rating).outerHTML}
+        </div>
+        <p>${review.text}</p>
+        `;
+        reviewsList.appendChild(reviewElement);
+    });
+}
+
+function createBookCard(book) {
+    const bookElement = document.createElement('div');
+    bookElement.className = 'book-card fade-in';
+    
+    bookElement.innerHTML = `
+        <div class="book-content">
+            <div class="book-cover">
+                <img src="${book.cover}" alt="${book.title}">
+            </div>
+            
+            <div class="book-details">
+                ${createBookHeader(book)}
+                ${createExpandedContent(book)}
+            </div>
+        </div>
+    `;
+
+    const toggleBtn = bookElement.querySelector('.toggle-btn');
+    toggleBtn.addEventListener('click', () => handleToggleExpand(bookElement, book));
+    
+    const addReviewBtn = bookElement.querySelector('.add-review-btn');
+    addReviewBtn.addEventListener('click', () => handleAddReview(bookElement, book));
+    
+    // render of reviews
+    renderReviews(bookElement, book);
+    
+    return bookElement;
+}
+
+function createBookHeader(book) {
+    return `
+        <div class="book-header">
+            <div class="book-meta">
+                <h2 class="book-title">${book.title}</h2>
+                <p class="book-author">${book.author}</p>
+                <p class="book-description">${book.description}</p>
+                <div class="book-rating">
+                    ${createStarRating(book.rating).outerHTML}
+                    <span class="rating-value">(${book.rating})</span>
+                </div>
+            </div>
+            <button class="toggle-btn" aria-label="Toggle book details">
+                ${toggleButtonSVG}
+            </button>
+        </div>
+    `;
+}
+
+function createExpandedContent(book) {
+    return `
+        <div class="expanded-content">
+            ${createReviewsSection(book)}
+            ${createRelatedBooks(book.id).outerHTML}
+        </div>
+    `;
+}
+
+function createReviewsSection(book) {
+    return `
+        <div class="reviews-section">
+            <div class="reviews-header">
+                <h3 class="section-title">Reviews</h3>
+                <button class="add-review-btn">
+                    ${plusIconSVG}
+                    Add Review
+                </button>
+            </div>
+            <div class="reviews-list"></div>
+        </div>
+    `;
+}
+
+const toggleButtonSVG = `
+    <svg width="24" height="24" viewBox="0 0 24 24" 
+        fill="none" stroke="currentColor" stroke-width="2" 
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="m6 9 6 6 6-6"/>
+    </svg>
+`;
+
+const plusIconSVG = `
+    <svg width="16" height="16" 
+        viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12h14"/>
+    </svg>
+`;
+
+// Initialize the page
+function initializePage() {
+    // Filter only favorite books
+    const favoriteBooks = books.filter(book => book.isFavorite);
+    favoriteBooks.forEach(book => {
+        const bookCard = createBookCard(book);
+        booksContainer.appendChild(bookCard);
+    });
+}
+
+// Start
+document.addEventListener('DOMContentLoaded', initializePage);
