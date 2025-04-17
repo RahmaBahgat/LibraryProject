@@ -1,15 +1,16 @@
 .notif-page {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 60px auto;
   padding: 20px;
   font-family: 'Merriweather', serif;
 }
 
 .notif-page h1 {
-  font-size: 2em;
+  font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 20px;
   color: #333;
+  text-align: center;
 }
 
 .notification-item {
@@ -31,4 +32,52 @@
   font-size: 0.8rem;
   color: #777;
   margin-top: 5px;
+}
+.notification-item-admin {
+  padding: 20px;
+  background: #f8f8f8;
+  border-left: 5px solid #333;
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 100%; /* make it fill container */
+  box-sizing: border-box;
+  font-weight: 700;
+}
+
+
+.notification-item-admin input[type="text"],.notification-item-admin input[type="email"] {
+  padding: 8px;
+  margin-top: 5px;
+  width: 500px;
+  max-width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;;
+}
+
+
+.notification-item-admin input[type="button"] {
+  padding: 8px 12px;
+  margin: 5px 5px 0 0;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight:bold;
+}
+
+.notification-item-admin input[type="button"]:hover {
+  background-color: #555;
+}
+
+.not-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.noti-title {
+  font-size: 1.9rem;
+  font-weight: 100;
+  color: #333;
 }
