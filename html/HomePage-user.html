@@ -1,331 +1,246 @@
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Library</title>
-    <link rel="stylesheet" href="../css/HomePage-user.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  </head>
-  <body>
-    <nav class="navbar">
-      <div class="nav-container">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet"> -->
+  <link rel="stylesheet" href="/css/HomePage-user.css">
+
+  
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
         <a href="#" class="brand">LitHub</a>
         <div class="search-bar">
-          <input type="text" placeholder="Search books, authors, or genres" />
-          <button><i class="fas fa-search"></i></button>
+            <input type="text" placeholder="Search books, authors, or genres">
+            <button><i class="fas fa-search"></i></button>
         </div>
         <ul class="nav-links">
-          <li>
-            <a href="borrowed_list.html"
-              ><i class="fas fa-book-open"></i> My Books</a
-            >
-          </li>
-          <li>
-            <a href="#"><i class="fas fa-bell"></i> Notifications</a>
-          </li>
-          <li>
-            <a href="#"><i class="fas fa-user"></i> Profile</a>
-          </li>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap"
-          />
-          <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-          />
+            <li><a href="borrowed_list.html"><i class="fas fa-book-open"></i> My Books</a></li>
+            <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+            <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+            <link href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap" trel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         </ul>
-      </div>
-          
-    </nav>
-    <br />
-    <br />
-
-    <div class="container">
-      <center>
-        <h1>Welcome back, book lover!</h1>
-        <!-- <div class="add-book-container">
-        <div class="add-book-form">
-          <h3>Add Book</h3>
-          <form>
-            <div class="form-group">
-              <label for="id">ID</label>
-              <input type="number" id="id" placeholder="#">
-            </div>
-            <div class="form-group">
-              <label for="title">Title</label>
-              <input type="text" id="title" placeholder="Title">
-            </div>
-            <div class="form-group">
-              <label for="author">Author</label>
-              <input type="text" id="author" placeholder="Author">
-            </div>
-            <div class="form-group">
-              <label for="category">Category</label>
-              <input type="text" id="category" placeholder="Category">
-            </div>
-            <button type="submit" class="submit-btn">+</button>
-          </form>
-        </div>
-      </div> -->
-      </center>
-
-      <br />
-
-      <div class="section-header">
-        <h2>Suggested For You</h2>
-        <div class="header-decoration"></div>
-      </div>
-
-      <div class="horizontal-group">
-        <div class="series-card">
-          <div class="card">
-            <p>
-              <span>
-                <a
-                  href="../html/Booksdetails/fourthWing.html"
-                  class="book-link"
-                >
-                  <img
-                    class="spine"
-                    src="../images/books/Fouth Wing spine.jpg"
-                    alt="Fourth Wing Spine"
-                  />
-                  <img
-                    class="cover"
-                    src="../images/books/Fourth Wing (International Edition).jpeg"
-                    alt="Fourth Wing Cover"
-                  />
-                </a>
-              </span>
-            </p>
-            <p>
-              <span>
-                <a
-                  href="../html/Booksdetails/Iron Flame.html"
-                  class="book-link"
-                >
-                  <img
-                    class="spine"
-                    src="../images/books/Iron Flame spine.png"
-                    alt="Fourth Wing Spine"
-                  />
-                  <img
-                    class="cover"
-                    src="../images/books/Iron Flame (The Empyrean Book 2).jpeg"
-                    alt="Fourth Wing Cover"
-                  />
-                </a>
-              </span>
-            </p>
-            <p>
-              <span>
-                <a
-                  href="../html/Booksdetails/onyx_storm.html"
-                  class="book-link"
-                >
-                  <img
-                    class="spine"
-                    src="../images/books/Onyx Storm spine.jpg"
-                    alt="Fourth Wing Spine"
-                  />
-                  <img
-                    class="cover"
-                    src="../images/books/Onyx Storm von Rebecca Yarros - Taschenbuch - 978-0-349-43707-1 _ Thalia.jpeg"
-                    alt="Fourth Wing Cover"
-                  />
-                </a>
-              </span>
-            </p>
-          </div>
-
-          <div class="book-info">Rebecca Yarros</div>
-        </div>
-
-        <!-- The Kite Runner -->
-        <div class="standalone-card">
-          <div class="static-card">
-            <a
-              href="../html/Booksdetails/عداء الطائرة الورقية.html"
-              class="card-link"
-            >
-              <img
-                src="../images/books/عداء الطائرة الورقية.jpeg"
-                alt="عداء الطائرة الورقية"
-              />
-            </a>
-          </div>
-          <div class="book-info">خالد حسيني</div>
-        </div>
-        <!-- Never Lie -->
-        <div class="standalone-card">
-          <div class="static-card">
-            <a href="../html/Booksdetails/Never Lie.html" class="card-link">
-              <img
-                src="../images/books/Never Lie.jpeg"
-                alt="Never Lie"
-              />
-            </a>
-          </div>
-          <div class="book-info">Freida McFadden</div>
-        </div>
-
-        <!-- Kafka on the Shore -->
-        <div class="standalone-card">
-          <div class="static-card">
-            <a
-              href="../html/Booksdetails/كافكا على الشاطئ.html"
-              class="card-link"
-            >
-              <img
-                src="../images/books/كافكا على الشاطئ - هاروكي موراكامي _ books4all_net _ Free Download, Borrow, and Streaming _ Internet Archive.jpeg"
-                alt="عداء الطائرة الورقية"
-              />
-            </a>
-          </div>
-          <div class="book-info">هاروكي موراكامي</div>
-        </div>
-      </div>
-
-      <br />
-      <!-- -------------------------------------------------- -->
-      <div class="section-header">
-        <h2>Popular This Week!</h2>
-        <div class="header-decoration"></div>
-      </div>
-
-      <div class="horizontal-group">
-        <!-- Al-Tantouriyya -->
-        <div class="standalone-card">
-          <div class="static-card">
-            <a
-              href="../html/Booksdetails/رواية الطنطورية.html"
-              class="card-link"
-            >
-              <img
-                src="../images/books/رواية الطنطورية.jpeg"
-                alt="عداء الطائرة الورقية"
-              />
-            </a>
-          </div>
-          <div class="book-info">رضوى عاشور</div>
-        </div>
-
-        <!-- Reckless -->
-        <div class="standalone-card">
-          <div class="static-card">
-            <a href="../html/Booksdetails/reckless.html" class="card-link">
-              <img
-                src="../images/books/ألف شمس ساطعة.jpeg"
-                alt="عداء الطائرة الورقية"
-              />
-            </a>
-          </div>
-          <div class="book-info">خالد حسيني</div>
-        </div>
-        <!-- As Long as the Lemon Trees Grow -->
-        <div class="standalone-card">
-          <div class="static-card">
-            <a
-              href="../html/Booksdetails/As_long_as_the_lemonTree.html"
-              class="card-link"
-            >
-              <img
-                src="../images/books/As long as the lemon trees grow.jpeg"
-                alt="As Long As The Lemon Trees Grow"
-              />
-            </a>
-          </div>
-          <div class="book-info">Zoulfa Katouh</div>
-        </div>
-
-        <!-- Fe Mamamr al Fe'ran-->
-        <div class="standalone-card">
-          <div class="static-card">
-            <a
-              href="../html/Booksdetails/فى ممر الفئران.html"
-              class="card-link"
-            >
-              <img
-                src="../images/books/أحمد خالد توفيق_ في ممر الفئران.jpeg"
-                alt="عداء الطائرة الورقية"
-              />
-            </a>
-          </div>
-          <div class="book-info">أحمد خالد توفيق</div>
-        </div>
-      </div>
-
-      <br />
-      <div class="section-header">
-        <h2>Top Rated</h2>
-        <div class="header-decoration"></div>
-      </div>
-
-      <br />
-
-      <div class="horizontal-group">
-        <!-- 1984 -->
-        <div class="standalone-card">
-          <div class="static-card">
-            <a href="../html/Booksdetails/1984.html" class="card-link">
-              <img
-                src="../images/books/1984 by George Orwell.jpeg"
-                alt="عداء الطائرة الورقية"
-              />
-            </a>
-          </div>
-          <div class="book-info">George Orwell</div>
-        </div>
-
-        <!-- The Seven Year Slip-->
-        <div class="standalone-card">
-          <div class="static-card">
-            <a
-              href="../html/Booksdetails/the_seven_year_slip.html"
-              class="card-link"
-            >
-              <img
-                src="../images/books/The Seven Year Slip.jpeg"
-                alt="عداء الطائرة الورقية"
-              />
-            </a>
-          </div>
-          <div class="book-info">Ashley Poston</div>
-        </div>
-
-        <!-- Murder on the Orient Express -->
-        <div class="standalone-card">
-          <div class="static-card">
-            <a
-              href="../html/Booksdetails/جريمة في قطار الشرق.html"
-              class="card-link"
-            >
-              <img
-                src="../images/books/جريمة في قطار الشرق.jpeg"
-                alt="عداء الطائرة الورقية"
-              />
-            </a>
-          </div>
-          <div class="book-info">أجاثا كريستي</div>
-        </div>
-        <!-- The Great Gatsby -->
-        <div class="standalone-card">
-          <div class="static-card">
-            <a
-              href="../html/Booksdetails/the_Great_Gatsby.html"
-              class="card-link"
-            >
-              <img
-                src="../images/books/The Great Gatsby (Paper Mill Press Classics).jpeg"
-                alt="عداء الطائرة الورقية"
-              />
-            </a>
-          </div>
-          <div class="book-info">F. Scott Fitzgerald</div>
-        </div>
-      </div>
     </div>
-  </body>
-</html>
+    </nav>
+<br>
+<br>
+
+  <div class="container">
+    <center>
+      <h1>Welcome back, "book lover"!</h1>
+    
+    <br>
+
+    <div class="section-header">
+      <h2>Suggested For You</h2>
+      <div class="header-decoration"></div>
+    </div>
+    
+    
+        <div class="horizontal-group">
+          <div class="series-card">
+            <div class="card">
+              <p>
+                <span>
+                  <a href="./Booksdetails/fourthWing.html" class="book-link">
+                    <img class="spine" src="books/Fouth Wing spine.jpg" alt="Fourth Wing Spine">
+                    <img class="cover" src="books/Fourth Wing Cover.jpeg" alt="Fourth Wing Cover">
+                  </a>
+                </span>
+              </p>
+              <p>
+                <span>
+                  <a href="./Booksdetails/Iron Flame.html" class="book-link">
+                    <img class="spine" src="books/Iron Flame spine.png" alt="Iron Flame Spine">
+                    <img class="cover" src="books/Iron Flame Cover.jpeg" alt="Iron Flame Cover">
+                  </a>
+                </span>
+              </p>
+              <p>
+                <span>
+                  <a href="./Booksdetails/onyx_storm.html" class="book-link">
+                    <img class="spine" src="books/Onyx Storm spine.jpg" alt="Onyx Storm Spine">
+                    <img class="cover" src="books/Onyx Storm Cover.jpeg" alt="Onyx Storm Cover">
+                  </a>
+                </span>
+              </p>
+            </div>
+            
+          <a href="Author page.html?name=Rebecca%20Yarros" class="book-info">Rebecca Yarros</a>
+
+          </div>
+    
+          
+          <!-- The Kite Runner -->
+          <div class="standalone-card">
+              <div class="static-card">
+                <a href="./Booksdetails/عداء الطائرة الورقية.html" class="card-link">
+                <img src="./books/عداء الطائرة الورقية.jpeg" alt="عداء الطائرة الورقية">
+              </a>
+              </div>
+              <a href="Author page.html?name=خالد%20حسيني" class="book-info">خالد حسيني</a>
+            </a>
+          </div>
+
+          <!-- Never Lie -->
+          <div class="standalone-card">
+            <div class="static-card">
+              <a href="./Booksdetails/Never Lie.html" class="card-link">
+              <img src="books/Never Lie.jpeg" alt="Never Lie">
+            </a>
+            </div>
+            <div>
+            <a href="Author page.html?name=Freida%20Mcfadden" class="book-info">Freida McFadden</a>
+            </div>
+          </a>
+          </div>
+    
+          <!-- Kafka on the Shore -->
+    <div class="standalone-card">
+      
+      <div class="static-card">
+        <a href="Booksdetails/كافكا على الشاطئ.html" class="card-link">
+        <img src="books/كافكا على الشاطئ.jpeg" alt="كافكا على الشاطئ">
+      </a>
+      </div>
+      <a href="Author page.html?name=هاروكي%20موراكامي" class="book-info">هاروكي موراكامي</a>
+    </a>
+    </div>
+    
+        </div>
+    
+        <br>
+        <!-------------------------------------------------------------------------------------------------------------->
+        <div class="section-header">
+          <h2>Popular This Week!</h2>
+          <div class="header-decoration"></div>
+        </div>
+    
+    
+        <div class="horizontal-group">
+           <!-- Al-Tantouriyya -->
+           <div class="standalone-card">
+      
+            <div class="static-card">
+              <a href="Booksdetails/رواية الطنطورية.html" class="card-link">
+              <img src="books/الطنطورية.jpeg" alt="الطنطورية">
+            </a>
+            </div>
+            <a href="Author page.html?name=رضوى%20عاشور" class="book-info">رضوى عاشور</a>
+          </a>
+          </div>
+    
+    
+          
+    
+          <!-- The Silent Patient -->
+          <div class="standalone-card">
+            
+              <div class="static-card">
+                <a href="./Booksdetails/the_silent_patient.html" class="card-link">
+                <img src="./books/The Silent Patient.jpeg" alt="The Silent Patient">
+              </a>
+              </div>
+              <a href="Author page.html?name=Alex%20Michaelides" class="book-info">Alex Michaelides</a>
+            </a>
+          </div>
+
+          <!-- As Long as the Lemon Trees Grow -->
+          <div class="standalone-card">
+      
+            <div class="static-card">
+              <a href="Booksdetails/As_long_as_the_lemonTree.html" class="card-link">
+              <img src="books/As long as the lemon trees grow.jpeg" alt="As Long As The Lemon Trees Grow">
+            </a>
+            </div>
+            <a href="Author page.html?name=Zoulfa%20Katouh" class="book-info">Zolfa Katouh</a>
+            
+          </a>
+          </div>
+    
+          <!-- Fe Mamamr al Fe'ran-->
+          <div class="standalone-card">
+      
+            <div class="static-card">
+              <a href="Booksdetails/فى ممر الفئران.html" class="card-link">
+              <img src="books/في ممر الفئران.jpeg" alt="في ممر فئران">
+            </a>
+            </div>
+            <a href="Author page.html?name=أحمد%20خالد%20توفيق" class="book-info">أحمد خالد توفيق</a>
+          </a>
+          </div>
+    
+    
+    
+        </div>
+    
+        <br>
+        <div class="section-header">
+          <h2>Top Rated</h2>
+          <div class="header-decoration"></div>
+        </div>
+    
+        <br>
+    
+        <div class="horizontal-group">
+          <!-- 1984 -->
+    <div class="standalone-card">
+      
+      <div class="static-card">
+        <a href="Booksdetails/1984.html" class="card-link">
+        <img src="books/1984.jpeg" alt="1984">
+      </a>
+      </div>
+      <a href="Author page.html?name=George%20Orwell" class="book-info">George Orwell</a>
+    </a>
+    </div>
+    
+    
+         <!-- The Seven Year Slip-->
+    <div class="standalone-card">
+      
+      <div class="static-card">
+        <a href="Booksdetails/the_seven_year_slip.html" class="card-link">
+        <img src="books/The Seven Year Slip.jpeg" alt="The Seven Year Slip">
+      </a>
+      </div>
+      <a href="Author page.html?name=Ashley%20Poston" class="book-info">Ashley Poston</a>
+    </a>
+    </div>
+    
+         
+          <!-- Murder on the Orient Express -->
+    <div class="standalone-card">
+      
+      <div class="static-card">
+        <a href="Booksdetails/جريمة في قطار الشرق.html" class="card-link">
+        <img src="books/جريمة في قطار الشرق.jpeg" alt="جريمة في قطار الشرق">
+      </a>
+      </div>
+      <a href="Author page.html?name=أجاثا%20كريستي" class="book-info">أجاثا كريستي</a>
+    </a>
+    </div>
+         <!-- The Great Gatsby -->
+         <div class="standalone-card">
+      
+          <div class="static-card">
+            <a href="Booksdetails/the_Great_Gatsby.html" class="card-link">
+            <img src="books/The Great Gatsby.jpeg" alt="The Great Gatsby">
+          </a>
+          </div>
+          <a href="Author page.html?name=F.%20Scott%20Fitzgerald" class="book-info">F. Scott Fitzgerald</a>
+        </a>
+        </div>
+    
+       </div>
+      </div>
+    </body>
+    </html>

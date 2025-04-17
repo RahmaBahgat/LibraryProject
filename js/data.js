@@ -344,6 +344,16 @@ const books = [
     }
 ];
 
+const authors = [
+    {
+      name: "Rebecca Yarros",
+      bio: "Rebecca Yarros is a bestselling author known for emotional and gripping romance novels. Her book 'Fourth Wing' brought her massive acclaim, and she continues to captivate readers with her storytelling.",
+      image: "Authors/Rebecca Yarros.jpeg"
+    }
+  ];
+  
+
+
   // Related books data
 const relatedBooks = {
     '1': ['2', '3', '9'],
