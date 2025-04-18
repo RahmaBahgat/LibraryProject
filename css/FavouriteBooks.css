@@ -20,41 +20,48 @@ body {
 
 /* Main Content Styles */
 .main-content {
-    max-width: 80rem;
+    /* max-width: 80rem; */
     margin: 2rem auto;
     padding: 0 1rem;
 }
 
 .books-grid {
-    display: grid;
-    gap: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 2rem;
+    align-items: flex-start;
 }
 
 /* Book Card Styles */
 .book-card {
-    background-color: white;
-    border-radius: 0.5rem;
+    background: white;
+    border-radius: 0.8rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    width: 300px;
+    max-height: 400px;
+    flex-shrink: 0;
+    position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    -webkit-border-radius: 0.5rem;
-    -moz-border-radius: 0.5rem;
-    -ms-border-radius: 0.5rem;
-    -o-border-radius: 0.5rem;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -ms-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
+}
+
+.book-card:hover,
+.book-card.pinned {
+    width: 700px;
+    z-index: 2;
 }
 
 .book-content {
     display: flex;
+    min-height: 400px;
 }
 
 .book-cover {
-    width: 12rem;
-    height: 18rem;
+    width: 300px;
+    height: 400px;
     flex-shrink: 0;
+    position: relative;
 }
 
 .book-cover img {
@@ -66,6 +73,8 @@ body {
 .book-details {
     flex: 1;
     padding: 1.5rem;
+    transition: opacity 0.3s 0.1s;
+
 }
 
 .book-header {
@@ -100,6 +109,32 @@ body {
 .star {
     color: #fbbf24;
     fill: #fbbf24;
+}
+
+.pin-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: all 0.3s;
+    z-index: 2;
+}
+
+.pin-button:hover {
+    background: var(--brand-red);
+    color: white;
+}
+
+/* Other Books Movement */
+.books-grid:hover .book-card:not(:hover):not(.pinned) {
+    transform: translateX(calc(300px * var(--direction)));
 }
 
 /* Expanded Content Styles */
@@ -276,6 +311,9 @@ body {
 /* Toggle Button */
 .toggle-btn {
     color: var(--brand-red);
+    position: fixed;
+    left: 620px;
+    right: 600px;
     background: none;
     border: none;
     cursor: pointer;

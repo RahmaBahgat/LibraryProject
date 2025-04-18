@@ -167,7 +167,7 @@ const books = [
         id: '9',
         title: 'Fourth Wing',
         author: 'Rebecca Yarros',
-        cover: '../images/books/Fourth Wing (International Edition).jpeg',
+        cover: '../images/books/Fourth Wing Cover.jpeg',
         genre: 'Fantasy',
         category: ['Dragon Fantasy', 'Romantasy'],
         rating: 4.8,
@@ -205,7 +205,7 @@ const books = [
         id: '11',
         title: 'Pride and Prejudice',
         author: 'Jane Austen',
-        cover: '../images/books/Pride and Prejudice Book Covers - Choose Your Favorite! - Book Review - Hasty Book List.jpeg',
+        cover: '../images/books/Pride and Prejudice.jpeg',
         genre: 'Classic',
         category: ['Regency Romance', 'Social Satire'],
         rating: 4.9,
@@ -224,7 +224,7 @@ const books = [
         id: '12',
         title: 'Reckless',
         author: 'Lauren Roberts',
-        cover: '../images/books/New Fantasy Release - July 2024.jpeg',
+        cover: '../images/books/Reckless.jpeg',
         genre: 'Fantasy',
         category: ['Romantasy', 'Young Adult'],
         rating: 4.5,
@@ -242,7 +242,7 @@ const books = [
         id: '13',
         title: 'The Great Gatsby',
         author: 'F. Scott Fitzgerald',
-        cover: '../images/books/The Great Gatsby (Paper Mill Press Classics).jpeg',
+        cover: '../images/books/The Great Gatsby.jpeg',
         genre: 'Classic',
         category: ['American Literature', 'Tragedy'],
         rating: 4.7,
@@ -329,9 +329,9 @@ const books = [
     },
     {
         id: '18',
-        title: 'كافكا على الشاطئ (Kafka on the Shore)',
+        title: 'كافكا على الشاطئ',
         author: 'هاروكي موراكامي',
-        cover: '../images/books/كافكا على الشاطئ - هاروكي موراكامي _ books4all_net _ Free Download, Borrow, and Streaming _ Internet Archive.jpeg',
+        cover: '../images/books/كافكا على الشاطئ.jpeg',
         genre: 'Magical Realism',
         category: ['Surreal Fiction', 'Philosophical'],
         rating: 4.7,
@@ -346,12 +346,12 @@ const books = [
 
 const authors = [
     {
-      name: "Rebecca Yarros",
-      bio: "Rebecca Yarros is a bestselling author known for emotional and gripping romance novels. Her book 'Fourth Wing' brought her massive acclaim, and she continues to captivate readers with her storytelling.",
-      image: "Authors/Rebecca Yarros.jpeg"
+        name: "Rebecca Yarros",
+        bio: "Rebecca Yarros is a bestselling author known for emotional and gripping romance novels. Her book 'Fourth Wing' brought her massive acclaim, and she continues to captivate readers with her storytelling.",
+        image: "Authors/Rebecca Yarros.jpeg"
     }
-  ];
-  
+];
+
 
 
   // Related books data

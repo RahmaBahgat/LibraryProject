@@ -237,12 +237,23 @@ function renderReviews(bookElement, book) {
         reviewsList.appendChild(reviewElement);
     });
 }
-
 function createBookCard(book) {
     const bookElement = document.createElement('div');
     bookElement.className = 'book-card fade-in';
-    
+    bookElement.dataset.bookId = book.id;
+
+    // Pin button SVG
+    const pinButtonSVG = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 17v-4m0 0V8m0 5h5l-5 5h5m-5-5H7l5-5H7"/>
+        </svg>
+    `;
+
     bookElement.innerHTML = `
+        <button class="pin-button" aria-label="Pin book">
+            ${pinButtonSVG}
+        </button>
+        
         <div class="book-content">
             <div class="book-cover">
                 <img src="${book.cover}" alt="${book.title}">
@@ -255,13 +266,43 @@ function createBookCard(book) {
         </div>
     `;
 
+    // Pin functionality
+    const pinBtn = bookElement.querySelector('.pin-button');
+    pinBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const wasPinned = bookElement.classList.contains('pinned');
+        
+        // Unpin all other cards
+        document.querySelectorAll('.book-card.pinned').forEach(card => {
+            if (card !== bookElement) card.classList.remove('pinned');
+        });
+        
+        bookElement.classList.toggle('pinned', !wasPinned);
+    });
+
+    let hoverTimeout;
+    bookElement.addEventListener('mouseenter', () => {
+        hoverTimeout = setTimeout(() => {
+            if (!document.querySelector('.book-card.pinned')) {
+                bookElement.classList.add('hover-expand');
+            }
+        }, 300);
+    });
+
+    bookElement.addEventListener('mouseleave', () => {
+        clearTimeout(hoverTimeout);
+        if (!bookElement.classList.contains('pinned')) {
+            bookElement.classList.remove('hover-expand');
+        }
+    });
+
     const toggleBtn = bookElement.querySelector('.toggle-btn');
-    toggleBtn.addEventListener('click', () => handleToggleExpand(bookElement, book));
-    
     const addReviewBtn = bookElement.querySelector('.add-review-btn');
+    
+    toggleBtn.addEventListener('click', () => handleToggleExpand(bookElement, book));
     addReviewBtn.addEventListener('click', () => handleAddReview(bookElement, book));
     
-    // render of reviews
+    // Initial render of reviews
     renderReviews(bookElement, book);
     
     return bookElement;
