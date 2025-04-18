@@ -21,44 +21,6 @@ body {
   flex-direction: column;
 }
 
-.navbar {
-  background: var(--dark-brown);
-  padding: 1.5rem 5%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-}
-
-.brand {
-  color: var(--cream);
-  font-size: 2.2rem;
-  font-family: "Playfair Display", serif;
-  text-decoration: none;
-}
-
-.nav-actions {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.nav-btn {
-  color: var(--warm-taupe);
-  text-decoration: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
-  transition: all 0.3s ease;
-}
-
-.nav-btn.primary {
-  background: var(--brand-red);
-  color: var(--cream);
-}
-
-.nav-btn.primary:hover {
-  background: #5a2c30;
-}
-
 .hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -109,6 +71,11 @@ body {
   padding: 0.8rem 1.5rem;
   border-radius: 25px;
   cursor: pointer;
+
+  transition: all 200ms;
+}
+.book-search button:hover {
+  background-color: #572b2e;
 }
 
 .hero-decor {

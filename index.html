@@ -4,18 +4,44 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LitHub - Where Stories Bloom</title>
+    <link rel="stylesheet" href="css/navbar.css" />
     <link rel="stylesheet" href="css/index-style.css" />
+
+    <!-- MerryWeather Font -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Playfair+Display:wght@700&display=swap"
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap"
+    />
+
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
   </head>
+
   <body>
     <nav class="navbar">
-      <a href="#" class="brand">LitHub</a>
-      <div class="nav-actions">
-        <a href="html/login.html" class="nav-btn">Log In</a>
-        <a href="html/signup.html" class="nav-btn primary">Join the Library</a>
+      <div class="nav-container">
+        <!-- Logo -->
+        <div>
+          <a href="">
+            <i class="fa-screenpal accept"></i>
+          </a>
+          <a href="../index.html" class="brand">InOtherWords</a>
+        </div>
+
+        <!-- Links -->
+        <ul class="nav-links index">
+          <li>
+            <a href="html/login.html">Log In</a>
+          </li>
+          <li>
+            <a href="html/signup.html" id="join-btn"
+              ><i class="fa-solid fa-book"></i> Join the Library</a
+            >
+          </li>
+        </ul>
       </div>
     </nav>
 
@@ -26,7 +52,7 @@
           <p>Discover, share, and grow with fellow book lovers</p>
           <div class="book-search">
             <input type="text" placeholder="Find your next read..." />
-            <button>read</button>
+            <button>Read</button>
           </div>
         </div>
         <div class="hero-decor">

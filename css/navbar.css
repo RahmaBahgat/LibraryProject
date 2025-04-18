@@ -84,6 +84,10 @@
   gap: 1.2rem;
   list-style: none;
 }
+.nav-links.index {
+  align-items: center;
+  gap: 1.5rem;
+}
 
 .nav-links a {
   font-family: "Merriweather", serif;
@@ -102,6 +106,18 @@
 
 .fas {
   font-size: 0.9rem;
+}
+
+.nav-links #join-btn {
+  background: var(--brand-red);
+  color: var(--cream);
+
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+.nav-links #join-btn:hover {
+  background-color: #572b2e;
 }
 
 @media (max-width: 768px) {
