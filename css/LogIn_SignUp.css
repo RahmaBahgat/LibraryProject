@@ -21,40 +21,6 @@ body {
   flex-direction: column;
 }
 
-/* Navigation */
-.navbar {
-  background: var(--dark-brown);
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.brand {
-  color: var(--cream);
-  font-size: 2rem;
-  font-weight: 700;
-  text-decoration: none;
-  font-family: 'Playfair Display', serif;
-}
-
-.nav-links {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-}
-
-.nav-links a {
-  color: var(--warm-taupe);
-  text-decoration: none;
-  font-size: 1.1rem;
-  transition: color 0.3s ease;
-}
-
-.nav-links a:hover {
-  color: var(--cream);
-}
-
 /* Main Content */
 .login-container {
   flex: 1;
@@ -313,6 +279,7 @@ body {
   -moz-border-radius: 10px;
   -ms-border-radius: 10px;
   -o-border-radius: 10px;
+  cursor: pointer;
 }
 
 .login-button:hover {

@@ -17,6 +17,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0.4rem 5%;
+}
+.nav-container.wide-btn {
   padding: 0rem 5%;
 }
 

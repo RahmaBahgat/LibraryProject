@@ -1,69 +1,97 @@
 <!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LitHub - Login</title>
-    <link rel="stylesheet" href="../css/LogIn_SignUp.css">
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="../css/LogIn_SignUp.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+
+    <!-- MerryWeather Font -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap"
+    />
+
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+
+  <body>
     <nav class="navbar">
-        <a href="#" class="brand">LitHub</a>
+      <div class="nav-container">
+        <!-- Logo -->
+        <div>
+          <a href="">
+            <i class="fa-screenpal accept"></i>
+          </a>
+          <a href="../index.html" class="brand">InOtherWords</a>
+        </div>
+
+        <!-- Links -->
         <ul class="nav-links">
-            <li><a href="about.html">About</a></li>
-            <li><a href="privacy.html">Privacy</a></li>
-            <li><a href="">Help</a></li>
+          <li>
+            <a href="about.html"><i class="fas fa-book-open"></i> About</a>
+          </li>
+          <li>
+            <a href="privacy.html"><i class="fas fa-bell"></i> Privacy</a>
+          </li>
+          <li>
+            <a href="help.html"><i class="fas fa-user"></i> Help</a>
+          </li>
         </ul>
+      </div>
     </nav>
 
     <main class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <h1>Welcome Back</h1>
-                <p>Discover your next great read with LitHub</p>
-            </div>
-            
-            <form class="login-form">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" required>
-                </div>
-
-                <div class="forgot-id">
-                    <a href="">Forgot password?</a>
-                </div>
-                
-                <div class="agreement-section">
-                    
-                    <label class="remember-me">
-                        <input type="checkbox">
-                        <span class="checkmark"></span>
-                        Keep me signed in. <a href="#">Details</a>
-                    </label>
-                </div>
-
-                <button type="submit" class="login-button">Sign In</button>
-            </form>
-
-            <div class="divider">
-                <span class="divider-text">OR</span>
-            </div>
-
-            <div class="secondary-options">
-                <p>New to LitHub? <a href="SignUp.html">Sign Up</a></p>
-            </div>
+      <div class="login-card">
+        <div class="login-header">
+          <h1>Welcome Back</h1>
+          <p>Discover your next great read with LitHub</p>
         </div>
+
+        <form class="login-form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" required />
+          </div>
+
+          <div class="forgot-id">
+            <a href="">Forgot password?</a>
+          </div>
+
+          <div class="agreement-section">
+            <label class="remember-me">
+              <input type="checkbox" />
+              <span class="checkmark"></span>
+              Keep me signed in. <a href="#">Details</a>
+            </label>
+          </div>
+
+          <button type="submit" class="login-button">Sign In</button>
+        </form>
+
+        <div class="divider">
+          <span class="divider-text">OR</span>
+        </div>
+
+        <div class="secondary-options">
+          <p>New to LitHub? <a href="SignUp.html">Sign Up</a></p>
+        </div>
+      </div>
     </main>
 
     <footer class="footer">
-        <p>&copy; 2025 LitHub</p>
+      <p>&copy; 2025 LitHub</p>
     </footer>
-</body>
+  </body>
 </html>
