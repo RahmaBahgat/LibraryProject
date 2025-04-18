@@ -348,10 +348,42 @@
     margin-top: 10px;
     text-align: center;
     font-family: 'Quicksand', sans-serif;
-    color: #72383D;
-    font-size: 14px;
+    color: var(--brand-red);
+    font-size: 17px;
     font-weight: 600;
+    width: 100%; 
+    display: inline-block;
+    padding: 0 15px; 
+    font-style: italic;
+    position: relative;
+    transform: translateY(0);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
   }
+  .book-info:hover {
+    transform: translateY(-3px);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+.book-info::before {
+    content: "<";
+    position: absolute;
+    color: var(--warm-taupe);
+    top: 50%;
+    transform: translateY(-50%);
+}
+.book-info::after{
+  content: ">";
+  position: absolute;
+    color: var(--warm-taupe);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.book-info::before { left: 0; }
+.book-info::after { right: 0; }
+  
   .standalone-card,
   .standalone-container {
     background: #f5f0e8;
