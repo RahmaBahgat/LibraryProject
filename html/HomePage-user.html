@@ -9,8 +9,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet"> -->
-  <link rel="stylesheet" href="/css/HomePage-user.css">
+  <link rel="stylesheet" href="../HomePage-user.css">
+  <style>
+.dropbtn {
+  background-color: var(--brand);
+  color: #AC9C8D;
+  padding: 0.rem 1.5rem;
+  font-size: 1rem;
+  font-family: 'Merriweather', serif;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
 
+.dropbtn:hover {
+  background-color: #5a2c30;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--cream);
+  min-width: 180px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.dropdown-content a {
+  color: var(--dark-brown);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-family: 'Merriweather', serif;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+  background-color: var(--cream);
+  color: var(--brand-red);
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+  </style>
   
 </head>
 <body>
@@ -23,7 +75,15 @@
         </div>
         <ul class="nav-links">
             <li><a href="borrowed_list.html"><i class="fas fa-book-open"></i> My Books</a></li>
-            <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+            <div class="dropdown">
+              <button class="dropbtn"><i class="fa-book-open"></i>notification</button>
+              <div class="dropdown-content">
+                <p>notification 1<p>
+                <p>notification 2</a>
+                <p>Notification 3<p>
+                <a href="notification.html">See all notifications</a>
+              </div>
+            </div>
             <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
             <link href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap" trel="stylesheet">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
