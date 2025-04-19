@@ -106,7 +106,7 @@ body, html{
     position: absolute;
     width: 100%;
     height: 100%;
-    background-image: url('Widget\,\ lockscreen.jpeg');
+    background-image: url('../images/Widget, lockscreen.jpeg');
     background-size: cover;
     background-position: center;
     filter: sepia(30%) contrast(110%);
