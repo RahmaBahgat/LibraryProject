@@ -14,6 +14,14 @@
   --cream: #EFE9E1;
 }
 
+[data-theme="dark"] {
+  --dark-brown: #E0D8D0;
+  --brand-red: #D4A5A9;
+  --warm-taupe: #8B7D6F;
+  --light-gray: #4A4A4A;
+  --cream: #1E1A17;
+}
+
 body {
   background: var(--cream);
   min-height: 100vh;
