@@ -1,0 +1,589 @@
+:root {
+    --form-height: 800px;
+    --form-width: 900px;
+    
+    --dark-brown: #322D29;
+    --brand-red: #72383D;
+    --warm-taupe: #AC9C8D;
+    --light-gray: #D9D9D9;
+    --cream: #EFE9E1;
+}
+
+body, html{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    font-family: 'Helvetica Neue', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.container{
+    width: var(--form-width);
+    height: var(--form-height);
+    position: relative;
+    margin: auto;
+    box-shadow: 2px 10px 40px rgba(22,20,19,0.4);
+    border-radius: 10px;
+    margin-top: 50px;
+    overflow: hidden;
+}
+
+
+.overlay{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 100;
+    background-image: linear-gradient(to right, #68584c, #68584c);
+    border-radius: 10px;
+    color: white;
+    clip: rect(0, 430px, var(--form-height), 0);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.open-sign-up{
+    animation: slideleft 1s linear forwards;
+    -webkit-animation: slideleft 1s linear forwards;
+}
+
+.open-sign-in{
+    animation: slideright 1s linear forwards;
+}
+
+.overlay .sign-in, .overlay .sign-up{
+    --padding: 40px;
+    width: calc(385px - var(--padding) * 2);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 4rem;
+    text-align: center;
+}
+
+.overlay .sign-in{
+    float: left;
+}
+
+.overlay-text-left-animation{
+    animation: text-slide-in-left 1s linear;
+}
+.overlay-text-left-animation-out{
+    animation: text-slide-out-left 1s linear;
+    -webkit-animation: text-slide-out-left 1s linear;
+}
+
+.overlay .sign-up{
+    float:right;
+}
+
+.overlay-text-right-animation{
+    animation: text-slide-in-right 1s linear;
+}
+
+.overlay-text-right-animation-out{
+    animation: text-slide-out-right 1s linear;
+}
+
+
+.overlay h1{
+    margin: 0px 5px;
+    font-size: 2.1rem;
+    z-index: 2;
+}
+
+.overlay p{
+    margin: 20px 0px 30px;
+    font-weight: 200;
+    z-index: 2;
+}
+
+.book-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('Widget\,\ lockscreen.jpeg');
+    background-size: cover;
+    background-position: center;
+    filter: sepia(30%) contrast(110%);
+    opacity: 50%;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    pointer-events: none;
+    -webkit-filter: sepia(30%) contrast(110%);
+}
+
+
+.switch-button, .control-button{
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 140px;
+    height: 40px;
+    font-size: 14px;
+    text-transform: uppercase;
+    background: none;
+    border-radius: 20px;
+    color: white;
+}
+
+.switch-button{
+    border: 2px solid;
+    background-color: var(--cream);
+    color: var(--dark-brown);
+    z-index: 2; 
+}
+
+
+.control-button{
+    border: none;
+    margin-top: 15px;
+}
+
+.switch-button:focus, .control-button:focus{
+    outline:none;
+}
+
+.control-button.up{
+    background-color: var(--brand-red);
+}
+
+.control-button.in{
+    background-color: var(--brand-red);
+}
+
+
+.form{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    overflow: hidden;
+}
+
+.form .sign-in, .form .sign-up{
+    --padding: 50px;
+    position:absolute;
+    width: calc(var(--form-width) - 444px - var(--padding) * 2);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 7px var(--padding);
+    text-align: center;
+}
+
+.form .sign-in{
+    display: none;
+}
+
+.form .sign-in{
+    left:0;
+}
+
+.form .sign-up{
+    right: 0;
+}
+
+.form-right-slide-in{
+    animation: form-slide-in-right 1s;
+}
+
+.form-right-slide-out{
+    animation: form-slide-out-right 1s;
+}
+
+.form-left-slide-in{
+    animation: form-slide-in-left 1s;
+}
+
+.form-left-slide-out{
+    animation: form-slide-out-left 1s;
+}
+
+.form .sign-in h1{
+    color: var(--dark-brown);
+    margin: 0;
+}
+
+.form .sign-up h1{
+    color: var(--dark-brown);
+    margin: 0;
+}
+
+.small{
+    font-size: 15px;
+    color: grey;
+    font-weight: 600;
+    margin: 20px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.forgot-id a {
+    display: flex;
+    text-align: left;
+    color: var(--brand-red);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.forgot-id a:hover {
+    color: var(--warm-taupe);
+    /* text-decoration: underline; */
+}
+
+.form-group {
+    text-align: left;
+    /* left: -100px; */
+}
+
+.form-group label {
+    display: block;
+    color: var(--brand-red);
+    /* margin-bottom: 0.5rem; */
+    font-weight: 100;
+}
+
+.form-group input {
+    padding: 5px;
+    border: 2px solid var(--cream);
+    font-size: 15px;
+    text-align: left;
+    width: calc((var(--form-width) / 3) * 1.122);
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--warm-taupe);
+    color: var(--dark-brown);
+}
+
+.form-group a {
+    color: var(--brand-red);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.form-group a:hover {
+    color: var(--dark-brown);
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    padding-right: 30px; 
+}
+
+.toggle-eye {
+    position: absolute;
+    right: 8px;
+    cursor: pointer;
+}
+
+.toggle-eye img {
+    width: 20px;
+    height: 20px;
+}
+
+.filter-switch {
+    border: 2px solid var(--brand-red);
+    border-radius: 30px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 30px;
+    left: 0;
+    overflow: hidden;
+}
+
+.filter-switch input {
+    display: none;
+}
+
+.filter-switch label {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    border-radius: 30px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.5s;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.filter-switch .background {
+    position: absolute;
+    width: 170px;
+    height: 20px;
+    background-color: var(--brand-red);
+    /* top: px; */
+    left: 4px;
+    border-radius: 30px;
+    transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    -webkit-transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    -moz-transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    -ms-transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    -o-transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#option2:checked ~ .background {
+    left: 50%;
+}
+
+#option1:checked + label[for="option1"] {
+    color: white;
+    font-weight: bold;
+}
+
+#option2:checked + label[for="option2"] {
+    color: white;
+    font-weight: bold;
+}
+
+#option1:not(:checked) + label[for="option1"],
+#option2:not(:checked) + label[for="option2"] {
+    color: var(--warm-taupe);
+}
+
+.agreement-section {
+    margin: -0.rem 0;
+    text-align: left;
+}
+
+.terms-text {
+    color: var(--warm-taupe);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.terms-text a {
+    color: var(--brand-red);
+    text-decoration: none;
+}
+
+.terms-text a:hover {
+    text-decoration: underline;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--dark-brown);
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.remember-me a {
+    color: var(--brand-red);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.remember-me a:hover {
+    color: var(--warm-taupe);
+    text-decoration: underline;
+}
+
+.remember-me input {
+    position: absolute;
+    opacity: 0;
+}
+
+.checkmark {
+    display: inline-block;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 2px solid var(--warm-taupe);
+    border-radius: 3px;
+    position: relative;
+}
+
+.remember-me input:checked ~ .checkmark {
+    background-color: var(--brand-red);
+    border-color: var(--brand-red);
+}
+
+.checkmark::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    display: none;
+}
+
+.remember-me input:checked ~ .checkmark::after {
+    display: block;
+}
+
+.secondary-options {
+    color: var(--brand-red);
+}
+
+.login-button {
+    background: var(--brand-red);
+    color: white;
+    padding: 0.4rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    -webkit-transition: background 0.3s ease;
+    -moz-transition: background 0.3s ease;
+    -ms-transition: background 0.3s ease;
+    -o-transition: background 0.3s ease;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background: #5a2c30;
+}
+
+
+@keyframes slideright{
+    0%{ clip: rect(0, 430px, var(--form-height), 0);}
+    30%{clip: rect(0, 480px, var(--form-height), 0);}
+    /*  we want the width to be slightly larger here  */
+    50%{clip: rect(0px, calc(var(--form-width) / 2 + 480px / 2), var(--form-height), calc(var(--form-width) / 2 - 480px / 2));}
+    80%{clip: rect(0px, var(--form-width), var(--form-height), calc(var(--form-width) - 480px));}
+    100%{clip: rect(0px, var(--form-width), var(--form-height), calc(var(--form-width) - 430px));}
+}
+
+@keyframes slideleft{
+    100%{clip: rect(0, 430px, var(--form-height), 0);}
+    70%{clip: rect(0, 480px, var(--form-height), 0);}
+    /*  we want the width to be slightly larger here  */
+    50%{clip: rect(0px, calc(var(--form-width) / 2 + 480px / 2), var(--form-height), calc(var(--form-width) / 2 - 480px / 2));}
+    30%{clip: rect(0px, var(--form-width), var(--form-height), calc(var(--form-width) - 480px));}
+    0%{clip: rect(0px, var(--form-width), var(--form-height), calc(var(--form-width) - 430px));}
+}
+
+@keyframes text-slide-in-left{
+    0% {
+        padding-left: 20px;
+    }
+    100% {
+        padding-left: 50px;
+    }
+}
+
+@keyframes text-slide-in-right{
+    0% {
+        padding-right: 20px;
+    }
+    100% {
+        padding-right: 50px;
+    }
+}
+
+@keyframes text-slide-out-left{
+    0% {
+        padding-left: 50px;
+    }
+    100% {
+        padding-left: 20px;
+    }
+}
+
+@keyframes text-slide-out-right{
+    0% {
+        padding-right: 50px;
+    }
+    100% {
+        padding-right: 20px;
+    }
+}
+
+@keyframes form-slide-in-right{
+    0%{
+        padding-right: 100px;
+    }
+    100%{
+        padding-right: 50px;
+    }
+}
+
+@keyframes form-slide-in-left{
+    0%{
+        padding-left: 100px;
+    }
+    100%{
+        padding-left: 50px;
+    }
+}
+
+@keyframes form-slide-out-right{
+    0%{
+        padding-right: 50px;
+    }
+    100%{
+        padding-right: 80px;
+    }
+}
+
+@keyframes form-slide-out-left{
+    0%{
+        padding-left: 50px;
+    }
+    100%{
+        padding-left: 80px;
+    }
+}
+
+/* Footer */
+.footer {
+    background: var(--dark-brown);
+    color: var(--cream);
+    text-align: center;
+    padding: 0.5rem;
+    margin-top: 3rem;
+}
+
+/* @media screen and (max-width: 650px) {
+    .container {
+        height: 1000px;
+    }  
+} */

@@ -1,0 +1,163 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>InOtherWords - Login/Signup</title>
+        <link rel="stylesheet" href="../css/LogIn_SignUp page.css">
+        <link rel="stylesheet" href="navbar.css">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div>
+                    <a href="../index.html" class="brand">InOtherWords</a>
+                </div>
+                <ul class="nav-links">
+                    <li>
+                        <a href="about.html"><i class="fas fa-book-open"></i> About</a>
+                    </li>
+                    <li>
+                        <a href="privacy.html"><i class="fas fa-bell"></i> Privacy</a>
+                    </li>
+                    <li>
+                        <a href="help.html"><i class="fas fa-user"></i> Help</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <div class="container">
+            <div class="overlay" id="overlay">
+                <div class="book-image"></div>
+                <div class="sign-in" id="sign-in">
+                    <h1>Welcome Back</h1>
+                    <p>Discover your next great read with InOtherWords</p>
+                    <button class="switch-button" id="slide-right-button">Sign In</button>
+                </div>
+                <div class="sign-up" id="sign-up">
+                    <h1>New Chapter Begins</h1>
+                    <p>Start your reading adventure with us today</p>
+                    <button class="switch-button" id="slide-left-button">Sign Up</button>
+                </div>
+            </div>
+            <div class="form">
+                <div class="sign-in" id="sign-in-info">
+                    <h1>Sign In</h1>
+                    <p class="small">use your email account</p>
+                    <form class="login-form">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signin-password">Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="signin-password" required>
+                                <span class="toggle-eye" data-target="signin-password">
+                                    <i class="fa-regular fa-eye" style="color: #6b6552;"></i>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="forgot-id">
+                            <a href="">Forgot password?</a>
+                        </div>
+                        
+                        <div id="firstFilter" class="filter-switch">
+                            <input checked="" id="option1" name="options" type="radio" />
+                            <label class="option" for="option1">Admin</label>
+                            <input id="option2" name="options" type="radio" />
+                            <label class="option" for="option2">User</label>
+                            <span class="background"></span>
+                        </div>
+                        
+                        <div class="agreement-section">
+                            <label class="remember-me">
+                                <input type="checkbox" />
+                                <span class="checkmark"></span>
+                                Keep me signed in. <a href="#">Details</a>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="login-button">Sign In</button>
+                    </form>
+                </div>
+                <div class="sign-up" id="sign-up-info">
+                    <h1>Create Account</h1>
+                    <p class="small">use your email for registration</p>
+                    <form class="login-form">
+                        <div class="form-group">
+                            <label for="first-name">First Name</label>
+                            <input type="text" id="first-name" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" id="last-name" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signup-password">Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="signup-password" required>
+                                <span class="toggle-eye" data-target="signup-password">
+                                    <i class="fa-regular fa-eye" style="color: #6b6552;"></i>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="confirm-password" required>
+                                <span class="toggle-eye" data-target="confirm-password">
+                                    <i class="fa-regular fa-eye" style="color: #6b6552;"></i>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div id="firstFilter" class="filter-switch">
+                            <input checked="" id="option1" name="options" type="radio" />
+                            <label class="option" for="option1">Admin</label>
+                            <input id="option2" name="options" type="radio" />
+                            <label class="option" for="option2">User</label>
+                            <span class="background"></span>
+                        </div>
+                        
+                        <div class="agreement-section">
+                            <p class="terms-text">
+                                By creating an account, you agree to the LitHub
+                                <a href="">Terms of Service</a> and
+                                <a href="">Privacy Policy</a>.
+                            </p>
+                            
+                            <label class="remember-me">
+                                <input type="checkbox" />
+                                <span class="checkmark"></span>
+                                I want to receive updates about InOtherWords
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="login-button">Create Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <p>&copy; 2025 InOtherWords</p>
+        </footer>
+        
+        <script src="../js/LogIn_SignUp page.js"></script>
+    </body>
+</html>
