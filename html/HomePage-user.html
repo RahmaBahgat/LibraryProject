@@ -9,7 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet"> -->
-  <link rel="stylesheet" href="../css/HomePage-user.css">
+  <link rel="stylesheet" href="css/HomePage-user.css">
+  <script src="js/HomePage-user.css"></script>
   <style>
 .dropbtn {
   background-color: var(--brand);
@@ -25,6 +26,7 @@
 
 .dropbtn:hover {
   background-color: #5a2c30;
+  
 }
 
 .dropdown {
@@ -36,9 +38,10 @@
   display: none;
   position: absolute;
   background-color: var(--cream);
-  min-width: 180px;
+  min-width: 250px;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
   z-index: 10;
+  
   border-radius: 10px;
   overflow: hidden;
 }
@@ -56,12 +59,32 @@
 .dropdown-content a:hover {
   background-color: var(--cream);
   color: var(--brand-red);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background-color: var(--cream); /* optional, if you want the background to change too */
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+
+  
 }
 
 .dropdown:hover .dropdown-content {
   display: block;
+  }
+  .notif {
+  padding: 12px 16px;
+  margin: 0;
+  font-family: 'Merriweather', serif;
+  font-size: 0.95rem;
+  color: var(--dark-brown);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  border-radius: 10px;
 }
 
+.notif:hover {
+  background-color: var(--cream);
+  color: var(--brand-red);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
   </style>
   
 </head>
@@ -76,12 +99,15 @@
         <ul class="nav-links">
             <li><a href="borrowed_list.html"><i class="fas fa-book-open"></i> My Books</a></li>
             <div class="dropdown">
-              <button class="dropbtn"><i class="fa-book-open"></i>notification</button>
+              <button class="dropbtn"><i class="fa-book-open"></i>notifications</button>
               <div class="dropdown-content">
-                <p>notification 1<p>
-                <p>notification 2</a>
-                <p>Notification 3<p>
-                <a href="../html/notifications.html">See all notifications</a>
+                <p class="notif">Your order #1234 has been shipped.
+                  <time>April 16, 2025 — 3:45 PM</time><p>
+                <p class="notif">"The Alchemist" is now 50% off!
+                  <time>April 16, 2025 — 1:12 PM</time></a>
+                <p class="notif">A book on your wishlist is back in stock.
+                  <time>April 15, 2025 — 10:05 AM</time><p>
+                <a class="notif"href="notification.html">See all notifications</a>
               </div>
             </div>
             <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
@@ -302,6 +328,5 @@
     
        </div>
       </div>
-        <script src="./darktheme.js"></script>
     </body>
     </html>
