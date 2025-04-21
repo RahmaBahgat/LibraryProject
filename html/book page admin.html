@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Book Store</title>
-  <link rel="stylesheet" href="../css/book page admin.css" />
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Book Store</title>
+    <link rel="stylesheet" href="../css/book page admin.css" />
+    <script src="../js/book-admin.js"></script>
+  </head>
+  
 <body>
 
   <div class="container">
@@ -14,46 +16,49 @@
     <div class="form-section">
       <h1 class="title">Edit Books</h1>
       <p class="subtitle">Add the book information below</p>
+      <form onsubmit="return validation();">
+        <p id="error" class="error-message"></p><br>
+        <div class="form-group">
+          <label for="name">Book Name</label>
+          <input type="text" id="name" placeholder="e.g. Atomic Habits" />
+        </div>
+        
+        <div class="form-group">
+          <label for="cover-page">Cover Page URL</label>
+          <input type="text" id="image" placeholder="e.g. http:image.com" />
+        </div>
 
-      <div class="form-group">
-        <label for="name">Book Name</label>
-        <input type="text" id="name" placeholder="e.g. Atomic Habits" />
+        <div class="form-group">
+          <label for="author">Author</label>
+          <input type="text" id="author" placeholder="e.g. James Clear" />
+        </div>
+
+        <div class="form-group">
+          <label for="category">book category</label>
+          <input type="text" id="category 1" placeholder="category 1" /><br><br>
+          <input type="text" id="category 2" placeholder="category 2" /><br><br>
+          <input type="text" id="category 3" placeholder="category 3" />
+        </div>
+
+        <div class="checkbox-group">
+          <label for="available">
+            <input type="checkbox" id="available" />
+            <span class="checkmark"></span>
+            Available?
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Book Description</label>
+          <textarea id="description" placeholder="Write a short description..."></textarea>
+        </div>
+        <div class="button-group">
+          <input type="button" value="Delete Book" onclick="if(validation()) deleteBook()" />
+          <input type="button" value="Add Book" onclick="if(validation()) addBook()" />
+          <input type="button" value="Discard" onclick="if(validation()) discardBook()" />
+        </div>
+        
       </div>
-
-      <div class="form-group">
-        <label for="id">Book ID</label>
-        <input type="text" id="id" placeholder="e.g. 1234" />
-      </div>
-
-      <div class="form-group">
-        <label for="author">Author</label>
-        <input type="text" id="author" placeholder="e.g. James Clear" />
-      </div>
-
-      <div class="form-group">
-        <label for="price">Price</label>
-        <input type="number" id="price" placeholder="$20" />
-      </div>
-
-      <div class="checkbox-group">
-        <label for="available">
-          <input type="checkbox" id="available" />
-          <span class="checkmark"></span>
-          Available?
-        </label>
-      </div>
-
-      <div class="form-group">
-        <label for="description">Book Description</label>
-        <textarea id="description" placeholder="Write a short description..."></textarea>
-      </div>
-
-      <div class="button-group">
-        <input type="button" value="Delete Book" />
-        <input type="button" value="Add Book" />
-        <input type="button" value="Discard" />
-      </div>
-    </div>
-
+  </form>
 </body>
 </html>
