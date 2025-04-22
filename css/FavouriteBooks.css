@@ -1,408 +1,407 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 :root {
-    --dark-brown: #322D29;
-    --brand-red: #72383D;
-    --warm-taupe: #AC9C8D;
-    --light-gray: #D9D9D9;
-    --cream: #EFE9E1;
+  --dark-brown: #322d29;
+  --brand-red: #72383d;
+  --warm-taupe: #ac9c8d;
+  --light-gray: #d9d9d9;
+  --cream: #efe9e1;
 }
 
 body {
-    font-family: system-ui, -apple-system, sans-serif;
-    background-color: var(--cream);
-    min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--cream);
+  min-height: 100vh;
 }
 
 /* Main Content Styles */
 .main-content {
-    /* max-width: 80rem; */
-    margin: 2rem auto;
-    padding: 0 1rem;
+  /* max-width: 80rem; */
+  margin: 2rem auto;
+  padding: 0 1rem;
 }
 
 .books-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    padding: 2rem;
-    align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 2rem;
+  align-items: flex-start;
 }
 
 /* Book Card Styles */
 .book-card {
-    background: white;
-    border-radius: 0.8rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    width: 300px;
-    max-height: 400px;
-    flex-shrink: 0;
-    position: relative;
-    overflow: hidden;
+  background: white;
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  width: 300px;
+  max-height: 400px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .book-card:hover,
 .book-card.pinned {
-    width: 700px;
-    z-index: 2;
+  width: 700px;
+  z-index: 2;
 }
 
 .book-content {
-    display: flex;
-    min-height: 400px;
+  display: flex;
+  min-height: 400px;
 }
 
 .book-cover {
-    width: 300px;
-    height: 400px;
-    flex-shrink: 0;
-    position: relative;
+  width: 300px;
+  height: 400px;
+  flex-shrink: 0;
+  position: relative;
 }
 
 .book-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .book-details {
-    flex: 1;
-    padding: 1.5rem;
-    transition: opacity 0.3s 0.1s;
-
+  flex: 1;
+  padding: 1.5rem;
+  transition: opacity 0.3s 0.1s;
 }
 
 .book-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .book-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--dark-brown);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--dark-brown);
 }
 
 .book-author {
-    color: var(--brand-red);
-    margin-top: 0.25rem;
+  color: var(--brand-red);
+  margin-top: 0.25rem;
 }
 
 .book-rating {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .star-rating {
-    display: flex;
-    gap: 0.25rem;
+  display: flex;
+  gap: 0.25rem;
 }
 
 .star {
-    color: #fbbf24;
-    fill: #fbbf24;
+  color: #fbbf24;
+  fill: #fbbf24;
 }
 
 .pin-button {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-    transition: all 0.3s;
-    z-index: 2;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.3s;
+  z-index: 2;
 }
 
 .pin-button:hover {
-    background: var(--brand-red);
-    color: white;
+  background: var(--brand-red);
+  color: white;
 }
 
 /* Other Books Movement */
 .books-grid:hover .book-card:not(:hover):not(.pinned) {
-    transform: translateX(calc(300px * var(--direction)));
+  transform: translateX(calc(300px * var(--direction)));
 }
 
 /* Expanded Content Styles */
 .expanded-content {
-    margin-top: 1rem;
-    display: none;
+  margin-top: 1rem;
+  display: none;
 }
 
 .expanded-content.active {
-    display: block;
+  display: block;
 }
 
 .book-description {
-    color: #4b5563;
+  color: #4b5563;
 }
 
 /* Reviews Section */
 .reviews-section {
-    margin-top: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .reviews-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .section-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--dark-brown);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--dark-brown);
 }
 
 .add-review-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--brand-red);
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: color 0.2s;
-    -webkit-transition: color 0.2s;
-    -moz-transition: color 0.2s;
-    -ms-transition: color 0.2s;
-    -o-transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--brand-red);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  -webkit-transition: color 0.2s;
+  -moz-transition: color 0.2s;
+  -ms-transition: color 0.2s;
+  -o-transition: color 0.2s;
 }
 
 .add-review-btn:hover {
-    color: var(--dark-brown);
+  color: var(--dark-brown);
 }
 
 /* Review Form */
 .review-form {
-    margin-top: 1rem;
-    background-color: var(--cream);
-    padding: 1rem;
-    border-radius: 0.5rem;
-    -webkit-border-radius: 0.5rem;
-    -moz-border-radius: 0.5rem;
-    -ms-border-radius: 0.5rem;
-    -o-border-radius: 0.5rem;
+  margin-top: 1rem;
+  background-color: var(--cream);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
 }
 
 .review-form textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--warm-taupe);
-    border-radius: 0.25rem;
-    resize: vertical;
-    -webkit-border-radius: 0.25rem;
-    -moz-border-radius: 0.25rem;
-    -ms-border-radius: 0.25rem;
-    -o-border-radius: 0.25rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--warm-taupe);
+  border-radius: 0.25rem;
+  resize: vertical;
+  -webkit-border-radius: 0.25rem;
+  -moz-border-radius: 0.25rem;
+  -ms-border-radius: 0.25rem;
+  -o-border-radius: 0.25rem;
 }
 
 .review-form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .btn-cancel {
-    padding: 0.5rem 1rem;
-    color: #4b5563;
-    background: none;
-    border: none;
-    cursor: pointer;
+  padding: 0.5rem 1rem;
+  color: #4b5563;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .btn-submit {
-    padding: 0.5rem 1rem;
-    background-color: var(--brand-red);
-    color: white;
-    border: none;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
+  padding: 0.5rem 1rem;
+  background-color: var(--brand-red);
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .btn-submit:hover {
-    background-color: var(--dark-brown);
+  background-color: var(--dark-brown);
 }
 
 /* Reviews List */
 .reviews-list {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 .review-item {
-    background-color: var(--cream);
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
+  background-color: var(--cream);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 /* Related Books */
 .related-books {
-    margin-top: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .related-books-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 .related-book {
-    display: flex;
-    gap: 1rem;
-    background-color: var(--cream);
-    padding: 1rem;
-    border-radius: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  background-color: var(--cream);
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 
 .related-book-cover {
-    width: 5rem;
-    height: 7.5rem;
+  width: 5rem;
+  height: 7.5rem;
 }
 
 .related-book-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 0.25rem;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.25rem;
 }
 
 .related-book-info h4 {
-    font-weight: 600;
-    color: var(--dark-brown);
+  font-weight: 600;
+  color: var(--dark-brown);
 }
 
 .related-book-info p {
-    font-size: 0.875rem;
-    color: var(--brand-red);
+  font-size: 0.875rem;
+  color: var(--brand-red);
 }
 
 .add-to-favorites {
-    margin-top: 0.5rem;
-    font-size: 0.875rem;
-    color: var(--brand-red);
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: color 0.2s;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--brand-red);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
 .add-to-favorites:hover {
-    color: var(--dark-brown);
+  color: var(--dark-brown);
 }
 
 /* Toggle Button */
 .toggle-btn {
-    color: var(--brand-red);
-    position: fixed;
-    left: 620px;
-    right: 600px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: color 0.2s;
+  color: var(--brand-red);
+  position: fixed;
+  left: 620px;
+  right: 600px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
 .toggle-btn:hover {
-    color: var(--dark-brown);
+  color: var(--dark-brown);
 }
 
 /* Modal Styles */
 .modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }
 
 .modal-content {
-    background-color: var(--cream);
-    margin: 2% auto;
-    padding: 2rem;
-    width: 80%;
-    max-width: 800px;
-    border-radius: 8px;
-    max-height: 90vh;
-    overflow-y: auto;
+  background-color: var(--cream);
+  margin: 2% auto;
+  padding: 2rem;
+  width: 80%;
+  max-width: 800px;
+  border-radius: 8px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .close-modal {
-    float: right;
-    cursor: pointer;
-    font-size: 1.5rem;
+  float: right;
+  cursor: pointer;
+  font-size: 1.5rem;
 }
 
 .modal-body {
-    margin-top: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .modal-book-cover {
-    width: 200px;
-    height: 300px;
-    margin-right: 2rem;
-    float: left;
+  width: 200px;
+  height: 300px;
+  margin-right: 2rem;
+  float: left;
 }
 
 .modal-book-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
 }
 
 .book-card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 1;
-    transform: translateY(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .book-card.removing {
-    opacity: 0;
-    transform: translateX(-100%);
+  opacity: 0;
+  transform: translateX(-100%);
 }
 
 /* transitions */
 .books-grid {
-    transition: height 0.3s ease-in-out;
-    -webkit-transition: height 0.3s ease-in-out;
-    -moz-transition: height 0.3s ease-in-out;
-    -ms-transition: height 0.3s ease-in-out;
-    -o-transition: height 0.3s ease-in-out;
+  transition: height 0.3s ease-in-out;
+  -webkit-transition: height 0.3s ease-in-out;
+  -moz-transition: height 0.3s ease-in-out;
+  -ms-transition: height 0.3s ease-in-out;
+  -o-transition: height 0.3s ease-in-out;
 }
 
 /* maybe I will change this */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .fade-in {
-    animation: fadeIn 0.3s ease-out forwards;
+  animation: fadeIn 0.3s ease-out forwards;
 }

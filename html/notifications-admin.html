@@ -1,48 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notifications</title>
-  <link rel="stylesheet" href="../css/notifications.css">
-  <link rel="stylesheet" href="../css/HomePage-user.css">
-  <script src="../js/notifications.js"></script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notifications</title>
+    <link rel="stylesheet" href="../css/notifications.css" />
+    <link rel="stylesheet" href="../css/HomePage-user.css" />
+    <script src="../js/notifications.js"></script>
+  </head>
+  <body>
     <nav class="navbar">
-        <div class="nav-container">
-            <a href="" class="brand">LitHub</a>
-            <div class="search-bar">
-                <input type="text" placeholder="Search books, authors, or genres">
-                <button><i class="fas fa-search"></i></button>
-            </div>
-            <ul class="nav-links">
-                <li><a href=""><i class="fas fa-book-open"></i> My Books</a></li>
-                <li><a href=""><i class="fas fa-bell"></i> Notifications</a></li>
-                <li><a href=""><i class="fas fa-user"></i> Profile</a></li>
-            </ul>
+      <div class="nav-container">
+        <a href="" class="brand">LitHub</a>
+        <div class="search-bar">
+          <input type="text" placeholder="Search books, authors, or genres" />
+          <button><i class="fas fa-search"></i></button>
         </div>
+        <ul class="nav-links">
+          <li>
+            <a href=""><i class="fas fa-book-open"></i> My Books</a>
+          </li>
+          <li>
+            <a href=""><i class="fas fa-bell"></i> Notifications</a>
+          </li>
+          <li>
+            <a href=""><i class="fas fa-user"></i> Profile</a>
+          </li>
+        </ul>
+      </div>
     </nav>
-  <div class="notif-page">
-    <h1 class="noti-title">Notifications</h1>
+    <div class="notif-page">
+      <h1 class="noti-title">Notifications</h1>
 
-    <div class="notification-item-admin">
-      <div class="not-details">
-        <label for="name">Enter the name of the user:</label>
-        <input type="text" id="name"><br><br>
+      <div class="notification-item-admin">
+        <div class="not-details">
+          <label for="name">Enter the name of the user:</label>
+          <input type="text" id="name" /><br /><br />
 
-        <label for="email">Enter the email of the user:</label>
-        <input type="email" id="email"><br><br>
+          <label for="email">Enter the email of the user:</label>
+          <input type="email" id="email" /><br /><br />
 
-        <label for="name">Enter the name of the book:</label>
-        <input type="text" id="book"><br><br>
+          <label for="name">Enter the name of the book:</label>
+          <input type="text" id="book" /><br /><br />
 
-
-        <input type="button" value="Reminder" onclick="sendReminder()" id="reminder">
-        <input type="button" value="Last Item" onclick="lastItem()" id="last-item">
-        <input type="button" value="New book" onclick="newBook()" id="newbook">
+          <input
+            type="button"
+            value="Reminder"
+            onclick="sendReminder()"
+            id="reminder"
+          />
+          <input
+            type="button"
+            value="Last Item"
+            onclick="lastItem()"
+            id="last-item"
+          />
+          <input
+            type="button"
+            value="New book"
+            onclick="newBook()"
+            id="newbook"
+          />
+        </div>
       </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

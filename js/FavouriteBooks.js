@@ -1,15 +1,15 @@
 // DOM Elements
-const booksContainer = document.getElementById('booksContainer');
-const reviewFormTemplate = document.getElementById('reviewFormTemplate');
-const modal = document.getElementById('bookModal');
-const modalBody = modal.querySelector('.modal-body');
+const booksContainer = document.getElementById("booksContainer");
+const reviewFormTemplate = document.getElementById("reviewFormTemplate");
+const modal = document.getElementById("bookModal");
+const modalBody = modal.querySelector(".modal-body");
 
 // Modal Functions
 function showBookDetails(bookId) {
-    const book = books.find(b => b.id === bookId);
-    if (!book) return;
+  const book = books.find((b) => b.id === bookId);
+  if (!book) return;
 
-    modalBody.innerHTML = `
+  modalBody.innerHTML = `
         <div class="modal-book-cover">
             <img src="${book.cover}" alt="${book.title}">
         </div>
@@ -25,19 +25,25 @@ function showBookDetails(bookId) {
             <div class="reviews-section">
                 <h3 class="section-title">Reviews</h3>
                 <div class="reviews-list">
-                    ${book.reviews.map(review => `
+                    ${book.reviews
+                      .map(
+                        (review) => `
                         <div class="review-item">
                             ${createStarRating(review.rating).outerHTML}
                             <p>${review.text}</p>
                         </div>
-                    `).join('')}
+                    `
+                      )
+                      .join("")}
                 </div>
             </div>
             
             <div class="related-books">
                 <h3 class="section-title">Related Books</h3>
                 <div class="related-books-grid">
-                    ${getRelatedBooks(book.id).map(relatedBook => `
+                    ${getRelatedBooks(book.id)
+                      .map(
+                        (relatedBook) => `
                         <div class="related-book">
                             <div class="related-book-cover">
                                 <img src="${relatedBook.cover}" alt="${relatedBook.title}">
@@ -50,66 +56,67 @@ function showBookDetails(bookId) {
                                 </button>
                             </div>
                         </div>
-                    `).join('')}
+                    `
+                      )
+                      .join("")}
                 </div>
             </div>
         </div>
         <div style="clear: both;"></div>
     `;
 
-    // nested view details
-    modalBody.querySelectorAll('.view-details').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const relatedBookId = e.target.dataset.bookId;
-            showBookDetails(relatedBookId);
-        });
+  // nested view details
+  modalBody.querySelectorAll(".view-details").forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const relatedBookId = e.target.dataset.bookId;
+      showBookDetails(relatedBookId);
     });
+  });
 
-    modal.style.display = 'block';
+  modal.style.display = "block";
 }
 
-
 function createStarRating(rating) {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-    const starsContainer = document.createElement('div');
-    starsContainer.className = 'star-rating';
-    
-    // Add full stars
-    for (let i = 0; i < fullStars; i++) {
-        const star = document.createElement('span');
-        star.className = 'star';
-        // el mafrood hena a3mel star ................................
-        starsContainer.appendChild(star);
-    }
-    
-    // Add half star
-    if (hasHalfStar) {
-        const halfStar = document.createElement('span');
-        halfStar.className = 'star';
-        // el mafrood hena a3mel star ................................
-        starsContainer.appendChild(halfStar);
-    }
-    
-    return starsContainer;
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 !== 0;
+  const starsContainer = document.createElement("div");
+  starsContainer.className = "star-rating";
+
+  // Add full stars
+  for (let i = 0; i < fullStars; i++) {
+    const star = document.createElement("span");
+    star.className = "star";
+    // el mafrood hena a3mel star ................................
+    starsContainer.appendChild(star);
+  }
+
+  // Add half star
+  if (hasHalfStar) {
+    const halfStar = document.createElement("span");
+    halfStar.className = "star";
+    // el mafrood hena a3mel star ................................
+    starsContainer.appendChild(halfStar);
+  }
+
+  return starsContainer;
 }
 
 function createRelatedBooks(bookId) {
-    const relatedBooksElement = document.createElement('div');
-    relatedBooksElement.className = 'related-books';
-    
-    const title = document.createElement('h3');
-    title.className = 'section-title';
-    title.textContent = 'Related Books';
-    relatedBooksElement.appendChild(title);
+  const relatedBooksElement = document.createElement("div");
+  relatedBooksElement.className = "related-books";
 
-    const grid = document.createElement('div');
-    grid.className = 'related-books-grid';
+  const title = document.createElement("h3");
+  title.className = "section-title";
+  title.textContent = "Related Books";
+  relatedBooksElement.appendChild(title);
 
-    getRelatedBooks(bookId).forEach(book => {
-        const relatedBook = document.createElement('div');
-        relatedBook.className = 'related-book';
-        relatedBook.innerHTML = `
+  const grid = document.createElement("div");
+  grid.className = "related-books-grid";
+
+  getRelatedBooks(bookId).forEach((book) => {
+    const relatedBook = document.createElement("div");
+    relatedBook.className = "related-book";
+    relatedBook.innerHTML = `
             <div class="related-book-cover">
                 <img src="${book.cover}" alt="${book.title}">
             </div>
@@ -117,139 +124,151 @@ function createRelatedBooks(bookId) {
                 <h4>${book.title}</h4>
                 <p>${book.author}</p>
                 <button class="add-to-favorites" data-book-id="${book.id}">
-                    ${book.isFavorite ? '❤️ Remove Favorite' : '♡ Add to Favorites'}
+                    ${
+                      book.isFavorite
+                        ? "❤️ Remove Favorite"
+                        : "♡ Add to Favorites"
+                    }
                 </button>
             </div>
         `;
-        grid.appendChild(relatedBook);
-    });
+    grid.appendChild(relatedBook);
+  });
 
-    relatedBooksElement.appendChild(grid);
-    return relatedBooksElement;
+  relatedBooksElement.appendChild(grid);
+  return relatedBooksElement;
 }
 
-document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('add-to-favorites')) {
-        const bookId = e.target.dataset.bookId;
-        const book = books.find(b => b.id === bookId);
-        const wasFavorite = book.isFavorite;
-        
-        // Toggle favorite status
-        book.isFavorite = !book.isFavorite;
-        
-        document.querySelectorAll(`[data-book-id="${bookId}"]`).forEach(button => {
-            button.textContent = book.isFavorite ? 
-                '❤️ Remove Favorite' : 
-                '♡ Add to Favorites';
-        });
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("add-to-favorites")) {
+    const bookId = e.target.dataset.bookId;
+    const book = books.find((b) => b.id === bookId);
+    const wasFavorite = book.isFavorite;
 
-        if (book.isFavorite && !wasFavorite) {
-            // Add newly favorited book to the page
-            if (!document.querySelector(`.book-card[data-book-id="${bookId}"]`)) {
-                const bookCard = createBookCard(book);
-                bookCard.dataset.bookId = bookId;
-                bookCard.style.opacity = '0';
-                booksContainer.prepend(bookCard);
-                
-                setTimeout(() => {
-                    bookCard.style.transform = 'translateY(0)';
-                    bookCard.style.opacity = '1';
-                }, 10);
-            }
-        }
-        else if (!book.isFavorite && wasFavorite) {
-            // Remove from page
-            const bookCard = document.querySelector(`.book-card[data-book-id="${bookId}"]`);
-            if (bookCard) {
-                bookCard.style.transform = 'translateX(-100%)';
-                bookCard.style.opacity = '0';
-                setTimeout(() => bookCard.remove(), 300);
-            }
-        }
+    // Toggle favorite status
+    book.isFavorite = !book.isFavorite;
 
-        // Refresh related books
-        const currentModalBookId = document.querySelector('.modal-book-info')?.querySelector('.book-title')?.dataset?.bookId;
-        if (currentModalBookId) {
-            showBookDetails(currentModalBookId);
-        }
+    document
+      .querySelectorAll(`[data-book-id="${bookId}"]`)
+      .forEach((button) => {
+        button.textContent = book.isFavorite
+          ? "❤️ Remove Favorite"
+          : "♡ Add to Favorites";
+      });
+
+    if (book.isFavorite && !wasFavorite) {
+      // Add newly favorited book to the page
+      if (!document.querySelector(`.book-card[data-book-id="${bookId}"]`)) {
+        const bookCard = createBookCard(book);
+        bookCard.dataset.bookId = bookId;
+        bookCard.style.opacity = "0";
+        booksContainer.prepend(bookCard);
+
+        setTimeout(() => {
+          bookCard.style.transform = "translateY(0)";
+          bookCard.style.opacity = "1";
+        }, 10);
+      }
+    } else if (!book.isFavorite && wasFavorite) {
+      // Remove from page
+      const bookCard = document.querySelector(
+        `.book-card[data-book-id="${bookId}"]`
+      );
+      if (bookCard) {
+        bookCard.style.transform = "translateX(-100%)";
+        bookCard.style.opacity = "0";
+        setTimeout(() => bookCard.remove(), 300);
+      }
     }
+
+    // Refresh related books
+    const currentModalBookId = document
+      .querySelector(".modal-book-info")
+      ?.querySelector(".book-title")?.dataset?.bookId;
+    if (currentModalBookId) {
+      showBookDetails(currentModalBookId);
+    }
+  }
 });
 
 function handleToggleExpand(bookElement, book) {
-    const expandedContent = bookElement.querySelector('.expanded-content');
-    const toggleBtn = bookElement.querySelector('.toggle-btn');
-    
-    book.expanded = !book.expanded;
-    expandedContent.classList.toggle('active');
-    
-    toggleBtn.innerHTML = book.expanded 
+  const expandedContent = bookElement.querySelector(".expanded-content");
+  const toggleBtn = bookElement.querySelector(".toggle-btn");
+
+  book.expanded = !book.expanded;
+  expandedContent.classList.toggle("active");
+
+  toggleBtn.innerHTML = book.expanded
     ? `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>`
     : `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
 }
 
 function handleAddReview(bookElement, book) {
-    const reviewsSection = bookElement.querySelector('.reviews-section');
-    const existingForm = reviewsSection.querySelector('.review-form');
-    
-    if (existingForm) {
-        existingForm.remove();
-        return;
-    }
-    
-    const reviewForm = reviewFormTemplate.content.cloneNode(true);
-    const formElement = reviewForm.querySelector('.review-form');
-    
-    formElement.querySelector('.btn-cancel').addEventListener('click', () => {
-        formElement.remove();
-    });
-    
-    formElement.querySelector('.btn-submit').addEventListener('click', () => {
-        const reviewText = formElement.querySelector('textarea').value.trim();
-        if (!reviewText) return;
-        
-        const review = {
-            id: Date.now(),
-            text: reviewText,
-            rating: 5
-        };
-        
-        book.reviews.push(review);
-        renderReviews(bookElement, book);
-        formElement.remove();
-    });
-    
-    reviewsSection.insertBefore(formElement, reviewsSection.querySelector('.reviews-list'));
+  const reviewsSection = bookElement.querySelector(".reviews-section");
+  const existingForm = reviewsSection.querySelector(".review-form");
+
+  if (existingForm) {
+    existingForm.remove();
+    return;
+  }
+
+  const reviewForm = reviewFormTemplate.content.cloneNode(true);
+  const formElement = reviewForm.querySelector(".review-form");
+
+  formElement.querySelector(".btn-cancel").addEventListener("click", () => {
+    formElement.remove();
+  });
+
+  formElement.querySelector(".btn-submit").addEventListener("click", () => {
+    const reviewText = formElement.querySelector("textarea").value.trim();
+    if (!reviewText) return;
+
+    const review = {
+      id: Date.now(),
+      text: reviewText,
+      rating: 5,
+    };
+
+    book.reviews.push(review);
+    renderReviews(bookElement, book);
+    formElement.remove();
+  });
+
+  reviewsSection.insertBefore(
+    formElement,
+    reviewsSection.querySelector(".reviews-list")
+  );
 }
 
 function renderReviews(bookElement, book) {
-    const reviewsList = bookElement.querySelector('.reviews-list');
-    reviewsList.innerHTML = '';
-    
-    book.reviews.forEach(review => {
-        const reviewElement = document.createElement('div');
-        reviewElement.className = 'review-item';
-        reviewElement.innerHTML = `
+  const reviewsList = bookElement.querySelector(".reviews-list");
+  reviewsList.innerHTML = "";
+
+  book.reviews.forEach((review) => {
+    const reviewElement = document.createElement("div");
+    reviewElement.className = "review-item";
+    reviewElement.innerHTML = `
         <div class="book-rating">
         ${createStarRating(review.rating).outerHTML}
         </div>
         <p>${review.text}</p>
         `;
-        reviewsList.appendChild(reviewElement);
-    });
+    reviewsList.appendChild(reviewElement);
+  });
 }
 function createBookCard(book) {
-    const bookElement = document.createElement('div');
-    bookElement.className = 'book-card fade-in';
-    bookElement.dataset.bookId = book.id;
+  const bookElement = document.createElement("div");
+  bookElement.className = "book-card fade-in";
+  bookElement.dataset.bookId = book.id;
 
-    // Pin button SVG
-    const pinButtonSVG = `
+  // Pin button SVG
+  const pinButtonSVG = `
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 17v-4m0 0V8m0 5h5l-5 5h5m-5-5H7l5-5H7"/>
         </svg>
     `;
 
-    bookElement.innerHTML = `
+  bookElement.innerHTML = `
         <button class="pin-button" aria-label="Pin book">
             ${pinButtonSVG}
         </button>
@@ -266,50 +285,54 @@ function createBookCard(book) {
         </div>
     `;
 
-    // Pin functionality
-    const pinBtn = bookElement.querySelector('.pin-button');
-    pinBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const wasPinned = bookElement.classList.contains('pinned');
-        
-        // Unpin all other cards
-        document.querySelectorAll('.book-card.pinned').forEach(card => {
-            if (card !== bookElement) card.classList.remove('pinned');
-        });
-        
-        bookElement.classList.toggle('pinned', !wasPinned);
+  // Pin functionality
+  const pinBtn = bookElement.querySelector(".pin-button");
+  pinBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const wasPinned = bookElement.classList.contains("pinned");
+
+    // Unpin all other cards
+    document.querySelectorAll(".book-card.pinned").forEach((card) => {
+      if (card !== bookElement) card.classList.remove("pinned");
     });
 
-    let hoverTimeout;
-    bookElement.addEventListener('mouseenter', () => {
-        hoverTimeout = setTimeout(() => {
-            if (!document.querySelector('.book-card.pinned')) {
-                bookElement.classList.add('hover-expand');
-            }
-        }, 300);
-    });
+    bookElement.classList.toggle("pinned", !wasPinned);
+  });
 
-    bookElement.addEventListener('mouseleave', () => {
-        clearTimeout(hoverTimeout);
-        if (!bookElement.classList.contains('pinned')) {
-            bookElement.classList.remove('hover-expand');
-        }
-    });
+  let hoverTimeout;
+  bookElement.addEventListener("mouseenter", () => {
+    hoverTimeout = setTimeout(() => {
+      if (!document.querySelector(".book-card.pinned")) {
+        bookElement.classList.add("hover-expand");
+      }
+    }, 300);
+  });
 
-    const toggleBtn = bookElement.querySelector('.toggle-btn');
-    const addReviewBtn = bookElement.querySelector('.add-review-btn');
-    
-    toggleBtn.addEventListener('click', () => handleToggleExpand(bookElement, book));
-    addReviewBtn.addEventListener('click', () => handleAddReview(bookElement, book));
-    
-    // Initial render of reviews
-    renderReviews(bookElement, book);
-    
-    return bookElement;
+  bookElement.addEventListener("mouseleave", () => {
+    clearTimeout(hoverTimeout);
+    if (!bookElement.classList.contains("pinned")) {
+      bookElement.classList.remove("hover-expand");
+    }
+  });
+
+  const toggleBtn = bookElement.querySelector(".toggle-btn");
+  const addReviewBtn = bookElement.querySelector(".add-review-btn");
+
+  toggleBtn.addEventListener("click", () =>
+    handleToggleExpand(bookElement, book)
+  );
+  addReviewBtn.addEventListener("click", () =>
+    handleAddReview(bookElement, book)
+  );
+
+  // Initial render of reviews
+  renderReviews(bookElement, book);
+
+  return bookElement;
 }
 
 function createBookHeader(book) {
-    return `
+  return `
         <div class="book-header">
             <div class="book-meta">
                 <h2 class="book-title">${book.title}</h2>
@@ -328,7 +351,7 @@ function createBookHeader(book) {
 }
 
 function createExpandedContent(book) {
-    return `
+  return `
         <div class="expanded-content">
             ${createReviewsSection(book)}
             ${createRelatedBooks(book.id).outerHTML}
@@ -337,7 +360,7 @@ function createExpandedContent(book) {
 }
 
 function createReviewsSection(book) {
-    return `
+  return `
         <div class="reviews-section">
             <div class="reviews-header">
                 <h3 class="section-title">Reviews</h3>
@@ -369,13 +392,13 @@ const plusIconSVG = `
 
 // Initialize the page
 function initializePage() {
-    // Filter only favorite books
-    const favoriteBooks = books.filter(book => book.isFavorite);
-    favoriteBooks.forEach(book => {
-        const bookCard = createBookCard(book);
-        booksContainer.appendChild(bookCard);
-    });
+  // Filter only favorite books
+  const favoriteBooks = books.filter((book) => book.isFavorite);
+  favoriteBooks.forEach((book) => {
+    const bookCard = createBookCard(book);
+    booksContainer.appendChild(bookCard);
+  });
 }
 
 // Start
-document.addEventListener('DOMContentLoaded', initializePage);
+document.addEventListener("DOMContentLoaded", initializePage);
