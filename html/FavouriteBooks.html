@@ -1,73 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Favorite Books</title>
-    <link rel="stylesheet" href="../css/FavouriteBooks.css">
-    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/FavouriteBooks.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
     <link
-    href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap"
-    trel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap"
+      trel="stylesheet"
     />
     <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
-</head>
-<body>
-
-<!-- Header Section -->
-<nav class="navbar">
-    <div class="nav-container">
+  </head>
+  <body>
+    <!-- Header Section -->
+    <nav class="navbar">
+      <div class="nav-container">
         <a href="./HomePage-user.html" class="brand">LitHub</a>
         <ul class="nav-links">
-            <li>
-                <a href="./HomePage-user.html"><i class="fas fa-home"></i>Home</a>
-            </li>
-            <li>
-                <a href=""><i class="fas fa-bell"></i> Notifications</a>
-            </li>
-            <li>
-                <a href=""><i class="fas fa-user"></i> Profile</a>
-            </li>
+          <li>
+            <a href="./HomePage-user.html"><i class="fas fa-home"></i>Home</a>
+          </li>
+          <li>
+            <a href=""><i class="fas fa-bell"></i> Notifications</a>
+          </li>
+          <li>
+            <a href=""><i class="fas fa-user"></i> Profile</a>
+          </li>
         </ul>
-    </div>
-</nav>
+      </div>
+    </nav>
 
-<!-- Main Content -->
-<main class="main-content">
-    <div class="books-grid" id="booksContainer">
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="books-grid" id="booksContainer">
         <!-- Books will be inserted here -->
-    </div>
-</main>
+      </div>
+    </main>
 
-<!-- Review Form Template -->
-<template id="reviewFormTemplate">
-    <div class="review-form">
+    <!-- Review Form Template -->
+    <template id="reviewFormTemplate">
+      <div class="review-form">
         <div class="rating-stars">
-            <div class="stars-container">
-                <!-- ahot el taqyeem bta3 el ketab -->
-            </div>
-            <span class="rating-text">XX/5 Stars</span>
+          <div class="stars-container">
+            <!-- ahot el taqyeem bta3 el ketab -->
+          </div>
+          <span class="rating-text">XX/5 Stars</span>
         </div>
         <textarea placeholder="Write your review..." rows="3"></textarea>
         <div class="review-form-actions">
-            <button class="btn-cancel">Cancel</button>
-            <button class="btn-submit">Submit</button>
+          <button class="btn-cancel">Cancel</button>
+          <button class="btn-submit">Submit</button>
         </div>
-    </div>
-</template>
+      </div>
+    </template>
 
-<!-- Book Details Modal -->
-<div id="bookModal" class="modal">
-    <div class="modal-content">
+    <!-- Book Details Modal -->
+    <div id="bookModal" class="modal">
+      <div class="modal-content">
         <span class="close-modal">&times;</span>
         <div class="modal-body"></div>
+      </div>
     </div>
-</div>
 
-<script src="../js/data.js"></script>
-<script src="../js/FavouriteBooks.js"></script>
-</body>
+    <script src="../js/data.js"></script>
+    <script src="../js/FavouriteBooks.js"></script>
+  </body>
 </html>

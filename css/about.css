@@ -1,118 +1,119 @@
 /* about.css */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Merriweather', serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Merriweather", serif;
 }
 
 :root {
-    --dark-brown: #322D29;
-    --brand-red: #72383D;
-    --warm-taupe: #AC9C8D;
-    --light-gray: #D9D9D9;
-    --cream: #EFE9E1;
+  --dark-brown: #322d29;
+  --brand-red: #72383d;
+  --warm-taupe: #ac9c8d;
+  --light-gray: #d9d9d9;
+  --cream: #efe9e1;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .hero {
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://source.unsplash.com/random/1200x600?library');
-    height: 400px;
-    background-size: cover;
-    background-position: center;
-    position: relative;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("https://source.unsplash.com/random/1200x600?library");
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
 }
 
 .hero-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
 }
 
 .hero-overlay h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-family: "Playfair Display", serif;
 }
 
 .mission-content h2 {
-    margin: 5%;
+  margin: 5%;
 }
 
 .mission-section {
-    padding: 4rem 2rem;
-    background: var(--cream);
+  padding: 4rem 2rem;
+  background: var(--cream);
 }
 
 .mission-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .mission-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .mission-card i {
-    font-size: 2.5rem;
-    color: var(--brand-red);
-    margin-bottom: 1rem;
+  font-size: 2.5rem;
+  color: var(--brand-red);
+  margin-bottom: 1rem;
 }
 
 .team-section {
-    padding: 4rem 2rem;
-    background: white;
-    text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  text-align: center;
 }
 
 .team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 2rem auto;
-    text-align: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  text-align: center;
 }
 
 .team-member img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 1rem;
-    text-align: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 .stats-section {
-    background: var(--brand-red);
-    color: white;
-    padding: 4rem 2rem;
+  background: var(--brand-red);
+  color: white;
+  padding: 4rem 2rem;
 }
 
 .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .stat-item h3 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
 }

@@ -3,15 +3,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Merriweather', serif;
+  font-family: "Merriweather", serif;
 }
 
 :root {
-  --dark-brown: #322D29;
-  --brand-red: #72383D;
-  --warm-taupe: #AC9C8D;
-  --light-gray: #D9D9D9;
-  --cream: #EFE9E1;
+  --dark-brown: #322d29;
+  --brand-red: #72383d;
+  --warm-taupe: #ac9c8d;
+  --light-gray: #d9d9d9;
+  --cream: #efe9e1;
 }
 
 body {
@@ -28,7 +28,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
-  background: url('book-pattern.png') repeat; /* Add subtle book pattern */
+  background: url("book-pattern.png") repeat; /* Add subtle book pattern */
 }
 
 .login-card {
@@ -181,7 +181,7 @@ body {
 }
 
 .agreement-section {
-  margin: -0.rem 0;
+  margin: -0rem 0;
   text-align: left;
 }
 
@@ -311,7 +311,7 @@ body {
 
 .divider::before,
 .divider::after {
-  content: '';
+  content: "";
   flex: 1;
   border-bottom: 1px solid var(--light-gray);
   margin: auto;
