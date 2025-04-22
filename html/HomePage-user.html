@@ -1,14 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-  <title>LitHub</title>
-  <link rel="stylesheet" href="../css/HomePage-admin.css">
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-=======
   <title>Library</title>
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -93,10 +88,8 @@
 }
   </style>
   
->>>>>>> 1ca95dc7170c0826a2ed1b2e83212bd40b070cf9
 </head>
 <body>
-
   <nav class="navbar">
     <div class="nav-container">
         <a href="#" class="brand">LitHub</a>
@@ -105,29 +98,71 @@
             <button><i class="fas fa-search"></i></button>
         </div>
         <ul class="nav-links">
-            <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+            <li><a href="borrowed_list.html"><i class="fas fa-book-open"></i> My Books</a></li>
+            <div class="dropdown">
+              <button class="dropbtn"><i class="fa-book-open"></i>notifications</button>
+              <div class="dropdown-content">
+                <p class="notif">Your order #1234 has been shipped.
+                  <time>April 16, 2025 — 3:45 PM</time><p>
+                <p class="notif">"The Alchemist" is now 50% off!
+                  <time>April 16, 2025 — 1:12 PM</time></a>
+                <p class="notif">A book on your wishlist is back in stock.
+                  <time>April 15, 2025 — 10:05 AM</time><p>
+                <a class="notif"href="notification.html">See all notifications</a>
+              </div>
+            </div>
             <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+            <link href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap" trel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         </ul>
     </div>
-  </nav>
-
-  <br><br>
+    </nav>
+<br>
+<br>
 
   <div class="container">
     <center>
-      <!-- <h1>Welcome back, reader. Your literary journey continues...</h1> -->
-      <br><br>
-    </center>
-  </div>
+      <h1>Welcome back, "book lover"!</h1>
+    
+    <br>
 
-  <div id="book-carousels-container"></div>
+    <div class="section-header">
+      <h2>Suggested For You</h2>
+      <div class="header-decoration"></div>
+    </div>
+    
+    
+        <div class="horizontal-group">
+          <div class="series-card">
+            <div class="card">
+              <p>
+                <span>
+                  <a href="./Booksdetails/fourthWing.html" class="book-link">
+                    <img class="spine" src="books/Fouth Wing spine.jpg" alt="Fourth Wing Spine">
+                    <img class="cover" src="books/Fourth Wing Cover.jpeg" alt="Fourth Wing Cover">
+                  </a>
+                </span>
+              </p>
+              <p>
+                <span>
+                  <a href="./Booksdetails/Iron Flame.html" class="book-link">
+                    <img class="spine" src="books/Iron Flame spine.png" alt="Iron Flame Spine">
+                    <img class="cover" src="books/Iron Flame Cover.jpeg" alt="Iron Flame Cover">
+                  </a>
+                </span>
+              </p>
+              <p>
+                <span>
+                  <a href="./Booksdetails/onyx_storm.html" class="book-link">
+                    <img class="spine" src="books/Onyx Storm spine.jpg" alt="Onyx Storm Spine">
+                    <img class="cover" src="books/Onyx Storm Cover.jpeg" alt="Onyx Storm Cover">
+                  </a>
+                </span>
+              </p>
+            </div>
+            
+          <a href="Author page.html?name=Rebecca%20Yarros" class="book-info">Rebecca Yarros</a>
 
-<<<<<<< HEAD
-  <script src="../js/data.js"></script>
-  <script src="../js/Book Carousel.js"></script>
-</body>
-</html>
-=======
           </div>
     
           
@@ -297,4 +332,3 @@
       <script src="js/search.js"></script>
     </body>
     </html>
->>>>>>> 1ca95dc7170c0826a2ed1b2e83212bd40b070cf9
