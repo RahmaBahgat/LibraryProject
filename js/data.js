@@ -4,7 +4,8 @@ const books = [
         id: '1',
         title: 'Iron Flame',
         author: 'Rebecca Yarros',
-        cover: '../images/books/Iron Flame (The Empyrean Book 2).jpeg',
+        cover: '../images/books/Iron Flame Cover.jpeg',
+        spine: '../images/books/Iron Flame spine.png',
         genre: 'Fiction',
         category: ['Dystopian Sci-Fi', 'Psychological Thriller'],
         rating: 4,
@@ -24,7 +25,8 @@ const books = [
         id: '2',
         title: 'Onyx Storm',
         author: 'Rebecca Yarros',
-        cover: '../images/books/Onyx Storm von Rebecca Yarros - Taschenbuch - 978-0-349-43707-1 _ Thalia.jpeg',
+        cover: '../images/books/Onyx Storm Cover.jpeg',
+        spine:'../images/books/Onyx Storm spine.jpg',
         genre: 'Fiction',
         category: ['Fantasy Romance', 'High Fantasy', 'New Adult'],
         rating: 4.8,
@@ -43,7 +45,7 @@ const books = [
         id: '3',
         title: 'في ممر الفئران',
         author: 'أحمد خالد توفيق',
-        cover: '../images/books/أحمد خالد توفيق_ في ممر الفئران.jpeg',
+        cover: '../images/books/في ممر الفئران.jpeg',
         genre: 'Fiction',
         category: ['Psychology'],
         rating: 4,
@@ -64,7 +66,7 @@ const books = [
         id: '4',
         title: '1948',
         author: 'George Orwell',
-        cover: '../images/books/1984 by George Orwell.jpeg',
+        cover: '../images/books/1984.jpeg',
         genre: 'Fiction',
         category: ['Historical Fiction', 'Dystopian Fiction'],
         rating: 5,
@@ -86,8 +88,8 @@ const books = [
     {
         id: '5',
         title: 'الطنطورية',
-        author: 'رُوىة الحسن',
-        cover: '../images/books/رواية الطنطورية.jpeg',
+        author: 'رضوى عاشور',
+        cover: '../images/books/الطنطورية.jpeg',
         genre: 'Fiction',
         category: ['رواية أدبية', 'دراما سياسية', 'واقعية'],
         rating: 4.7,
@@ -106,7 +108,7 @@ const books = [
     {
         id: '6',
         title: 'ألف شمس ساطعة',
-        author: 'khaled hussain',
+        author: 'Khaled Hosseini',
         cover: '../images/books/ألف شمس ساطعة.jpeg',
         genre: 'Fiction',
         category: ['Social Commentary'],
@@ -127,7 +129,7 @@ const books = [
     {
     id: '7',
     title: 'عداء الطائرة الورقية',
-    author: 'khaled hussain',
+    author: 'Khaled Hosseini',
     cover: '../images/books/عداء الطائرة الورقية.jpeg',
     genre: 'Fiction',
     category: ['رواية درامية', 'خيالية تاريخية'],
@@ -168,6 +170,7 @@ const books = [
         title: 'Fourth Wing',
         author: 'Rebecca Yarros',
         cover: '../images/books/Fourth Wing Cover.jpeg',
+        spine: '../images/books/Fourth Wing spine.jpg',
         genre: 'Fantasy',
         category: ['Dragon Fantasy', 'Romantasy'],
         rating: 4.8,
@@ -276,7 +279,7 @@ const books = [
         id: '15',
         title: 'The Silent Patient',
         author: 'Alex Michaelides',
-        cover: '../images/books/books I recommend.jpeg',
+        cover: '../images/books/The Silent Patient.jpeg',
         genre: 'Thriller',
         category: ['Psychological Thriller', 'Mystery'],
         rating: 4.6,
@@ -341,7 +344,121 @@ const books = [
         description: 'رحلة كافكا تامورا المراهق هاربًا من لعبة أبيه، تتشابك مع قصة ناكاتا العجيب الذي يتحدث مع القطط. رواية سحرية تبحث عن الهوية عبر حدود الواقع والخيال.',
         expanded: false,
         reviews: []
-    }
+    },
+
+    {
+        id: '19',
+        title: 'Yellow Face',
+        author: 'R. F. Kuang',
+        cover: '../images/books/Yellow Face.jpg',
+        genre: 'Fiction',
+        category: [' Fiction', 'Contemporary'],
+        rating: 3.7,
+        status: 'Want to read',
+        progress: 0,
+        isFavorite: false,
+        description:'June Hayward, an unsuccessful young author, finds herself the only witness to the death of her former classmate and casual friend, Athena Liu, a Chinese-American author who is an industry darling. She decides to position herself as the best friend of the author and begins to edit and re-write Athena\'s latest unpublished manuscript, a novel about Chinese laborers in World War I',
+        expanded: false,
+        reviews: []
+    },
+
+    {
+        id: '20',
+        title: 'يوتوبيا',
+        author: 'أحمد خالد توفيق',
+        cover: '../images/books/يوتوبيا.jpeg',
+        genre: 'Fiction',
+        category: [' Fiction', 'Contemporary'],
+        rating: 5,
+        status: 'Want to read',
+        progress: 0,
+        isFavorite: false,
+        description: 'تدور أحداث الرواية في سنة 2023 حيث تحولت مصر إلى طبقتين، الأولى بالغة الثراء والرفاهية وهي (يوتوبيا) المدينة المحاطة بسور ويحرسها جنود المارينز التي تقع في الساحل الشمالي والثانية فقر مدقع وتعيش في عشوائيات ويتقاتلون من أجل الطعام ',
+        expanded: false,
+        reviews: []
+    },
+    {
+        id: '21',
+        title: 'قنبلة للاستخدام الشخصي',
+        author: 'ميرنا المهدي',
+        cover: '../images/books/قنبلة للاستخدام الشخصي.jpg',
+        genre: 'Crime',
+        category: ['Crime', 'Mystery'],
+        rating: 3.7,
+        status: 'Want to read',
+        progress: 0,
+        isFavorite: false,
+        description:'',
+        expanded: false,
+        reviews: []
+    },
+    {
+        id: '22',
+        title: 'حذاء فادي',
+        author: 'يوسف الدموكي',
+        cover: '../images/books/حذاء فادي.jpeg',
+        genre: 'Social',
+        category: [' Social', 'Realist'],
+        rating: 3.,
+        status: 'Want to read',
+        progress: 0,
+        isFavorite: false,
+        description:'June Hayward, an unsuccessful young author, finds herself the only witness to the death of her former classmate and casual friend, Athena Liu, a Chinese-American author who is an industry darling. She decides to position herself as the best friend of the author and begins to edit and re-write Athena\'s latest unpublished manuscript, a novel about Chinese laborers in World War I',
+        expanded: false,
+        reviews: []
+    },
+
+    {
+        id: '23',
+        title: 'Watch Me',
+        author: 'Tahereh Mafi',
+        cover: '../images/books/Watch Me.jpg',
+        genre: 'Fantasy',
+        category: [' Romance', 'Dystopia'],
+        rating: 4.3,
+        status: 'Want to read',
+        progress: 0,
+        isFavorite: false,
+        description:'James Anderson had a plan. Or half of one. All that matters is that he managed to do what his older brother, the famous Aaron Warner Anderson, never did: infiltrate Ark Island, the last refuge of The Reestablishment. In the past decade no outsider has breached the stronghold of the authoritarian regime, but James is in. In a prison cell, sure, but as far as James is concerned, a win is a win.',
+        expanded: false,
+        reviews: []
+    },
+
+    {
+        id: '24',
+        title: 'Great Big Beautiful Life',
+        author: 'Emily Henry',
+        cover: '../images/books/Great Big Beautiful Life.jpg',
+        genre: 'Fiction',
+        category: ['Romance', 'Contemporary'],
+        rating: 4.19,
+        status: 'Want to read',
+        progress: 0,
+        isFavorite: false,
+        description:'Two writers compete for the chance to tell the larger-than-life story of a woman with more than a couple of plot twists up her sleeve in this dazzling and sweeping new novel from Emily Henry.',
+        expanded: false,
+        reviews: []
+    },
+
+    {
+        id: '25',
+        title: 'Fearless',
+        author: 'Lauren Roberts',
+        cover: '../images/books/Fearless.jpg',
+        genre: 'Fantasy',
+        category: ['Romantasy', 'Young Adult'],
+        rating: 4.35,
+        status: 'Want to read',
+        progress: 0,
+        isFavorite: false,
+        description:'Paedyn and Kai are reunited but face a terrible decision in this thrilling conclusion to the New York Times bestselling romantic fantasy trilogy perfect for fans of Sarah J. Maas and The Red Queen.',
+        expanded: false,
+        reviews: []
+    },
+
+
+
+    
 ];
 
 const authors = [
@@ -381,3 +498,17 @@ function getRelatedBooks(bookId) {
         .map(id => books.find(book => book.id === id))
         .filter(book => book !== undefined);
 }
+
+
+const bookSeries = {
+  "empyrean": {
+    title: "The Empyrean Series",
+    author: "Rebecca Yarros",
+    books: [
+      books.find(book => book.id === "9"), // Fourth Wing
+      books.find(book => book.id === "1"), // Iron Flame
+      books.find(book => book.id === "2")  // Onyx Storm
+    ],
+    authorLink: "Author page.html?name=Rebecca%20Yarros"
+  }
+};
