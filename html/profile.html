@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="../css/profile.css" />
     <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/notifications.css" />
 
     <!-- MerryWeather Font -->
     <link
@@ -40,10 +41,12 @@
         <!-- Links -->
         <ul class="nav-links">
           <li>
-            <a href="FavouriteBooks.html"><i class="fas fa-book-open"></i> My Books</a>
+            <a href="FavouriteBooks.html"
+              ><i class="fas fa-book-open"></i> My Books</a
+            >
           </li>
           <li>
-            <a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a>
+            <a href=""><i class="fas fa-bell"></i> Notifications</a>
           </li>
           <li>
             <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
@@ -60,6 +63,7 @@
               src="../images/blank-profile-pic.webp"
               alt="Profile Picture"
               class="profile-img"
+              id="profile-img"
             />
           </div>
           <div class="user-info">
@@ -94,6 +98,63 @@
           </div>
         </div>
       </div>
+
+      <div class="img-change-container">
+        <div class="inner-container">
+          <span class="close-btn" id="closeContent">&times;</span>
+          <h3>Change Profile Picture</h3>
+          <p>Select a new photo to update your profile picture:</p>
+          <input type="file" id="uploadPic" accept="image/*" />
+          <button class="upload-btn" id="upload-btn">Upload</button>
+          <div id="preview"></div>
+        </div>
+      </div>
     </div>
+
+    <script src="../js/notifications.js"></script>
+    <script>
+      const profilePicCon = document.querySelector(".profile-img-container");
+      const content = document.querySelector(".img-change-container");
+      const closeBtn = document.querySelector("#closeContent");
+      const uploadBtn = document.querySelector("#upload-btn");
+
+      profilePicCon.addEventListener("click", () => {
+        content.style.display = "flex";
+      });
+
+      closeBtn.addEventListener("click", () => {
+        content.style.display = "none";
+      });
+
+      window.addEventListener("click", (e) => {
+        if (e.target === content) {
+          content.style.display = "none";
+        }
+      });
+
+      uploadBtn.addEventListener("click", () => {
+        const fileInput = document.querySelector("#uploadPic");
+        const file = fileInput.files[0];
+
+        if (!file) {
+          alert("Please select an image first");
+          return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          const imageData = e.target.result;
+
+          localStorage.setItem("savedImage", imageData);
+
+          const profilePic = document.querySelector("#profile-img");
+          profilePic.src = imageData;
+
+          console.log("Image saved to local storage");
+        };
+        reader.readAsDataURL(file);
+      });
+    </script>
   </body>
 </html>
