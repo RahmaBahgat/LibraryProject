@@ -1,94 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Library</title>
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet"> -->
-  <link rel="stylesheet" href="../css/HomePage-user.css">
-  <script src="js/HomePage-user.css"></script>
-  <style>
-.dropbtn {
-  background-color: var(--brand);
-  color: #AC9C8D;
-  padding: 0.rem 1.5rem;
-  font-size: 1rem;
-  font-family: 'Merriweather', serif;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.dropbtn:hover {
-  background-color: #5a2c30;
-  
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: var(--cream);
-  min-width: 250px;
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
-  z-index: 10;
-  
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.dropdown-content a {
-  color: var(--dark-brown);
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  font-family: 'Merriweather', serif;
-  font-size: 0.95rem;
-  transition: background-color 0.3s ease;
-}
-
-.dropdown-content a:hover {
-  background-color: var(--cream);
-  color: var(--brand-red);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  background-color: var(--cream); /* optional, if you want the background to change too */
-  transition: box-shadow 0.3s ease, background-color 0.3s ease;
-
-  
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-  }
-  .notif {
-  padding: 12px 16px;
-  margin: 0;
-  font-family: 'Merriweather', serif;
-  font-size: 0.95rem;
-  color: var(--dark-brown);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  border-radius: 10px;
-}
-
-.notif:hover {
-  background-color: var(--cream);
-  color: var(--brand-red);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-  </style>
-  
+  <title>LitHub</title>
+  <link rel="stylesheet" href="../css/HomePage-admin.css">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+
   <nav class="navbar">
     <div class="nav-container">
         <a href="#" class="brand">LitHub</a>
@@ -97,236 +18,24 @@
             <button><i class="fas fa-search"></i></button>
         </div>
         <ul class="nav-links">
-            <li><a href="borrowed_list.html"><i class="fas fa-book-open"></i> My Books</a></li>
-            <div class="dropdown">
-              <button class="dropbtn"><i class="fa-book-open"></i>notifications</button>
-              <div class="dropdown-content">
-                <p class="notif">Your order #1234 has been shipped.
-                  <time>April 16, 2025 — 3:45 PM</time><p>
-                <p class="notif">"The Alchemist" is now 50% off!
-                  <time>April 16, 2025 — 1:12 PM</time></a>
-                <p class="notif">A book on your wishlist is back in stock.
-                  <time>April 15, 2025 — 10:05 AM</time><p>
-                <a class="notif"href="notification.html">See all notifications</a>
-              </div>
-            </div>
+            <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
             <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
-            <link href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap" trel="stylesheet">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         </ul>
     </div>
-    </nav>
-<br>
-<br>
+  </nav>
+
+  <br><br>
 
   <div class="container">
     <center>
-      <h1>Welcome back, "book lover"!</h1>
-    
-    <br>
+      <h1>Welcome back, reader. Your literary journey continues...</h1>
+      <br><br>
+    </center>
+  </div>
 
-    <div class="section-header">
-      <h2>Suggested For You</h2>
-      <div class="header-decoration"></div>
-    </div>
-    
-    
-        <div class="horizontal-group">
-          <div class="series-card">
-            <div class="card">
-              <p>
-                <span>
-                  <a href="./Booksdetails/fourthWing.html" class="book-link">
-                    <img class="spine" src="books/Fouth Wing spine.jpg" alt="Fourth Wing Spine">
-                    <img class="cover" src="books/Fourth Wing Cover.jpeg" alt="Fourth Wing Cover">
-                  </a>
-                </span>
-              </p>
-              <p>
-                <span>
-                  <a href="./Booksdetails/Iron Flame.html" class="book-link">
-                    <img class="spine" src="books/Iron Flame spine.png" alt="Iron Flame Spine">
-                    <img class="cover" src="books/Iron Flame Cover.jpeg" alt="Iron Flame Cover">
-                  </a>
-                </span>
-              </p>
-              <p>
-                <span>
-                  <a href="./Booksdetails/onyx_storm.html" class="book-link">
-                    <img class="spine" src="books/Onyx Storm spine.jpg" alt="Onyx Storm Spine">
-                    <img class="cover" src="books/Onyx Storm Cover.jpeg" alt="Onyx Storm Cover">
-                  </a>
-                </span>
-              </p>
-            </div>
-            
-          <a href="Author page.html?name=Rebecca%20Yarros" class="book-info">Rebecca Yarros</a>
+  <div id="book-carousels-container"></div>
 
-          </div>
-    
-          
-          <!-- The Kite Runner -->
-          <div class="standalone-card">
-              <div class="static-card">
-                <a href="./Booksdetails/عداء الطائرة الورقية.html" class="card-link">
-                <img src="./books/عداء الطائرة الورقية.jpeg" alt="عداء الطائرة الورقية">
-              </a>
-              </div>
-              <a href="Author page.html?name=خالد%20حسيني" class="book-info">خالد حسيني</a>
-            </a>
-          </div>
-
-          <!-- Never Lie -->
-          <div class="standalone-card">
-            <div class="static-card">
-              <a href="./Booksdetails/Never Lie.html" class="card-link">
-              <img src="books/Never Lie.jpeg" alt="Never Lie">
-            </a>
-            </div>
-            <div>
-            <a href="Author page.html?name=Freida%20Mcfadden" class="book-info">Freida McFadden</a>
-            </div>
-          </a>
-          </div>
-    
-          <!-- Kafka on the Shore -->
-    <div class="standalone-card">
-      
-      <div class="static-card">
-        <a href="Booksdetails/كافكا على الشاطئ.html" class="card-link">
-        <img src="books/كافكا على الشاطئ.jpeg" alt="كافكا على الشاطئ">
-      </a>
-      </div>
-      <a href="Author page.html?name=هاروكي%20موراكامي" class="book-info">هاروكي موراكامي</a>
-    </a>
-    </div>
-    
-        </div>
-    
-        <br>
-        <!-------------------------------------------------------------------------------------------------------------->
-        <div class="section-header">
-          <h2>Popular This Week!</h2>
-          <div class="header-decoration"></div>
-        </div>
-    
-    
-        <div class="horizontal-group">
-           <!-- Al-Tantouriyya -->
-           <div class="standalone-card">
-      
-            <div class="static-card">
-              <a href="Booksdetails/رواية الطنطورية.html" class="card-link">
-              <img src="books/الطنطورية.jpeg" alt="الطنطورية">
-            </a>
-            </div>
-            <a href="Author page.html?name=رضوى%20عاشور" class="book-info">رضوى عاشور</a>
-          </a>
-          </div>
-    
-    
-          
-    
-          <!-- The Silent Patient -->
-          <div class="standalone-card">
-            
-              <div class="static-card">
-                <a href="./Booksdetails/the_silent_patient.html" class="card-link">
-                <img src="./books/The Silent Patient.jpeg" alt="The Silent Patient">
-              </a>
-              </div>
-              <a href="Author page.html?name=Alex%20Michaelides" class="book-info">Alex Michaelides</a>
-            </a>
-          </div>
-
-          <!-- As Long as the Lemon Trees Grow -->
-          <div class="standalone-card">
-      
-            <div class="static-card">
-              <a href="Booksdetails/As_long_as_the_lemonTree.html" class="card-link">
-              <img src="books/As long as the lemon trees grow.jpeg" alt="As Long As The Lemon Trees Grow">
-            </a>
-            </div>
-            <a href="Author page.html?name=Zoulfa%20Katouh" class="book-info">Zolfa Katouh</a>
-            
-          </a>
-          </div>
-    
-          <!-- Fe Mamamr al Fe'ran-->
-          <div class="standalone-card">
-      
-            <div class="static-card">
-              <a href="Booksdetails/فى ممر الفئران.html" class="card-link">
-              <img src="books/في ممر الفئران.jpeg" alt="في ممر فئران">
-            </a>
-            </div>
-            <a href="Author page.html?name=أحمد%20خالد%20توفيق" class="book-info">أحمد خالد توفيق</a>
-          </a>
-          </div>
-    
-    
-    
-        </div>
-    
-        <br>
-        <div class="section-header">
-          <h2>Top Rated</h2>
-          <div class="header-decoration"></div>
-        </div>
-    
-        <br>
-    
-        <div class="horizontal-group">
-          <!-- 1984 -->
-    <div class="standalone-card">
-      
-      <div class="static-card">
-        <a href="Booksdetails/1984.html" class="card-link">
-        <img src="books/1984.jpeg" alt="1984">
-      </a>
-      </div>
-      <a href="Author page.html?name=George%20Orwell" class="book-info">George Orwell</a>
-    </a>
-    </div>
-    
-    
-         <!-- The Seven Year Slip-->
-    <div class="standalone-card">
-      
-      <div class="static-card">
-        <a href="Booksdetails/the_seven_year_slip.html" class="card-link">
-        <img src="books/The Seven Year Slip.jpeg" alt="The Seven Year Slip">
-      </a>
-      </div>
-      <a href="Author page.html?name=Ashley%20Poston" class="book-info">Ashley Poston</a>
-    </a>
-    </div>
-    
-         
-          <!-- Murder on the Orient Express -->
-    <div class="standalone-card">
-      
-      <div class="static-card">
-        <a href="Booksdetails/جريمة في قطار الشرق.html" class="card-link">
-        <img src="books/جريمة في قطار الشرق.jpeg" alt="جريمة في قطار الشرق">
-      </a>
-      </div>
-      <a href="Author page.html?name=أجاثا%20كريستي" class="book-info">أجاثا كريستي</a>
-    </a>
-    </div>
-         <!-- The Great Gatsby -->
-         <div class="standalone-card">
-      
-          <div class="static-card">
-            <a href="Booksdetails/the_Great_Gatsby.html" class="card-link">
-            <img src="books/The Great Gatsby.jpeg" alt="The Great Gatsby">
-          </a>
-          </div>
-          <a href="Author page.html?name=F.%20Scott%20Fitzgerald" class="book-info">F. Scott Fitzgerald</a>
-        </a>
-        </div>
-    
-       </div>
-      </div>
-    </body>
-    </html>
+  <script src="../js/data.js"></script>
+  <script src="../js/Book Carousel.js"></script>
+</body>
+</html>
