@@ -320,7 +320,8 @@ html {
   display: flex;
   align-items: center;
   height: 30px;
-  left: 0;
+  left: 10px;
+  right: 5px;
   overflow: hidden;
 }
 
@@ -344,35 +345,28 @@ html {
 
 .filter-switch .background {
   position: absolute;
-  width: 170px;
-  height: 20px;
+  width: 50%;
+  height: 75%;
   background-color: var(--brand-red);
-  /* top: px; */
-  left: 4px;
   border-radius: 30px;
   transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  -webkit-transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  -moz-transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  -ms-transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  -o-transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 0;
 }
 
-#option2:checked ~ .background {
+.filter-switch input:nth-of-type(1):checked ~ .background {
+  left: 0;
+}
+
+.filter-switch input:nth-of-type(2):checked ~ .background {
   left: 50%;
 }
 
-#option1:checked + label[for="option1"] {
+.filter-switch input:checked + label {
   color: white;
   font-weight: bold;
 }
 
-#option2:checked + label[for="option2"] {
-  color: white;
-  font-weight: bold;
-}
-
-#option1:not(:checked) + label[for="option1"],
-#option2:not(:checked) + label[for="option2"] {
+.filter-switch label:not(:checked) {
   color: var(--warm-taupe);
 }
 
@@ -630,9 +624,3 @@ html {
   padding: 0.5rem;
   margin-top: 3rem;
 }
-
-/* @media screen and (max-width: 650px) {
-    .container {
-        height: 1000px;
-    }  
-} */

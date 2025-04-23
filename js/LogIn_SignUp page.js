@@ -80,3 +80,18 @@ document.querySelectorAll(".toggle-eye").forEach((toggle) => {
     icon.classList.toggle("fa-eye-slash", isPasswordVisible);
   });
 });
+
+document.querySelectorAll('.filter-switch').forEach(toggle => {
+  const inputs = toggle.querySelectorAll('input');
+  const background = toggle.querySelector('.background');
+  
+  inputs.forEach(input => {
+    input.addEventListener('change', () => {
+      if (input.id.includes('option2')) {
+        background.style.left = '50%';
+      } else {
+        background.style.left = '0';
+      }
+    });
+  });
+});
