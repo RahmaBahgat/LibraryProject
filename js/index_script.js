@@ -72,10 +72,11 @@ function initializeBookCarousel() {
         });
 
         // Handle button clicks
-        document.querySelectorAll('.save-btn, .borrow-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                window.location.href = '../html/LogIn_SignUp page.html';
-            });
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.save-btn, .borrow-btn')) {
+                e.preventDefault();
+                window.location.href = './html/LogIn_SignUp page.html';
+            }
         });
 
         const prevArrow = document.querySelector('.carousel-arrow.prev');
