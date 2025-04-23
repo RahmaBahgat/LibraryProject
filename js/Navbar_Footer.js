@@ -30,3 +30,27 @@ document.addEventListener('DOMContentLoaded', () => {
     currentYear.textContent = new Date().getFullYear();
 });
 
+// Search functionality
+const searchForm = document.getElementById('searchForm');
+const navSearch = document.querySelector('.nav-search');
+const navbar = document.querySelector('.navbar');
+
+// Toggle search on mobile
+document.querySelector('.nav-toggle').addEventListener('click', () => {
+    if (window.innerWidth <= 768) {
+        navSearch.classList.toggle('active');
+        // Toggle background when search is active
+        navbar.style.background = navSearch.classList.contains('active') 
+            ? 'var(--cream)' 
+            : '';
+    }
+});
+
+// Handle window resize to reset background
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        navSearch.classList.remove('active');
+        navbar.style.background = '';
+    }
+});
+

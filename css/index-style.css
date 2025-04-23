@@ -25,36 +25,6 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
-/* Buttons */
-.btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: var(--transition);
-  border: none;
-  font-size: 1rem;
-}
-
-.btn-primary {
-  background-color: var(--brand-red);
-  color: var(--cream);
-}
-
-.btn-primary:hover {
-  background-color: rgba(114, 56, 61, 0.9);
-}
-
-.btn-outline {
-  background-color: transparent;
-  border: 1px solid var(--cream);
-  color: var(--cream);
-}
-
-.btn-outline:hover {
-  background-color: rgba(239, 233, 225, 0.2);
-}
-
 /* Hero Section */
 .hero {
   display: grid;
@@ -113,7 +83,8 @@ position: absolute;
 }
 
 .background {
-  background: linear-gradient(45deg, var(--cream) 40%, var(--warm-taupe) 70%);}
+  background: linear-gradient(45deg, var(--cream) 40%, var(--warm-taupe) 70%);
+}
 
 .carousel-section h2 {
   text-align: center;
@@ -202,15 +173,6 @@ position: absolute;
   justify-content: space-between;
   align-items: center;
 }
-
-.btn-primary {
-  text-decoration: none;
-  height: 40px;
-  text-align: center;
-  /* padding: 15px; */
-  padding-top: 9px;
-}
-
 
 .save-btn {
   background: none;
