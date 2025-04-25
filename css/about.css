@@ -20,14 +20,12 @@ body {
 }
 
 .hero {
-  background: #d7c8ba;
-  height: 400px;
-  background-size: cover;
-  background-position: center;
+  margin-top: 70px;
+  background: var(--cream);
+  height: 200px;
   position: relative;
+  margin-bottom: -2rem;
 }
-
-
 
 .hero-overlay {
   position: absolute;
@@ -45,7 +43,8 @@ body {
 }
 
 .mission-content h2 {
-  margin: 5%;
+  margin-bottom: 55px;
+  text-align: center;
 }
 
 .mission-section {
