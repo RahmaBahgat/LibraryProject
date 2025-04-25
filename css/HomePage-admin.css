@@ -702,3 +702,72 @@ body {
   from, to { border-color: transparent }
   50% { border-color: #72383D; }
 }
+
+.book-cover-container {
+  position: relative;
+  display: inline-block;
+}
+
+.book-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  color: white;
+}
+
+.badge-bestselling { 
+  background-color: #FFD700; /* Rich golden color */
+  color: #000; /* Black text for better contrast */
+}
+
+.badge-new-release { 
+  background-color: #6A0DAD; /* Royal purple */
+  color: #FFF; /* White text */
+}
+
+.badge-coming-soon { 
+  background-color: #FF8C00; /* Dark orange - suggests anticipation */
+  color: #FFF; /* White text */
+}
+
+.badge-trending { 
+  background-color: #C93756; /* Elegant deep rose red */
+  color: #FFF; /* White text */
+}
+
+
+.static-card {
+  position: relative; 
+}
+
+.book-cover-container {
+  display: block; 
+}
+
+.book-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: white;
+  z-index: 2;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+}
+
+.book-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
