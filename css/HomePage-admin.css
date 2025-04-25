@@ -90,6 +90,10 @@ body {
   border-radius: 3px;
 }
 
+.form-group {
+  margin-bottom: 900px;
+}
+
 .submit-btn {
   padding: 6px 12px;
   font-size: 12px;

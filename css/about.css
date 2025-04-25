@@ -20,13 +20,14 @@ body {
 }
 
 .hero {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("https://source.unsplash.com/random/1200x600?library");
+  background: #d7c8ba;
   height: 400px;
   background-size: cover;
   background-position: center;
   position: relative;
 }
+
+
 
 .hero-overlay {
   position: absolute;
@@ -34,7 +35,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: white;
+  color: var(--dark-brown);
 }
 
 .hero-overlay h1 {
@@ -81,26 +82,20 @@ body {
 }
 
 .team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 2rem auto;
-  text-align: center;
-}
-
-.team-member img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 1rem;
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3.5rem;
+  /* max-width: 1200px; */
+  margin: 2rem;
+  margin-left: 70px;
+  padding: 20px;
+  font-size: 1.3rem;
 }
 
 .stats-section {
-  background: var(--brand-red);
-  color: white;
+  background: #d7c8ba;
+  color: var(--dark-brown);
   padding: 4rem 2rem;
 }
 
