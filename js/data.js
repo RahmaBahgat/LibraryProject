@@ -542,3 +542,11 @@ const bookSeries = {
     authorLink: "Author page.html?name=Rebecca%20Yarros",
   },
 };
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const dataDiv = document.getElementById("data-book");
+  if (dataDiv) {
+    dataDiv.setAttribute("data-books", JSON.stringify(books));
+  }
+});
