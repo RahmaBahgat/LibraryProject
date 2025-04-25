@@ -295,6 +295,10 @@
         gap: 1rem;
     }
     
+    .navbar.scrolled .nav-link {
+        color: var(--dark-brown);
+    }
+    
     .nav-menu.active {
         display: flex;
     }
