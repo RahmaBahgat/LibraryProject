@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
       title: "Suggested For You",
       subtitle: "Inspired by the stories you’ve loved.",
       items: [
-        { type: "series", id: "empyrean" },
+      
         { type: "book", id: "8" },
         { type: "book", id: "11" },
         { type: "book", id: "14" },
@@ -132,46 +132,40 @@ function generateCarousels(pageType, categories) {
           if (!series) return "";
 
           return `
-            <div class="carousel-item series-item">
-              <div class="card">
-                ${series.books
-                  .map(
-                    (book) => `
-                  <p>
-                    <span>
-                      <a href="./Booksdetails/book.html?id=${book.id}" class="book-link">
-                        <img class="spine" src="${book.spine}" alt="${book.title} Spine">
-                        <img class="cover" src="${book.cover}" alt="${book.title} Cover">
-                      </a>
-                    </span>
-                  </p>
-                `
-                  )
-                  .join("")}
-              </div>
-              <a href="${series.authorLink}" class="book-info">${
-            series.author
-          }</a>
-            </div>
-          `;
+  <div class="carousel-item series-item">
+    <div class="card">
+      ${series.books.map((book) => `
+        <p>
+          <span>
+            <a href="bookPage.html?id=${book.id}" class="book-link">  <!-- Updated link -->
+              <img class="spine" src="${book.spine}" alt="${book.title} Spine">
+              <img class="cover" src="${book.cover}" alt="${book.title} Cover">
+              ${book.badge ? `<span class="book-badge badge-${book.badge}">${formatBadgeText(book.badge)}</span>` : ''}
+            </a>
+          </span>
+        </p>
+      `).join("")}
+    </div>
+    <a href="${series.authorLink}" class="book-info">${series.author}</a>
+  </div>
+`;
         } else {
           const book = books?.find((b) => b.id === item.id);
           if (!book) return "";
 
           return `
-            <div class="carousel-item">
-              <div class="static-card">
-                <a href="./Booksdetails/book.html?id=${
-                  book.id
-                }" class="card-link">
-                  <img src="${book.cover}" alt="${book.title}">
-                </a>
-              </div>
-              <a href="Author page.html?name=${encodeURIComponent(
-                book.author
-              )}" class="book-info">${book.author}</a>
-            </div>
-          `;
+  <div class="carousel-item">
+    <div class="static-card">
+      <a href="bookPage.html?id=${book.id}" class="card-link">  <!-- Updated link -->
+        <div class="book-cover-container">
+          <img src="${book.cover}" alt="${book.title}">
+          ${book.badge ? `<span class="book-badge badge-${book.badge}">${formatBadgeText(book.badge)}</span>` : ''}
+        </div>
+      </a>
+    </div>
+    <a href="Author page.html?name=${encodeURIComponent(book.author)}" class="book-info">${book.author}</a>
+  </div>
+`;
         }
       })
       .join("");
@@ -242,12 +236,15 @@ function initializeCarousels() {
     if (items.length === 0) return;
 
     const itemStyle = window.getComputedStyle(items[0]);
-    const itemWidth = items[0].offsetWidth + parseInt(itemStyle.marginRight);
+    const itemMarginRight = parseInt(itemStyle.marginRight);
+    const itemWidth = items[0].offsetWidth + itemMarginRight;
 
     let isAnimating = false;
     let targetPosition = 0;
     let currentPosition = 0;
-    let maxPosition = track.scrollWidth - carousel.offsetWidth;
+    
+    // Calculate max position based on actual content width
+    let maxPosition = track.scrollWidth - carousel.offsetWidth + itemMarginRight;
 
     function animateScroll() {
       if (Math.abs(currentPosition - targetPosition) < 1) {
@@ -272,11 +269,11 @@ function initializeCarousels() {
     }
 
     nextBtn.addEventListener("click", () => {
-      scrollTo(targetPosition + carousel.offsetWidth * 0.8);
+      scrollTo(targetPosition + Math.min(carousel.offsetWidth * 0.8, maxPosition - targetPosition));
     });
 
     prevBtn.addEventListener("click", () => {
-      scrollTo(targetPosition - carousel.offsetWidth * 0.8);
+      scrollTo(targetPosition - Math.min(carousel.offsetWidth * 0.8, targetPosition));
     });
 
     function updateButtons() {
@@ -288,7 +285,8 @@ function initializeCarousels() {
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        maxPosition = track.scrollWidth - carousel.offsetWidth;
+        // Recalculate dimensions on resize
+        maxPosition = track.scrollWidth - carousel.offsetWidth + itemMarginRight;
         scrollTo(Math.min(targetPosition, maxPosition));
       }, 100);
     });
@@ -325,4 +323,17 @@ track.addEventListener("touchend", () => {
 
 function handleEditCategory() {
   alert("Edit category clicked!");
+}
+
+function formatBadgeText(badgeType) {
+  const badgeTexts = {
+    'bestselling': 'Bestseller',
+    'new-release': 'New',
+    'coming-soon': 'Coming Soon',
+    'classic': 'Classic',
+    'favorite': 'Favorite',
+    'staff-pick': 'Staff Pick',
+    'trending': 'Trending'
+  };
+  return badgeTexts[badgeType] || badgeType;
 }
