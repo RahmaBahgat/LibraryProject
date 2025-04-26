@@ -136,55 +136,29 @@ img {
   color: rgb(21, 177, 21);
 }
 
-.navbar {
-  background: var(--dark-brown);
-  padding: 1rem 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem;
-}
-
-.brand {
-  color: var(--cream);
-  font-size: 2rem;
-  font-weight: 700;
-  text-decoration: none;
-  font-family: "Playfair Display", serif;
-}
-.nav-links {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-}
-
-.nav-links a {
-  color: var(--warm-taupe);
-  text-decoration: none;
+#fav-btn {
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  transition: color 0.3s ease;
+  gap: 8px;
 }
 
-.nav-links a:hover {
-  color: var(--cream);
+#fav-btn .icon {
+  transition: transform 0.2s ease;
 }
 
-@media (max-width: 768px) {
-  .nav-container {
-    flex-direction: column;
-    gap: 1rem;
-  }
+#fav-btn.active {
+  background-color: var(--brand-red);
+  
+}
 
-  .search-bar {
-    width: 100%;
-    margin: 0;
-  }
+#fav-btn.active .icon {
+  transform: scale(1.1);
+  color: #ff4d4d;
+}
+
+.avl {
+  font-family: var(--poppins);
+  font-weight: 500;
+  color: var(--brand-red);
 }

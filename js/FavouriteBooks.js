@@ -164,47 +164,31 @@ document.addEventListener("click", (e) => {
 
     // Toggle favorite status
     book.isFavorite = !book.isFavorite;
+    
+    // Force boolean value
+    book.isFavorite = Boolean(book.isFavorite);
+    
+    localStorage.setItem('books', JSON.stringify(books));
 
-    document
-      .querySelectorAll(`[data-book-id="${bookId}"]`)
-      .forEach((button) => {
-        button.textContent = book.isFavorite
-          ? "❤️ Remove Favorite"
-          : "♡ Add to Favorites";
-      });
+    // Update all buttons
+    document.querySelectorAll(`[data-book-id="${bookId}"]`).forEach((button) => {
+      button.textContent = book.isFavorite 
+        ? "❤️ Remove Favorite" 
+        : "♡ Add to Favorites";
+    });
 
-    if (book.isFavorite && !wasFavorite) {
-      // Add newly favorited book to the page
-      if (!document.querySelector(`.book-card[data-book-id="${bookId}"]`)) {
-        const bookCard = createBookCard(book);
-        bookCard.dataset.bookId = bookId;
-        bookCard.style.opacity = "0";
-        booksContainer.prepend(bookCard);
-
-        setTimeout(() => {
-          bookCard.style.transform = "translateY(0)";
-          bookCard.style.opacity = "1";
-        }, 10);
-      }
-    } else if (!book.isFavorite && wasFavorite) {
-      // Remove from page
-      const bookCard = document.querySelector(
-        `.book-card[data-book-id="${bookId}"]`
-      );
+    // If on favorites page and removing
+    if (window.location.pathname.includes('FavouriteBooks') && !book.isFavorite) {
+      const bookCard = document.querySelector(`.book-card[data-book-id="${bookId}"]`);
       if (bookCard) {
         bookCard.style.transform = "translateX(-100%)";
         bookCard.style.opacity = "0";
-        setTimeout(() => bookCard.remove(), 300);
+        setTimeout(() => {
+          bookCard.remove();
+        }, 300);
       }
     }
-
-    // Refresh related books
-    const currentModalBookId = document
-      .querySelector(".modal-book-info")
-      ?.querySelector(".book-title")?.dataset?.bookId;
-    if (currentModalBookId) {
-      showBookDetails(currentModalBookId);
-    }
+    initializePage(); // Re-check empty state
   }
 });
 
@@ -554,12 +538,36 @@ const plusIconSVG = `
 
 // Initialize the page
 function initializePage() {
-  // Filter only favorite books
-  const favoriteBooks = books.filter((book) => book.isFavorite);
-  favoriteBooks.forEach((book) => {
-    const bookCard = createBookCard(book);
-    booksContainer.appendChild(bookCard);
+  // Always get fresh data from localStorage
+  const storedBooks = localStorage.getItem('books');
+  books = storedBooks ? JSON.parse(storedBooks) : [];
+  
+  // Filter only TRULY favorite books
+  const favoriteBooks = books.filter(book => Boolean(book.isFavorite));
+  
+  // Clear existing content
+  booksContainer.innerHTML = '';
+
+  // Add empty state if no favorites
+  if (favoriteBooks.length === 0) {
+    booksContainer.innerHTML = `
+      <div class="empty-state">
+        <h2>No Favorite Books Found</h2>
+        <p>Books you mark as favorite will appear here</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Create cards only for favorite books
+  favoriteBooks.forEach(book => {
+    // Double-check favorite status
+    if (book.isFavorite) {
+      const bookCard = createBookCard(book);
+      booksContainer.appendChild(bookCard);
+    }
   });
+
 }
 
 // Start

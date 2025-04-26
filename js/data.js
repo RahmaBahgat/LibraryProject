@@ -1,5 +1,5 @@
 // Sample book data
-const books = [
+let books = JSON.parse(localStorage.getItem('books')) || [
   {
     id: "1",
     title: "Iron Flame",
@@ -69,7 +69,7 @@ const books = [
   },
   {
     id: "4",
-    title: "1948",
+    title: "1984",
     author: "George Orwell",
     cover: "../images/books/1984.jpeg",
     genre: "Fiction",
@@ -121,7 +121,7 @@ const books = [
     rating: 4.7,
     status: "Completed",
     progress: 100,
-    isFavorite: true,
+    isFavorite: false,
     description: `
         تدور أحداث الرواية حول مريم، الابنة غير الشرعية لرجل أفغاني ثري،
         وليلى، الفتاة الجميلة والذكية التي تعيش حياة مرفهة حتى تندلع الحرب. 
@@ -163,7 +163,7 @@ const books = [
     rating: 4.6,
     status: "Want to Read",
     progress: 0,
-    isFavorite: true,
+    isFavorite: false,
     description: `
         A harrowing tale set during the Syrian revolution, 
         following Salama Kassab as she navigates her duties as a hospital volunteer 
@@ -185,7 +185,7 @@ const books = [
     rating: 4.8,
     status: "Completed",
     progress: 100,
-    isFavorite: true,
+    isFavorite: false,
     description: `
         At Basgiath War College, twenty-year-old Violet Sorrengail defies expectations 
         by joining the elite dragon riders. In a deadly training program where riders bond with dragons or perish, 
@@ -225,7 +225,7 @@ const books = [
     rating: 4.9,
     status: "Completed",
     progress: 100,
-    isFavorite: true,
+    isFavorite: false,
     description: `
         The timeless story of Elizabeth Bennet navigating societal pressures and her complicated relationship
         with the proud Mr. Darcy. Austen\'s masterpiece explores class, reputation, and the dangers of 
@@ -264,7 +264,7 @@ const books = [
     rating: 4.7,
     status: "Completed",
     progress: 100,
-    isFavorite: true,
+    isFavorite: false,
     description: `
         Jay Gatsby\'s extravagant parties and obsession with the married Daisy Buchanan reveal the dark underbelly of the Jazz Age. 
         Fitzgerald\'s seminal work explores the corruption of the American Dream through lavish prose and tragic romance.`,
@@ -323,7 +323,7 @@ const books = [
     rating: 4.7,
     status: "Completed",
     progress: 100,
-    isFavorite: true,
+    isFavorite: false,
     description: `
             رواية investigativa مثيرة تكشف الواقع المظلم خلف القصور الفاخرة في القاهرة. 
             الصحفية الشابة "نور" تكتشف جثة مسؤول رفيع في إحدى قصور الزعفرانة الفاخرة، 
@@ -344,7 +344,7 @@ const books = [
     rating: 4.8,
     status: "Completed",
     progress: 100,
-    isFavorite: true,
+    isFavorite: false,
     description:
       "أشهر روايات أجاثا كريستي: المحقق هيركيول بوارو يحقق في جريمة قتل غامطة على متن قطار الشرق السريع المحاصر بالثلوج. كل الركاب مشتبه بهم في هذه التحفة البوليسية ذات النهاية الصادمة.",
     expanded: false,
@@ -360,7 +360,7 @@ const books = [
     rating: 4.7,
     status: "Reading",
     progress: 45,
-    isFavorite: true,
+    isFavorite: false,
     description:
       "رحلة كافكا تامورا المراهق هاربًا من لعبة أبيه، تتشابك مع قصة ناكاتا العجيب الذي يتحدث مع القطط. رواية سحرية تبحث عن الهوية عبر حدود الواقع والخيال.",
     expanded: false,
@@ -522,7 +522,23 @@ const relatedBooks = {
   16: ["15", "17"],
   17: ["16", "18"],
   18: ["13", "14", "18"],
+  19: ["13", "14", "18"],
+  20: ["16", "18"],
+  21: ["20", "24"],
+  22: ["21", "25"],
+  23: ["22", "10"],
+  24: ["23", "16"],
+  25: ["24", "6"]
 };
+
+if (!localStorage.getItem('books')) {
+  // Initialize all books with explicit false values
+  books = books.map(book => ({
+    ...book,
+    isFavorite: Boolean(book.isFavorite) // Ensure boolean
+  }));
+  localStorage.setItem('books', JSON.stringify(books));
+}
 
 function getRelatedBooks(bookId) {
   return relatedBooks[bookId]
