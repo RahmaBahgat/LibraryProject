@@ -45,6 +45,10 @@ img {
   display: flex;
 }
 
+.btn {
+  margin: 0.5rem;
+}
+
 .container {
   display: flex;
   justify-content: space-between;
