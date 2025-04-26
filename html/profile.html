@@ -70,14 +70,14 @@
             />
           </div>
           <div class="user-info">
-            <h2>Jane Doe</h2>
-            <p>Member Since: 2021</p>
+            <h2 id="user-name">Jane Doe</h2>
+            <p>Authority Level: <span id="auth-level"></span></p>
           </div>
         </div>
 
         <div class="details">
           <h3>Contact Information</h3>
-          <p>Email: my.email@example.com</p>
+          <p id="user-email">Email: my.email@example.com</p>
           <p>Phone: 011 123 12123</p>
         </div>
 
@@ -255,6 +255,18 @@
         const userData = JSON.parse(localStorage.getItem("loggedIn"));
         if (userData.preferences.profilePic) {
           profilePic.src = userData.preferences.profilePic;
+        }
+
+        const userName = document.getElementById("user-name");
+        const userEmail = document.getElementById("user-email");
+        const authLevel = document.getElementById("auth-level");
+
+        userName.innerHTML = userData.firstName + " " + userData.lastName;
+        userEmail.innerHTML = userData.email;
+        if (userData.authLevel > 0) {
+          authLevel.innerHTML = "Admin";
+        } else {
+          authLevel.innerHTML = "User";
         }
       });
 
