@@ -6,10 +6,10 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
 if (localStorage.getItem("users") == null) {
   let users = [
     {
-      firstName: "mazen",
-      lastName: "amr",
-      email: "mazen@gmail.com",
-      password: "abc123",
+      firstName: "admin",
+      lastName: "admin",
+      email: "admin",
+      password: "admin",
     },
   ];
   localStorage.setItem("users", JSON.stringify(users));
