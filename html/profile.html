@@ -51,7 +51,9 @@
           <a href="privacy.html" class="nav-link">Privacy</a>
           <a href="about.html" class="nav-link">About Us</a>
           <a href="help.html" class="nav-link"> Help</a>
-          <a href="../index.html" class="nav-link"> Sign Out</a>
+          <a style="cursor: pointer" class="nav-link" id="signOut-btn">
+            Sign Out</a
+          >
         </div>
       </div>
     </nav>
@@ -284,6 +286,13 @@
           console.log("Image saved to local storage");
         };
         reader.readAsDataURL(file);
+      });
+
+      const signOutBtn = document.getElementById("signOut-btn");
+      signOutBtn.addEventListener("click", () => {
+        console.log("sign out");
+        localStorage.removeItem("loggedIn");
+        window.location.pathname = "";
       });
     </script>
     <script src="../js/checkAuth.js"></script>
