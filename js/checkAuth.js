@@ -1,9 +1,9 @@
 function check(allowed) {
-  if (JSON.parse(localStorage.getItem("loggedIn")).email == "admin") {
-    return;
-  }
-
-  if (localStorage.getItem("loggedIn") == null) {
+  if (localStorage.getItem("loggedIn")) {
+    if (JSON.parse(localStorage.getItem("loggedIn")).email == "admin") {
+      return;
+    }
+  } else {
     if (!allowed) {
       window.location.replace("LogIn_SignUp page.html");
     }
@@ -11,15 +11,15 @@ function check(allowed) {
 }
 
 function loginCheck() {
-  if (JSON.parse(localStorage.getItem("loggedIn")).email == "admin") {
-    return;
-  }
-
-  if (localStorage.getItem("loggedIn") != null) {
-    if (window.location.pathname.includes("html/")) {
-      window.location.replace("HomePage-user.html");
+  if (localStorage.getItem("loggedIn")) {
+    if (JSON.parse(localStorage.getItem("loggedIn")).email == "admin") {
+      return;
     } else {
-      window.location.replace("html/HomePage-user.html");
+      if (window.location.pathname.includes("html/")) {
+        window.location.replace("HomePage-user.html");
+      } else {
+        window.location.replace("html/HomePage-user.html");
+      }
     }
   }
 }
