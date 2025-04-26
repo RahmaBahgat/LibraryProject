@@ -63,8 +63,8 @@ img {
 .details-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   background-color: var(--cream);
+  gap: 40px;
   padding: 3%;
   width: 55%;
 }
@@ -97,7 +97,7 @@ img {
   font-family: var(--poppins);
   color: var(--brownish-gray);
   margin: 0;
-  padding-bottom: 5px;
+  padding-bottom: 24px;
   border-bottom: solid var(--cream) 2px;
   font-size: 14px;
   max-width: 80%;

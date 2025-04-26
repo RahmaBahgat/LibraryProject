@@ -60,7 +60,6 @@ function newBook() {
     " have just arrived! " +
     "Check out the latest additions to our collection.\n\n" +
     "Happy reading!\n\nBest regards,";
-
   console.log("To: " + email);
   console.log("Subject: " + subject);
   console.log("Message:\n" + message);
@@ -68,9 +67,35 @@ function newBook() {
   showMessage(message);
   return message;
 }
-function showMessage(message) {
-  return "hello";
+window.onload = function() {
+  var messageList = JSON.parse(localStorage.getItem("generatedMessages")) || [];
+  var notifContainer = document.querySelector(".notif-page");
+
+  messageList.forEach(function(message) {
+    var newNotif = document.createElement("div");
+    newNotif.className = "notification-item";
+    newNotif.innerText = "📢 " + message;
+    notifContainer.appendChild(newNotif);
+  });
+};
+function borrowBook() {
+  var title = document.querySelector('.book-title').innerText;
+  var author = document.querySelector('.book-author').innerText;
+
+  var message = `You have successfully borrowed "${title}" by ${author}.`;
+  localStorage.setItem("borrowedMessage", message);
+  showMessage(message);
+  alert("Book borrowed successfully!");
+
 }
+
+
+function showMessage(message) {
+  var messageList = JSON.parse(localStorage.getItem("generatedMessages")) || [];
+  messageList.push(message);
+  localStorage.setItem("generatedMessages", JSON.stringify(messageList));
+}
+
 
 function errorhandle() {
   var name = document.getElementById("name").value;
