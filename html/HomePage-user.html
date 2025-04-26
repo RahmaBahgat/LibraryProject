@@ -70,7 +70,7 @@
           <a href="profile.html" class="nav-link"> Profile</a> <!-- Fixed icon -->
           <div class="dropdown-content">
             <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
-            <a href="../index.html"><i class="fas fa-user"></i> Sign Out </a>
+            <a style="cursor: pointer" id="signOut-btn"><i class="fas fa-user"></i> Sign Out </a>
           </div>
         </div>
 
@@ -148,6 +148,13 @@
    <script src="../js/checkAuth.js"></script>
     <script>
       check(false);
+
+      const signOutBtn = document.getElementById("signOut-btn");
+      signOutBtn.addEventListener("click", () => {
+        console.log("sign out");
+        localStorage.removeItem("loggedIn");
+        window.location.pathname = "";
+      });
     </script>
 </body>
 </html> 
