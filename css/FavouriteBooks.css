@@ -439,6 +439,26 @@ body {
   -o-transition: height 0.3s ease-in-out;
 }
 
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  margin: auto;
+}
+
+.empty-state h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.empty-state p {
+  text-align: center;
+  color: #999;
+}
+
 /* maybe I will change this */
 @keyframes fadeIn {
   from {
