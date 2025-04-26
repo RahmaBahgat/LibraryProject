@@ -2,18 +2,16 @@
 document.addEventListener('DOMContentLoaded', bookSearch);
 
 function bookSearch() {
-  console.log('Initializing enhanced search functionality');
+
   
   const searchInput = document.getElementById('searchBar');
   const bookCards = document.getElementById('data-book');
   const resultsContainer = document.getElementById('results');
   const bookCarouselsContainer = document.getElementById('book-carousels-container');
-  
-  // Parse book data
+
   const allBooks = JSON.parse(bookCards.getAttribute('data-books'));
   console.log('All books loaded:', allBooks);
   
-  // Store original carousels HTML to restore when search is cleared
   let originalCarouselsHTML = bookCarouselsContainer.innerHTML;
   
   searchInput.addEventListener('input', function() {
@@ -21,7 +19,6 @@ function bookSearch() {
     console.log('Searching for:', searchValue);
     
     if (searchValue === '') {
-      // Restore original carousels when search is empty
       bookCarouselsContainer.innerHTML = originalCarouselsHTML;
       resultsContainer.innerHTML = '';
       initializeCarousels(); // Reinitialize carousel functionality
@@ -29,7 +26,6 @@ function bookSearch() {
       return;
     }
     
-    // Filter books that match the search term
     const matchingBooks = allBooks.filter(book => {
       const matches = book.title.toLowerCase().includes(searchValue) ||
                      book.author.toLowerCase().includes(searchValue) ||
@@ -37,7 +33,6 @@ function bookSearch() {
       return matches;
     });
     
-    // Log matched books to console
     console.log('Matched books:', matchingBooks);
     
     displaySearchResults(matchingBooks);
@@ -50,14 +45,12 @@ function bookSearch() {
       return;
     }
     
-    // Create a single search results carousel
     resultsContainer.innerHTML = `
       <div class="search-results-header">
         <h3>Found ${matchingBooks.length} ${matchingBooks.length === 1 ? 'book' : 'books'}</h3>
       </div>
     `;
     
-    // Generate HTML for matching books
     const booksHTML = matchingBooks.map(book => `
       <div class="carousel-item" data-book-id="${book.id}">
         <div class="static-card">
@@ -71,7 +64,6 @@ function bookSearch() {
       </div>
     `).join('');
     
-    // Replace carousels with search results
     bookCarouselsContainer.innerHTML = `
       <div class="section-wrapper">
         <div class="book-carousel search-results-carousel">
