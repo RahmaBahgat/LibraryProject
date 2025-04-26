@@ -31,9 +31,20 @@ emailInput.addEventListener("blur", () => {
   manageAlert(emailInput, "email-alert", emailRegex);
 });
 
+const logInEmailInput = document.getElementById("email");
+logInEmailInput.addEventListener("blur", () => {
+  manageAlert(logInEmailInput, "login-email-alert", emailRegex);
+});
+
 const passwordInput = document.getElementById("signup-password");
 passwordInput.addEventListener("blur", () => {
   manageAlert(passwordInput, "password-alert", passwordRegex);
+});
+
+const logInPasswordInput = document.getElementById("signin-password");
+logInPasswordInput.addEventListener("blur", () => {
+  manageAlert(logInPasswordInput, "login-password-alert", "empty");
+  console.log(logInPasswordInput.value);
 });
 
 const rePasswordInput = document.getElementById("confirm-password");
@@ -43,6 +54,7 @@ rePasswordInput.addEventListener("blur", () => {
 
 let users = JSON.parse(localStorage.getItem("users")) || [];
 const createBtn = document.getElementById("create-btn");
+const loginBtn = document.getElementById("login-btn");
 
 createBtn.addEventListener("click", () => {
   if (
@@ -58,6 +70,13 @@ createBtn.addEventListener("click", () => {
     }
   } else {
     console.log("Not created");
+  }
+});
+
+loginBtn.addEventListener("click", () => {
+  console.log("Login button");
+  if (checkPassword(logInEmailInput.value, logInPasswordInput.value)) {
+    logIn(logInEmailInput.value, logInPasswordInput.value);
   }
 });
 
@@ -93,6 +112,31 @@ function checkEmail(inputID) {
   return true;
 }
 
+function checkPassword(email, password) {
+  let users = JSON.parse(localStorage.getItem("users"));
+  const user = users.find((u) => u.email === email);
+
+  if (user) {
+    if (user.password === password) {
+      console.log("Account verified");
+      return true;
+    } else {
+      console.log("Password incorrect");
+      return false;
+    }
+  } else {
+    console.log("user doesn't exist");
+    return false;
+  }
+}
+
+function logIn(email) {
+  let users = JSON.parse(localStorage.getItem("users"));
+  const user = users.find((u) => u.email === email);
+
+  localStorage.setItem("LoggedIn", JSON.stringify(user));
+}
+
 function manageAlert(inputID, alertID, regex) {
   const alert = document.getElementById(alertID);
   let condition = null;
@@ -102,6 +146,8 @@ function manageAlert(inputID, alertID, regex) {
   } else if (regex == "emailFound" && inputID == emailInput) {
     alert.innerHTML = "Email Already Exists";
     condition = true;
+  } else if (regex == "empty") {
+    condition = !inputID.value;
   } else {
     if (inputID == emailInput) {
       alert.innerHTML = "Email must consist of @ and . at the end";
