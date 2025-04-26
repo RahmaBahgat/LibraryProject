@@ -170,3 +170,17 @@ img {
   font-weight: 500;
   color: var(--brand-red);
 }
+
+#borrow-btn.disabled {
+  background-color: #ac9c8d !important;
+  cursor: not-allowed;
+}
+
+/* Add to borrowed_list.css */
+.book-image {
+  width: 150px;
+  height: 230px;
+  object-fit: contain;
+  border-radius: 8px;
+  background-color: white;
+}

@@ -563,7 +563,7 @@ function initializePage() {
 
   // Create cards only for favorite books
   favoriteBooks.forEach(book => {
-    // Double-check favorite status
+    // Double check favorite status
     if (book.isFavorite) {
       const bookCard = createBookCard(book);
       booksContainer.appendChild(bookCard);

@@ -1,51 +1,78 @@
-const defaultBooks = [
-    {
-        title: "Divine Rivals",
-        author: "Rebecca Ross",
-        category: "Fantasy",
-        borrowedOn: "2025-03-15",
-        status: "Not Returned",
-        reviews: [],
-    },
-    {
-        title: "في ممر الفئران",
-        author: "أحمد خالد توفيق",
-        category: "Arabic novel",
-        borrowedOn: "2025-03-20",
-        status: "Not Returned",
-        reviews: [],
-    },
-    {
-        title: "Atomic Habits",
-        author: "James Clear",
-        category: "Self-help",
-        borrowedOn: "2025-04-10",
-        status: "Not Returned",
-        reviews: [],
-    },
-    {
-        title: "The Silent Patient",
-        author: "Alex Michaelides",
-        category: "Thriller",
-        borrowedOn: "2025-04-12",
-        status: "Not Returned",
-        reviews: [],
-    },
-    {
-        title: "Kafka on the Shore",
-        author: "Haruki Murakami",
-        category: "Fiction",
-        borrowedOn: "2025-04-15",
-        status: "Not Returned",
-        reviews: [],
-    },
-];
+const books = JSON.parse(localStorage.getItem('books')) || [];
 
-  // Local Storage Key
-const STORAGE_KEY = "borrowedBooksData";
+function returnBook(index) {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedIn'));
+    let users = JSON.parse(localStorage.getItem('users'));
+    
+    // Get fresh user index
+    const userIndex = users.findIndex(u => u.email === loggedInUser.email);
+    
+    // Find the actual book index in the full borrowed array
+    const bookId = borrowedBooks[index].id;
+    const fullBorrowIndex = users[userIndex].books.borrowed.findIndex(b => 
+        b.id === bookId && b.status === "Not Returned"
+    );
 
-// Retrieve data from localStorage
-let borrowedBooks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultBooks;
+    if (fullBorrowIndex === -1) return;
+
+    // Update status
+    users[userIndex].books.borrowed[fullBorrowIndex].status = "Returned";
+    
+    // Update local storage
+    localStorage.setItem('users', JSON.stringify(users));
+    
+    // Refresh loggedInUser data
+    const updatedUser = users[userIndex];
+    localStorage.setItem('loggedIn', JSON.stringify(updatedUser));
+
+    // Update borrowedBooks array
+    borrowedBooks = updatedUser.books.borrowed.filter(b => b.status === "Not Returned");
+    
+    // Re-render
+    renderBooks();
+    updateBorrowCount();
+}
+
+  // Updated renderBooks function
+function renderBooks() {
+    const container = document.getElementById('borrowed-books-container');
+    container.innerHTML = "";
+
+    if (borrowedBooks.length === 0) {
+    container.innerHTML = `
+        <div class="empty-state">
+            <h2>No Borrowed Books Found</h2>
+            <p>Books you borrow will appear here</p>
+        </div>
+        `;
+        return;
+    }
+    borrowedBooks.forEach((book, index) => {
+    const fullBookData = books.find(b => b.id === book.id) || {};
+    const card = document.createElement("div");
+    card.className = "book-card";
+    card.innerHTML = `
+        <img src="${fullBookData.cover || 'images/default.jpg'}" class="book-image">
+        <div class="book-info">
+        <h2>${book.title}</h2>
+        <p><strong>Author:</strong> ${book.author}</p>
+        <p><strong>Borrowed On:</strong> ${book.borrowedOn}</p>
+            <div class="button-group">
+            <button class="return-btn" onclick="returnBook(${index})">Return Book</button>
+            </div>
+        </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+const STORAGE_KEY = "users";
+let users = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+const loggedInUser = JSON.parse(localStorage.getItem('loggedIn'));
+
+// Initialization
+let borrowedBooks = loggedInUser ? 
+loggedInUser.books.borrowed.filter(b => b.status === "Not Returned") : [];
 
 const maxBooks = 5;
 let currentBorrowCount = borrowedBooks.filter(b => b.status === "Not Returned").length;
@@ -59,54 +86,16 @@ function saveToLocalStorage() {
 }
 
 function updateBorrowCount() {
-    countElement.textContent = currentBorrowCount;
-    warningElement.style.display = currentBorrowCount >= maxBooks ? "block" : "none";
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedIn'));
+    const currentCount = loggedInUser?.books?.borrowed?.filter(b => b.status === "Not Returned").length || 0;
+    
+    document.getElementById('borrow-count').textContent = currentCount;
+    document.getElementById('limit-warning').style.display = 
+    currentCount >= 5 ? 'block' : 'none';
 }
 
 function formatFileName(title) {
     return title.toLowerCase().replace(/[^\w\u0600-\u06FF]+/g, "-");
-}
-
-function renderBooks() {
-    container.innerHTML = "";
-    borrowedBooks.forEach((book, index) => {
-        if (book.status !== "Returned") {
-            const card = document.createElement("div");
-            card.className = "book-card";
-
-            const formatted = formatFileName(book.title);
-            const img = document.createElement("img");
-            img.className = "book-image";
-            img.src = `images/${formatted}.jpg`;
-            img.onerror = () => (img.src = "images/default.jpg");
-
-            const info = document.createElement("div");
-            info.className = "book-info";
-            info.innerHTML = `
-                <h2>${book.title}</h2>
-                <p><strong>Author:</strong> ${book.author}</p>
-                <p><strong>Category:</strong> ${book.category}</p>
-                <p><strong>Borrowed On:</strong> ${book.borrowedOn}</p>
-                <p><strong>Status:</strong> <span id="status-${index}">${book.status}</span></p>
-                <textarea class="review-input" placeholder="Write your review here..."></textarea>
-                <div class="button-group">
-                    <button class="return-btn" onclick="returnBook(${index})">Return Book</button>
-                    <button class="submit-review-btn" onclick="addReview(${index})">Submit Review</button>
-                    <button class="return-btn" onclick="toggleReviews(${index})">Previous Reviews</button>
-                </div>
-                <div id="reviews-container-${index}" style="display: none;">
-                    <h3>Previous Reviews:</h3>
-                    <ul id="reviews-${index}"></ul>
-                </div>
-            `;
-
-            card.appendChild(img);
-            card.appendChild(info);
-            container.appendChild(card);
-        }
-    });
-
-    updateBorrowCount();
 }
 
 function addReview(index) {
@@ -140,11 +129,20 @@ function toggleReviews(index) {
 }
 
 function returnBook(index) {
-    borrowedBooks[index].status = "Returned";
-    currentBorrowCount--;
-    saveToLocalStorage(); // Save changes
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedIn'));
+    let users = JSON.parse(localStorage.getItem('users'));
+    
+    const userIndex = users.findIndex(u => u.email === loggedInUser.email);
+    
+    // Mark as returned
+    users[userIndex].books.borrowed[index].status = "Returned";
+    
+    // Update storage
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('loggedIn', JSON.stringify(users[userIndex]));
+    
+    // Re-render without page reload
     renderBooks();
 }
-
 // Initial Render
 renderBooks();
