@@ -10,6 +10,10 @@ if (localStorage.getItem("users") == null) {
       lastName: "admin",
       email: "admin",
       password: "admin",
+      authLevel: "1",
+      preferences: {
+        keepLogin: true,
+      },
     },
   ];
   localStorage.setItem("users", JSON.stringify(users));
@@ -88,12 +92,17 @@ function signUp() {
   let lastName = document.getElementById("last-name").value;
   let email = document.getElementById("newEmail").value;
   let password = document.getElementById("signup-password").value;
+  let isAdmin = document.getElementById("signup-option1").checked;
 
   let newUser = {
     firstName,
     lastName,
     email,
     password,
+    authLevel: isAdmin ? 1 : 0,
+    preferences: {
+      keepLogin: true,
+    },
   };
 
   let users = JSON.parse(localStorage.getItem("users"));
@@ -136,6 +145,9 @@ function checkPassword(email, password) {
 function logIn(email) {
   let users = JSON.parse(localStorage.getItem("users"));
   const user = users.find((u) => u.email === email);
+  const keepLogin = document.getElementById("keep-login").checked;
+
+  user.preferences.keepLogin = keepLogin;
 
   localStorage.setItem("loggedIn", JSON.stringify(user));
 }
