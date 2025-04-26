@@ -13,6 +13,7 @@ if (localStorage.getItem("users") == null) {
       authLevel: "1",
       preferences: {
         keepLogin: true,
+        profilePic: "",
       },
       books: {
         borrowed: [],
@@ -106,6 +107,7 @@ function signUp() {
     authLevel: isAdmin ? 1 : 0,
     preferences: {
       keepLogin: true,
+      profilePic: "",
     },
     books: {
       borrowed: [],
@@ -185,5 +187,17 @@ function manageAlert(inputID, alertID, regex) {
     alert.classList.add("hide");
     alert.classList.remove("show");
     return true;
+  }
+}
+
+function updateUser(userData, email) {
+  const users = JSON.parse(localStorage.getItem("users"));
+  let index = users.findIndex((u) => u.email === email);
+
+  if (index !== -1) {
+    users[index] = userData;
+    localStorage.setItem("users", JSON.stringify(users));
+  } else {
+    console.log("User not found.");
   }
 }

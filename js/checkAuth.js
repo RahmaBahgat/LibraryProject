@@ -1,7 +1,6 @@
 function check(allowed, level) {
   if (localStorage.getItem("loggedIn")) {
     const userData = JSON.parse(localStorage.getItem("loggedIn"));
-    // return userData.authLevel;
 
     if (userData.authLevel >= level) {
       return;

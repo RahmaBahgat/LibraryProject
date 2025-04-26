@@ -1,24 +1,27 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>InOtherWords | Books Home</title>
+  
+  <!-- CSS Styles -->
   <link rel="stylesheet" href="../css/HomePage-admin.css">
   <link rel="stylesheet" href="../css/Navbar_Footer.css">
   <link rel="stylesheet" href="../css/notifications.css">
+  
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-  <div id="data-book" data-books =""></div>
+  <div id="data-book" data-books=""></div>
   <div id="results"></div>
 
   <nav class="navbar">
     <div class="nav-container">
-      <!-- Logo --
+      <!-- Logo -->
       <div class="nav-logo">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
@@ -44,7 +47,7 @@
       <!-- Mobile Menu Toggle -->
       <button class="nav-toggle" aria-label="Toggle navigation">
         <span></span>
-        <span></span>n
+        <span></span>
         <span></span>
       </button>
   
@@ -52,47 +55,44 @@
       <div class="nav-menu">
         <a href="./borrowed_list.html" class="nav-link">My Books</a>
         <a href="FavouriteBooks.html" class="nav-link">Fav Books</a>
+        
         <div class="dropdown">
-          <a href="notifications.html" class="nav-link"> Notifications</a> <!-- Fixed icon -->
+          <a href="notifications.html" class="nav-link">Notifications</a>
           <div class="dropdown-content">
             <p class="notif">Your order #1234 has been shipped.
-              <time>April 16, 2025 — 3:45 PM</time><p>
+              <time>April 16, 2025 — 3:45 PM</time></p>
             <p class="notif">"The Alchemist" is now 50% off!
-              <time>April 16, 2025 — 1:12 PM</time></a>
+              <time>April 16, 2025 — 1:12 PM</time></p>
             <p class="notif">A book on your wishlist is back in stock.
-              <time>April 15, 2025 — 10:05 AM</time><p>
+              <time>April 15, 2025 — 10:05 AM</time></p>
             <a class="notif" href="notifications.html">See all notifications</a>
           </div>
         </div>
 
-        <!-- profiel dropdown-->
+        <!-- Profile dropdown -->
         <div class="dropdown">
-          <a href="profile.html" class="nav-link"> Profile</a> <!-- Fixed icon -->
+          <a href="profile.html" class="nav-link">Profile</a>
           <div class="dropdown-content">
             <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
-            <a style="cursor: pointer" id="signOut-btn"><i class="fas fa-user"></i> Sign Out </a>
+            <a style="cursor: pointer" id="signOut-btn"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
           </div>
         </div>
-
-
       </div>
     </div>
   </nav>
 
   <main class="main-content">
-    <!-- <section class="background"> -->
     <div class="container">
       <center>
         <h1>Welcome back, reader. Your literary journey continues...</h1>
         <br><br>
       </center>
     </div>
-    <!-- </section> -->
 
     <div id="book-carousels-container"></div>
   </main>
 
-      <!-- Footer -->
+  <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-brand">
@@ -144,21 +144,17 @@
   <script src="../js/data.js"></script>
   <script src="../js/Book Carousel.js"></script>
   <script src="../js/Navbar_Footer.js"></script>
-   <script src="../js/search.js"></script>
-   <script src="../js/checkAuth.js"></script>
-    <script>
-      check(false, 0);
+  <script src="../js/search.js"></script>
+  <script src="../js/checkAuth.js"></script>
+  <script>
+    check(false, 0);
 
-      const signOutBtn = document.getElementById("signOut-btn");
-      signOutBtn.addEventListener("click", () => {
-        console.log("sign out");
-        localStorage.removeItem("loggedIn");
-        window.location.pathname = "";
-      });
-    </script>
+    const signOutBtn = document.getElementById("signOut-btn");
+    signOutBtn.addEventListener("click", () => {
+      console.log("sign out");
+      localStorage.removeItem("loggedIn");
+      window.location.pathname = "";
+    });
+  </script>
 </body>
-</html> 
-
-
-
-
+</html>
