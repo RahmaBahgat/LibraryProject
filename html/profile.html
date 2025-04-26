@@ -245,10 +245,18 @@
     <script src="../js/Navbar_Footer.js"></script>
     <script src="../js/notifications.js"></script>
     <script>
+      const profilePic = document.querySelector("#profile-img");
       const profilePicCon = document.querySelector(".profile-img-container");
       const content = document.querySelector(".img-change-container");
       const closeBtn = document.querySelector("#closeContent");
       const uploadBtn = document.querySelector("#upload-btn");
+
+      window.addEventListener("load", () => {
+        const userData = JSON.parse(localStorage.getItem("loggedIn"));
+        if (userData.preferences.profilePic) {
+          profilePic.src = userData.preferences.profilePic;
+        }
+      });
 
       profilePicCon.addEventListener("click", () => {
         content.style.display = "flex";
@@ -278,7 +286,10 @@
         reader.onload = function (e) {
           const imageData = e.target.result;
 
-          localStorage.setItem("savedImage", imageData);
+          const userData = JSON.parse(localStorage.getItem("loggedIn"));
+          userData.preferences.profilePic = imageData;
+          localStorage.setItem("loggedIn", JSON.stringify(userData));
+          updateUser(userData, userData.email);
 
           const profilePic = document.querySelector("#profile-img");
           profilePic.src = imageData;
@@ -296,6 +307,7 @@
       });
     </script>
     <script src="../js/checkAuth.js"></script>
+    <script src="../js/authentication.js"></script>
     <script>
       check(false, 0);
     </script>
