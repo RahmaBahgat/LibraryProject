@@ -14,6 +14,10 @@ if (localStorage.getItem("users") == null) {
       preferences: {
         keepLogin: true,
       },
+      books: {
+        borrowed: [],
+        favorite: [],
+      },
     },
   ];
   localStorage.setItem("users", JSON.stringify(users));
@@ -102,6 +106,10 @@ function signUp() {
     authLevel: isAdmin ? 1 : 0,
     preferences: {
       keepLogin: true,
+    },
+    books: {
+      borrowed: [],
+      favorite: [],
     },
   };
 

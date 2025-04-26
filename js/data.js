@@ -12,6 +12,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Reading",
     progress: 65,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         In a future where emotions are outlawed and minds are encased in digital Iron Frames, 
         one rogue engineer discovers a glitch in the system — a way to feel again. As he navigates a 
@@ -33,6 +34,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Completed",
     progress: 100,
     isFavorite: false,
+    isBorrowed: false,
     description: `Onyx Storm is the third installment in Rebecca Yarros Empyrean series, 
         following Fourth Wing and Iron Flame. The story continues with Violet Sorrengail, 
         who has been training at Basgiath War College for over eighteen months, facing external threats and internal betrayals. 
@@ -53,6 +55,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Want to Read",
     progress: 0,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         تدور أحداث الرواية حول شخصية تُدعى "الشرقاوي" الذي يدخل في غيبوبة غير مفسرة.
         أثناء وجوده في المستشفى، ينتقل إلى عالم مظلم نتج عن سقوط نيزك حجب ضوء الشمس، مما أدى إلى اختفاء
@@ -75,6 +78,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Completed",
     progress: 100,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         "1984" is a dystopian novel set in a totalitarian society controlled by the Party, 
         led by the omnipresent and omnipotent figure known as Big Brother.The story follows Winston Smith, 
@@ -98,6 +102,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Completed",
     progress: 100,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         تحكي الرواية قصة رُلى الطنطوري، فتاة فلسطينية من جنوب لبنان، 
         تعيش أحداثًا مؤلمة منذ طفولتها بسبب الاجتياح الإسرائيلي عام 1982
@@ -118,6 +123,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Completed",
     progress: 100,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         تدور أحداث الرواية حول مريم، الابنة غير الشرعية لرجل أفغاني ثري،
         وليلى، الفتاة الجميلة والذكية التي تعيش حياة مرفهة حتى تندلع الحرب. 
@@ -140,6 +146,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Completed",
     progress: 100,
     isFavorite: false,
+    isBorrowed: false,
     description: `
     تدور أحداث الرواية حول "أمير"، فتى من حي وزير أكبر خان في كابل، وصديقه المقرب "حسن"، 
     خادم والده المنتمي إلى أقلية الهزارة. تتناول الرواية مواضيع الصداقة، الخيانة، والفداء، وتستعرض التغيرات السياسية
@@ -160,6 +167,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Want to Read",
     progress: 0,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         A harrowing tale set during the Syrian revolution, 
         following Salama Kassab as she navigates her duties as a hospital volunteer 
@@ -182,6 +190,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Completed",
     progress: 100,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         At Basgiath War College, twenty-year-old Violet Sorrengail defies expectations 
         by joining the elite dragon riders. In a deadly training program where riders bond with dragons or perish, 
@@ -201,6 +210,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Reading",
     progress: 35,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         Newlyweds Tricia and Ethan discover secret audio recordings in a 
         psychiatrist\'s isolated mansion during a snowstorm. As they listen to the late doctor\'s sessions 
@@ -221,6 +231,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Completed",
     progress: 100,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         The timeless story of Elizabeth Bennet navigating societal pressures and her complicated relationship
         with the proud Mr. Darcy. Austen\'s masterpiece explores class, reputation, and the dangers of 
@@ -240,6 +251,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Reading",
     progress: 60,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         In the kingdom of Ilya, Paedyn Gray, a Ordinary posing as a Psychic, 
         and Prince Kai Azer team up to survive the Purging Trials. 
@@ -259,6 +271,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Completed",
     progress: 100,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         Jay Gatsby\'s extravagant parties and obsession with the married Daisy Buchanan reveal the dark underbelly of the Jazz Age. 
         Fitzgerald\'s seminal work explores the corruption of the American Dream through lavish prose and tragic romance.`,
@@ -276,6 +289,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Want to Read",
     progress: 0,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         A publicist inherits a magical apartment where she meets a man from seven years in the past. 
         As they fall in love across time, they must confront whether their connection can survive different life stages.`,
@@ -293,6 +307,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Completed",
     progress: 100,
     isFavorite: false,
+    isBorrowed: false,
     description: `
         Alicia Berenson hasn\'t spoken since shooting her husband five times. 
         Criminal psychotherapist Theo Faber becomes obsessed with uncovering her 
@@ -317,6 +332,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Completed",
     progress: 100,
     isFavorite: false,
+    isBorrowed: false,
     description: `
             رواية investigativa مثيرة تكشف الواقع المظلم خلف القصور الفاخرة في القاهرة. 
             الصحفية الشابة "نور" تكتشف جثة مسؤول رفيع في إحدى قصور الزعفرانة الفاخرة، 
@@ -338,6 +354,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Completed",
     progress: 100,
     isFavorite: false,
+    isBorrowed: false,
     description:
       "أشهر روايات أجاثا كريستي: المحقق هيركيول بوارو يحقق في جريمة قتل غامطة على متن قطار الشرق السريع المحاصر بالثلوج. كل الركاب مشتبه بهم في هذه التحفة البوليسية ذات النهاية الصادمة.",
     expanded: false,
@@ -354,6 +371,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Reading",
     progress: 45,
     isFavorite: false,
+    isBorrowed: false,
     description:
       "رحلة كافكا تامورا المراهق هاربًا من لعبة أبيه، تتشابك مع قصة ناكاتا العجيب الذي يتحدث مع القطط. رواية سحرية تبحث عن الهوية عبر حدود الواقع والخيال.",
     expanded: false,
@@ -389,6 +407,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Want to read",
     progress: 0,
     isFavorite: false,
+    isBorrowed: false,
     description:
       "تدور أحداث الرواية في سنة 2023 حيث تحولت مصر إلى طبقتين، الأولى بالغة الثراء والرفاهية وهي (يوتوبيا) المدينة المحاطة بسور ويحرسها جنود المارينز التي تقع في الساحل الشمالي والثانية فقر مدقع وتعيش في عشوائيات ويتقاتلون من أجل الطعام ",
     expanded: false,
@@ -405,6 +424,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Want to read",
     progress: 0,
     isFavorite: false,
+    isBorrowed: false,
     description: "",
     expanded: false,
     reviews: [],
@@ -421,6 +441,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Want to read",
     progress: 0,
     isFavorite: false,
+    isBorrowed: false,
     description:
       "June Hayward, an unsuccessful young author, finds herself the only witness to the death of her former classmate and casual friend, Athena Liu, a Chinese-American author who is an industry darling. She decides to position herself as the best friend of the author and begins to edit and re-write Athena's latest unpublished manuscript, a novel about Chinese laborers in World War I",
     expanded: false,
@@ -438,6 +459,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Want to read",
     progress: 0,
     isFavorite: false,
+    isBorrowed: false,
     description:
       "James Anderson had a plan. Or half of one. All that matters is that he managed to do what his older brother, the famous Aaron Warner Anderson, never did: infiltrate Ark Island, the last refuge of The Reestablishment. In the past decade no outsider has breached the stronghold of the authoritarian regime, but James is in. In a prison cell, sure, but as far as James is concerned, a win is a win.",
     expanded: false,
@@ -456,6 +478,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Want to read",
     progress: 0,
     isFavorite: false,
+    isBorrowed: false,
     description:
       "Two writers compete for the chance to tell the larger-than-life story of a woman with more than a couple of plot twists up her sleeve in this dazzling and sweeping new novel from Emily Henry.",
     expanded: false,
@@ -474,6 +497,7 @@ let books = JSON.parse(localStorage.getItem('books')) || [
     status: "Want to read",
     progress: 0,
     isFavorite: false,
+    isBorrowed: false,
     description:
       "Paedyn and Kai are reunited but face a terrible decision in this thrilling conclusion to the New York Times bestselling romantic fantasy trilogy perfect for fans of Sarah J. Maas and The Red Queen.",
     expanded: false,
