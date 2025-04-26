@@ -21,7 +21,7 @@ function showBookDetails(bookId) {
                 <span>(${book.rating})</span>
             </div>
             <p class="book-description">${book.description}</p>
-            
+            //
             <div class="reviews-section">
                 <h3 class="section-title">Reviews</h3>
                 <div class="reviews-list">
@@ -84,19 +84,19 @@ function createStarRating(rating, interactive = false) {
 
   for (let i = 1; i <= 5; i++) {
     const star = document.createElement("span");
-    star.className = `star ${i <= rating ? 'selected' : ''}`;
+    star.className = `star ${i <= rating ? "selected" : ""}`;
     star.dataset.value = i;
-    
+
     if (interactive) {
-      star.addEventListener('click', handleStarClick);
-      star.style.cursor = 'pointer';
+      star.addEventListener("click", handleStarClick);
+      star.style.cursor = "pointer";
     }
-    
+
     // Add star SVG
     star.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
     </svg>`;
-    
+
     starsContainer.appendChild(star);
   }
 
@@ -104,14 +104,14 @@ function createStarRating(rating, interactive = false) {
 }
 
 function handleStarClick(e) {
-  const starsContainer = e.target.closest('.star-rating');
+  const starsContainer = e.target.closest(".star-rating");
   const value = parseInt(e.target.dataset.value);
-  
+
   starsContainer.dataset.rating = value;
-  starsContainer.querySelectorAll('.star').forEach((star, index) => {
-    star.classList.toggle('selected', index < value);
+  starsContainer.querySelectorAll(".star").forEach((star, index) => {
+    star.classList.toggle("selected", index < value);
   });
-  
+
   const ratingText = starsContainer.nextElementSibling;
   if (ratingText) {
     ratingText.textContent = `${value}/5 Stars`;
@@ -208,38 +208,35 @@ document.addEventListener("click", (e) => {
   }
 });
 
-
 function calculateExpansionSpace(card) {
   const container = booksContainer;
   const containerRect = container.getBoundingClientRect();
   const cardRect = card.getBoundingClientRect();
-  
+
   const availableRight = containerRect.right - cardRect.left;
   const neededSpace = 700 - 300; // Expanded width - original width
-  
+
   return {
     canExpandRight: availableRight >= neededSpace,
-    overflow: neededSpace - availableRight
+    overflow: neededSpace - availableRight,
   };
 }
 
-document.querySelectorAll('.book-card').forEach(card => {
-  card.addEventListener('mouseenter', () => {
+document.querySelectorAll(".book-card").forEach((card) => {
+  card.addEventListener("mouseenter", () => {
     const { canExpandRight, overflow } = calculateExpansionSpace(card);
-    
+
     if (!canExpandRight) {
       card.style.transform = `translateX(-${overflow}px)`;
     } else {
-      card.style.transform = 'translateX(0)';
+      card.style.transform = "translateX(0)";
     }
   });
-  
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
+
+  card.addEventListener("mouseleave", () => {
+    card.style.transform = "";
   });
 });
-
-
 
 function handleToggleExpand(bookElement, book) {
   const expandedContent = bookElement.querySelector(".expanded-content");
@@ -264,7 +261,7 @@ function handleAddReview(bookElement, book) {
 
   const reviewForm = reviewFormTemplate.content.cloneNode(true);
   const formElement = reviewForm.querySelector(".review-form");
-  const starsContainer = formElement.querySelector('.star-rating');
+  const starsContainer = formElement.querySelector(".star-rating");
   createStarRating(0, true, starsContainer);
 
   formElement.querySelector(".btn-submit").addEventListener("click", () => {
@@ -272,7 +269,7 @@ function handleAddReview(bookElement, book) {
     const rating = parseInt(starsContainer.dataset.rating);
 
     if (!reviewText || rating === 0) {
-      alert('Please add a rating and review text');
+      alert("Please add a rating and review text");
       return;
     }
 
@@ -294,62 +291,64 @@ function handleAddReview(bookElement, book) {
 }
 
 function initializeReviewForm(form) {
-  const starsContainer = form.querySelector('.star-rating');
-  const ratingText = form.querySelector('.rating-text');
-  const textarea = form.querySelector('textarea');
+  const starsContainer = form.querySelector(".star-rating");
+  const ratingText = form.querySelector(".rating-text");
+  const textarea = form.querySelector("textarea");
   let currentRating = 0;
 
   // Create interactive stars
-  starsContainer.innerHTML = '';
+  starsContainer.innerHTML = "";
   for (let i = 1; i <= 5; i++) {
-    const star = document.createElement('span');
-    star.className = 'star';
+    const star = document.createElement("span");
+    star.className = "star";
     star.dataset.value = i;
     star.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24">
       <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
     </svg>`;
-    
-    star.addEventListener('click', () => {
+
+    star.addEventListener("click", () => {
       currentRating = parseInt(star.dataset.value);
-      starsContainer.querySelectorAll('.star').forEach((s, idx) => {
-        s.classList.toggle('selected', idx < currentRating);
+      starsContainer.querySelectorAll(".star").forEach((s, idx) => {
+        s.classList.toggle("selected", idx < currentRating);
       });
       ratingText.textContent = `${currentRating}/5 Stars`;
     });
-    
+
     starsContainer.appendChild(star);
   }
 
   // Cancel button handler
-  form.querySelector('.btn-cancel').addEventListener('click', () => {
+  form.querySelector(".btn-cancel").addEventListener("click", () => {
     form.remove();
   });
 
   // Submit button handler
-  form.querySelector('.btn-submit').addEventListener('click', (e) => {
+  form.querySelector(".btn-submit").addEventListener("click", (e) => {
     e.preventDefault();
     const reviewText = textarea.value.trim();
-    
+
     if (!reviewText || currentRating === 0) {
-      alert('Please provide both a rating and review text');
+      alert("Please provide both a rating and review text");
       return;
     }
 
     const review = {
       id: Date.now(),
       text: reviewText,
-      rating: currentRating
+      rating: currentRating,
     };
 
     // Add review to book object
-    const bookId = form.closest('.book-card').dataset.bookId;
-    const book = books.find(b => b.id === bookId);
+    const bookId = form.closest(".book-card").dataset.bookId;
+    const book = books.find((b) => b.id === bookId);
     book.reviews.push(review);
 
     // Refresh reviews list
-    const reviewsList = form.closest('.reviews-section').querySelector('.reviews-list');
-    const reviewItem = document.createElement('div');
-    reviewItem.className = 'review-item';
+    const reviewsList = form
+      .closest(".reviews-section")
+      .querySelector(".reviews-list");
+    const reviewItem = document.createElement("div");
+    reviewItem.className = "review-item";
     reviewItem.innerHTML = `
       ${createStarRating(currentRating).outerHTML}
       <p>${reviewText}</p>
@@ -371,9 +370,12 @@ function handleAddReview(bookElement, book) {
   }
 
   const formClone = document.importNode(reviewFormTemplate.content, true);
-  const reviewForm = formClone.querySelector('.review-form');
-  reviewsSection.insertBefore(formClone, reviewsSection.querySelector(".reviews-list"));
-  
+  const reviewForm = formClone.querySelector(".review-form");
+  reviewsSection.insertBefore(
+    formClone,
+    reviewsSection.querySelector(".reviews-list")
+  );
+
   // Initialize the form functionality
   initializeReviewForm(reviewForm);
 }
@@ -386,18 +388,18 @@ function createStarRating(rating, interactive = false) {
 
   for (let i = 1; i <= 5; i++) {
     const star = document.createElement("span");
-    star.className = `star ${i <= rating ? 'selected' : ''}`;
+    star.className = `star ${i <= rating ? "selected" : ""}`;
     star.dataset.value = i;
-    
+
     star.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24">
       <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
     </svg>`;
 
     if (interactive) {
-      star.style.cursor = 'pointer';
-      star.addEventListener('click', handleStarClick);
+      star.style.cursor = "pointer";
+      star.addEventListener("click", handleStarClick);
     }
-    
+
     starsContainer.appendChild(star);
   }
 
@@ -432,7 +434,7 @@ function createBookCard(book) {
         </svg>
     `;
 
-    bookElement.innerHTML = `
+  bookElement.innerHTML = `
     <button class="pin-button" aria-label="Pin book">
       ${pinButtonSVG}
     </button>

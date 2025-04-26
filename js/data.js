@@ -20,7 +20,6 @@ const books = [
         `,
     expanded: false,
     reviews: [],
-  
   },
   {
     id: "2",
@@ -41,8 +40,7 @@ const books = [
         The novel delves into themes of loyalty, sacrifice, and the relentless pursuit of truth in a world teetering on the brink of chaos.`,
     expanded: false,
     reviews: [],
-    badge: "new-release"
-  
+    badge: "new-release",
   },
   {
     id: "3",
@@ -64,8 +62,7 @@ const books = [
         `,
     expanded: false,
     reviews: [],
-    badge: "bestselling"
-
+    badge: "bestselling",
   },
   {
     id: "4",
@@ -109,7 +106,6 @@ const books = [
         `,
     expanded: false,
     reviews: [],
-    
   },
   {
     id: "6",
@@ -131,7 +127,7 @@ const books = [
         `,
     expanded: false,
     reviews: [],
-    badge: "bestselling"
+    badge: "bestselling",
   },
   {
     id: "7",
@@ -151,8 +147,8 @@ const books = [
     `,
     expanded: false,
     reviews: [],
-    badge: "bestselling"
-    },
+    badge: "bestselling",
+  },
   {
     id: "8",
     title: "As Long as the Lemon Trees Grow",
@@ -172,7 +168,7 @@ const books = [
         `,
     expanded: false,
     reviews: [],
-    badge:'trending'
+    badge: "trending",
   },
   {
     id: "9",
@@ -193,7 +189,6 @@ const books = [
         `,
     expanded: false,
     reviews: [],
-    
   },
   {
     id: "10",
@@ -213,7 +208,7 @@ const books = [
         `,
     expanded: false,
     reviews: [],
-    badge: "trending"
+    badge: "trending",
   },
   {
     id: "11",
@@ -251,8 +246,7 @@ const books = [
         A dangerous game develops between the street thief and the warrior prince in this fantasy romance.`,
     expanded: false,
     reviews: [],
-    badge: "trending"
-
+    badge: "trending",
   },
   {
     id: "13",
@@ -306,8 +300,7 @@ const books = [
         `,
     expanded: false,
     reviews: [],
-    badge: "trending"
-
+    badge: "trending",
   },
   {
     id: "16",
@@ -382,8 +375,7 @@ const books = [
       "June Hayward, an unsuccessful young author, finds herself the only witness to the death of her former classmate and casual friend, Athena Liu, a Chinese-American author who is an industry darling. She decides to position herself as the best friend of the author and begins to edit and re-write Athena's latest unpublished manuscript, a novel about Chinese laborers in World War I",
     expanded: false,
     reviews: [],
-    badge: "trending"
-
+    badge: "trending",
   },
 
   {
@@ -416,8 +408,7 @@ const books = [
     description: "",
     expanded: false,
     reviews: [],
-    badge: "trending"
-
+    badge: "trending",
   },
   {
     id: "22",
@@ -451,8 +442,7 @@ const books = [
       "James Anderson had a plan. Or half of one. All that matters is that he managed to do what his older brother, the famous Aaron Warner Anderson, never did: infiltrate Ark Island, the last refuge of The Reestablishment. In the past decade no outsider has breached the stronghold of the authoritarian regime, but James is in. In a prison cell, sure, but as far as James is concerned, a win is a win.",
     expanded: false,
     reviews: [],
-    badge: "coming-soon"
-
+    badge: "coming-soon",
   },
 
   {
@@ -470,8 +460,7 @@ const books = [
       "Two writers compete for the chance to tell the larger-than-life story of a woman with more than a couple of plot twists up her sleeve in this dazzling and sweeping new novel from Emily Henry.",
     expanded: false,
     reviews: [],
-    badge: "coming-soon"
-
+    badge: "coming-soon",
   },
 
   {
@@ -489,8 +478,7 @@ const books = [
       "Paedyn and Kai are reunited but face a terrible decision in this thrilling conclusion to the New York Times bestselling romantic fantasy trilogy perfect for fans of Sarah J. Maas and The Red Queen.",
     expanded: false,
     reviews: [],
-    badge: "coming-soon"
-
+    badge: "coming-soon",
   },
 ];
 
@@ -544,7 +532,6 @@ const bookSeries = {
 };
 
 document.addEventListener("DOMContentLoaded", function () {
-
   const dataDiv = document.getElementById("data-book");
   if (dataDiv) {
     dataDiv.setAttribute("data-books", JSON.stringify(books));
