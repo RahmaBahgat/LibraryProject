@@ -67,6 +67,7 @@ createBtn.addEventListener("click", () => {
     if (checkEmail(emailInput)) {
       console.log("Account Created");
       signUp();
+      window.location.replace("HomePage-user.html");
     }
   } else {
     console.log("Not created");
@@ -98,6 +99,7 @@ function signUp() {
   let users = JSON.parse(localStorage.getItem("users"));
   users.push(newUser);
   localStorage.setItem("users", JSON.stringify(users));
+  localStorage.setItem("loggedIn", JSON.stringify(newUser));
 }
 
 function checkEmail(inputID) {
