@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Add New Book | InOtherWords</title>
-  <link rel="stylesheet" href="../css/book page admin.css" />
-  <link rel="stylesheet" href="../css/Navbar_Footer.css" />
-  <link rel="stylesheet" href="../css/notifications.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | InOtherWords</title>
+  
+  <!-- CSS Styles -->
+  <link rel="stylesheet" href="../css/HomePage-admin.css">
+  <link rel="stylesheet" href="../css/Navbar_Footer.css">
+  <link rel="stylesheet" href="../css/notifications.css">
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  
 </head>
-
 <body>
   <div id="data-book" data-books=""></div>
   <div id="results"></div>
@@ -27,7 +29,7 @@
         <span>InOtherWords</span>
       </div>
 
-      <!-- Search Bar (merged from both) -->
+      <!-- Search Bar -->
       <div class="nav-search">
         <form id="searchForm">
           <div class="book-list"></div>
@@ -48,8 +50,8 @@
         <span></span>
       </button>
 
+      <!-- Navigation Menu -->
       <div class="nav-menu">
-        <a href="HomePage-admin.html" class="nav-link">Back to Dashboard</a>
         <div class="dropdown">
           <a href="notifications.html" class="nav-link">Notifications</a>
           <div class="dropdown-content">
@@ -62,6 +64,7 @@
             <a class="notif" href="notifications.html">See all notifications</a>
           </div>
         </div>
+        
         <div class="dropdown">
           <a href="profile.html" class="nav-link">Profile</a>
           <div class="dropdown-content">
@@ -69,76 +72,23 @@
             <a href="../index.html"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
           </div>
         </div>
+
+        <button id="theme">🌙</button>
       </div>
     </div>
   </nav>
 
   <div class="container">
-    <div class="form-section">
-      <h1 class="title">Add New Book</h1>
-      <p class="subtitle">Fill in the book details below</p>
-      <form id="bookForm">
-        <p id="error" class="error-message"></p>
-        
-        <!-- Required Fields -->
-        <div class="form-group">
-          <label for="id">Book ID*</label>
-          <input type="text" id="id" placeholder="e.g. 26" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="title">Book Title*</label>
-          <input type="text" id="title" placeholder="e.g. Atomic Habits" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="author">Author*</label>
-          <input type="text" id="author" placeholder="e.g. James Clear" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="cover">Cover Image URL*</label>
-          <input type="text" id="cover" placeholder="https://example.com/book-cover.jpg" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="genre">Genre*</label>
-          <input type="text" id="genre" placeholder="e.g. Self-Help" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="description">Description*</label>
-          <textarea id="description" rows="5" placeholder="Enter a detailed book description..." required></textarea>
-        </div>
-        
- 
-        <div class="form-group">
-          <label for="category">Category (Optional)</label>
-          <input type="text" id="category" placeholder="e.g. Productivity">
-        </div>
-        
-        <div class="form-group">
-          <label for="rating">Rating (Optional)</label>
-          <input type="number" id="rating" min="0" max="5" step="0.1" placeholder="0-5">
-        </div>
-        
-        <div class="form-group">
-          <label for="badge">Badge (Optional)</label>
-          <select id="badge">
-            <option value="">None</option>
-            <option value="new-release">New Release</option>
-            <option value="bestseller">Bestseller</option>
-            <option value="trending">Trending</option>
-          </select>
-        </div>
-        
-        <div class="button-group">
-          <button type="button" class="submit-btn" onclick="addBook()">Add Book</button>
-          <button type="reset" class="discard-btn">Clear Form</button>
-        </div>
-      </form>
-    </div>
+    <center>
+      <p class="archive-message"><span>Access granted. The archive is now yours to command.</span></p>      
+      <a href="book page admin.html">
+        <button class="manage-books-btn">Add New Book</button>
+      </a>
+    </center>
+    <br>
   </div>
+
+  <div id="book-carousels-container"></div>
 
   <footer class="footer">
     <div class="footer-content">
@@ -189,12 +139,23 @@
   </footer>
 
   <script>
-    check(false, 1);
+    // Check for success message
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if(urlParams.has('added')) {
+        alert('Book added successfully to New Arrivals!');
+        // Optional: Clear the URL parameter
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    });
   </script>
-  <script src="../js/book-admin.js"></script>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/Book Carousel.js"></script>
   <script src="../js/Navbar_Footer.js"></script>
+  <script src="../js/HomePage-admin.js"></script>
   <script src="../js/notifications.js"></script>
   <script src="../js/search.js"></script>
-  <script src="../js/checkAuth.js"></script>
+  <script src="../js/darkTheme.js"></script>
 </body>
 </html>
