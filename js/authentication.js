@@ -77,6 +77,7 @@ loginBtn.addEventListener("click", () => {
   console.log("Login button");
   if (checkPassword(logInEmailInput.value, logInPasswordInput.value)) {
     logIn(logInEmailInput.value, logInPasswordInput.value);
+    window.location.replace("HomePage-user.html");
   }
 });
 
@@ -134,7 +135,7 @@ function logIn(email) {
   let users = JSON.parse(localStorage.getItem("users"));
   const user = users.find((u) => u.email === email);
 
-  localStorage.setItem("LoggedIn", JSON.stringify(user));
+  localStorage.setItem("loggedIn", JSON.stringify(user));
 }
 
 function manageAlert(inputID, alertID, regex) {
