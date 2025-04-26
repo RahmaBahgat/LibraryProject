@@ -1,96 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Library</title>
-  <link rel="stylesheet" href="../css/HomePage-admin.css">
-  <link rel="stylesheet" href="../css/Navbar_Footer.css">
-  <link rel="stylesheet" href="../css/notifications.css">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add New Book | InOtherWords</title>
+  <link rel="stylesheet" href="../css/book page admin.css" />
+  <link rel="stylesheet" href="../css/Navbar_Footer.css" />
+  <link rel="stylesheet" href="../css/notifications.css" />
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
 </head>
+
 <body>
-  <div id="data-book" data-books =""></div>
+  <div id="data-book" data-books=""></div>
   <div id="results"></div>
 
-    <nav class="navbar">
-      <div class="nav-container">
-        <!-- Logo -->
-        <div class="nav-logo">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-          </svg>
-          <span>InOtherWords</span>
-        </div>
-    
-        <!-- Search Bar -->
-        <div class="nav-search">
-          <form id="searchForm">
-            <div class="book-list"></div>
-            <input id="searchBar" type="text" placeholder="Search books..." aria-label="Search books">
-            <button type="submit" aria-label="Search">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="M21 21l-4.35-4.35"></path>
-              </svg>
-            </button>
-          </form>
-        </div>
-    
-        <!-- Mobile Menu Toggle -->
-        <button class="nav-toggle" aria-label="Toggle navigation">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-    
-        <!-- Navigation Menu -->
-        <div class="nav-menu">
-          <div class="dropdown">
-            <a href="notifications.html" class="nav-link"> Notifications</a> <!-- Fixed icon -->
-            <div class="dropdown-content">
-              <p class="notif">Your order #1234 has been shipped.
-                <time>April 16, 2025 — 3:45 PM</time><p>
-              <p class="notif">"The Alchemist" is now 50% off!
-                <time>April 16, 2025 — 1:12 PM</time></a>
-              <p class="notif">A book on your wishlist is back in stock.
-                <time>April 15, 2025 — 10:05 AM</time><p>
-              <a class="notif" href="notifications.html">See all notifications</a>
-            </div>
+  <nav class="navbar">
+    <div class="nav-container">
+      <!-- Logo -->
+      <div class="nav-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+        </svg>
+        <span>InOtherWords</span>
+      </div>
+
+      <!-- Search Bar (merged from both) -->
+      <div class="nav-search">
+        <form id="searchForm">
+          <div class="book-list"></div>
+          <input id="searchBar" type="text" placeholder="Search books..." aria-label="Search books">
+          <button type="submit" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="M21 21l-4.35-4.35"></path>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="nav-menu">
+        <a href="HomePage-admin.html" class="nav-link">Back to Dashboard</a>
+        <div class="dropdown">
+          <a href="notifications.html" class="nav-link">Notifications</a>
+          <div class="dropdown-content">
+            <p class="notif">Your order #1234 has been shipped.
+              <time>April 16, 2025 — 3:45 PM</time></p>
+            <p class="notif">"The Alchemist" is now 50% off!
+              <time>April 16, 2025 — 1:12 PM</time></p>
+            <p class="notif">A book on your wishlist is back in stock.
+              <time>April 15, 2025 — 10:05 AM</time></p>
+            <a class="notif" href="notifications.html">See all notifications</a>
           </div>
-          
-          <div class="dropdown">
-          <a href="profile.html" class="nav-link"> Profile</a> <!-- Fixed icon -->
+        </div>
+        <div class="dropdown">
+          <a href="profile.html" class="nav-link">Profile</a>
           <div class="dropdown-content">
             <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
-            <a href="../index.html"><i class="fas fa-user"></i> Sign Out </a>
+            <a href="../index.html"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
           </div>
         </div>
-
-        </div>
       </div>
-    </nav>
-
-<br>
-<br>
+    </div>
+  </nav>
 
   <div class="container">
-    <center>
-      <p class="archive-message"><span>Access granted. The archive is now yours to command.</span></p>      
-      <!-- <a href="../html/book page admin.html">
-        <button class="manage-books-btn">Manage Books</button>
-      </a> -->
-    </center>
-    <br>
+    <div class="form-section">
+      <h1 class="title">Add New Book</h1>
+      <p class="subtitle">Fill in the book details below</p>
+      <form id="bookForm">
+        <p id="error" class="error-message"></p>
+        
+        <!-- Required Fields -->
+        <div class="form-group">
+          <label for="id">Book ID*</label>
+          <input type="text" id="id" placeholder="e.g. 26" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="title">Book Title*</label>
+          <input type="text" id="title" placeholder="e.g. Atomic Habits" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="author">Author*</label>
+          <input type="text" id="author" placeholder="e.g. James Clear" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="cover">Cover Image URL*</label>
+          <input type="text" id="cover" placeholder="https://example.com/book-cover.jpg" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="genre">Genre*</label>
+          <input type="text" id="genre" placeholder="e.g. Self-Help" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Description*</label>
+          <textarea id="description" rows="5" placeholder="Enter a detailed book description..." required></textarea>
+        </div>
+        
+ 
+        <div class="form-group">
+          <label for="category">Category (Optional)</label>
+          <input type="text" id="category" placeholder="e.g. Productivity">
+        </div>
+        
+        <div class="form-group">
+          <label for="rating">Rating (Optional)</label>
+          <input type="number" id="rating" min="0" max="5" step="0.1" placeholder="0-5">
+        </div>
+        
+        <div class="form-group">
+          <label for="badge">Badge (Optional)</label>
+          <select id="badge">
+            <option value="">None</option>
+            <option value="new-release">New Release</option>
+            <option value="bestseller">Bestseller</option>
+            <option value="trending">Trending</option>
+          </select>
+        </div>
+        
+        <div class="button-group">
+          <button type="button" class="submit-btn" onclick="addBook()">Add Book</button>
+          <button type="reset" class="discard-btn">Clear Form</button>
+        </div>
+      </form>
+    </div>
   </div>
 
-  <div id="book-carousels-container"></div>
-
-  <footer class="footer" style="margin-top: 70px;">
+  <footer class="footer">
     <div class="footer-content">
       <div class="footer-brand">
         <div class="footer-logo">
@@ -138,15 +188,13 @@
     </div>
   </footer>
 
-
-  <script src="../js/data.js"></script>
-  <script src="../js/Book Carousel.js"></script>
+  <script>
+    check(false, 1);
+  </script>
+  <script src="../js/book-admin.js"></script>
   <script src="../js/Navbar_Footer.js"></script>
   <script src="../js/notifications.js"></script>
-    <script src="../js/search.js"></script>
-    <script src="../js/checkAuth.js"></script>
-    <script>
-      check(false, 1);
-    </script>
+  <script src="../js/search.js"></script>
+  <script src="../js/checkAuth.js"></script>
 </body>
 </html>
