@@ -3,6 +3,19 @@ const nameRegex = /^[A-Za-z\s'-]{2,30}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
 
+if (localStorage.getItem("users") == null) {
+  let users = [
+    {
+      firstName: "mazen",
+      lastName: "amr",
+      email: "mazen@gmail.com",
+      password: "abc123",
+    },
+  ];
+  localStorage.setItem("users", JSON.stringify(users));
+  console.log("(users) array created");
+}
+
 const FnameInput = document.getElementById("first-name");
 FnameInput.addEventListener("blur", () => {
   manageAlert(FnameInput, "Fname-alert", nameRegex);
@@ -27,19 +40,6 @@ const rePasswordInput = document.getElementById("confirm-password");
 rePasswordInput.addEventListener("blur", () => {
   manageAlert(rePasswordInput, "rePassword-alert", "match");
 });
-
-if (localStorage.getItem("users") == null) {
-  let users = [
-    {
-      firstName: "mazen",
-      lastName: "amr",
-      email: "mazen@gmail.com",
-      password: "abc123",
-    },
-  ];
-  localStorage.setItem("users", JSON.stringify(users));
-  console.log("(users) array created");
-}
 
 let users = JSON.parse(localStorage.getItem("users")) || [];
 const createBtn = document.getElementById("create-btn");
