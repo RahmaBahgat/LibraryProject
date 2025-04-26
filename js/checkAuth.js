@@ -1,7 +1,12 @@
-function check(allowed) {
+function check(allowed, level) {
   if (localStorage.getItem("loggedIn")) {
-    if (JSON.parse(localStorage.getItem("loggedIn")).email == "admin") {
+    const userData = JSON.parse(localStorage.getItem("loggedIn"));
+    // return userData.authLevel;
+
+    if (userData.authLevel >= level) {
       return;
+    } else {
+      window.location.replace("HomePage-user.html");
     }
   } else {
     if (!allowed) {
@@ -11,15 +16,15 @@ function check(allowed) {
 }
 
 function loginCheck() {
-  if (localStorage.getItem("loggedIn")) {
-    if (JSON.parse(localStorage.getItem("loggedIn")).email == "admin") {
-      return;
-    } else {
-      if (window.location.pathname.includes("html/")) {
-        window.location.replace("HomePage-user.html");
-      } else {
-        window.location.replace("html/HomePage-user.html");
-      }
-    }
-  }
+  // if (localStorage.getItem("loggedIn")) {
+  //   if (JSON.parse(localStorage.getItem("loggedIn")).authLevel > 0) {
+  //     return;
+  //   } else {
+  //     if (window.location.pathname.includes("html/")) {
+  //       window.location.replace("HomePage-user.html");
+  //     } else {
+  //       window.location.replace("html/HomePage-user.html");
+  //     }
+  //   }
+  // }
 }
