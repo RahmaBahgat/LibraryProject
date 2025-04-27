@@ -1,5 +1,8 @@
+const userData = JSON.parse(localStorage.getItem("loggedIn"));
+
 function check(allowed, level) {
   if (localStorage.getItem("loggedIn")) {
+
     const userData = JSON.parse(localStorage.getItem("loggedIn"));
     // return userData.authLevel;
 
@@ -16,15 +19,15 @@ function check(allowed, level) {
 }
 
 function loginCheck() {
-  // if (localStorage.getItem("loggedIn")) {
-  //   if (JSON.parse(localStorage.getItem("loggedIn")).authLevel > 0) {
-  //     return;
-  //   } else {
-  //     if (window.location.pathname.includes("html/")) {
-  //       window.location.replace("HomePage-user.html");
-  //     } else {
-  //       window.location.replace("html/HomePage-user.html");
-  //     }
-  //   }
-  // }
+  if (localStorage.getItem("loggedIn")) {
+    if (userData.authLevel > 0) {
+      return;
+    } else {
+      if (window.location.pathname.includes("html/")) {
+        window.location.replace("HomePage-user.html");
+      } else {
+        window.location.replace("html/HomePage-user.html");
+      }
+    }
+  }
 }
