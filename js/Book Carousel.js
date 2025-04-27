@@ -186,14 +186,7 @@ function generateCarousels(pageType, categories) {
     }).join("");
 
     const adminControls = pageType === "admin" && category.editable ? `
-      <div class="admin-controls">
-        <button class="add-btn" onclick="window.location.href='book page admin.html'">
-          <i class="fas fa-plus"></i> Add Book
-        </button>
-        <button class="edit-btn" onclick="window.location.href='book page admin.html'">
-          <i class="fas fa-cog"></i> Edit
-        </button>
-      </div>
+      
     ` : "";
 
     const sectionHTML = `
