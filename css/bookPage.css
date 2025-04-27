@@ -170,3 +170,11 @@ img {
   font-weight: 500;
   color: var(--brand-red);
 }
+.btn.borrowed {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.btn.borrowed:hover {
+  background-color: #6c757d;
+}
