@@ -1,8 +1,29 @@
 const userData = JSON.parse(localStorage.getItem("loggedIn"));
 
+if (localStorage.getItem("users") == null) {
+  let users = [
+    {
+      firstName: "admin",
+      lastName: "admin",
+      email: "admin",
+      password: "admin",
+      authLevel: "1",
+      preferences: {
+        keepLogin: true,
+        profilePic: "",
+      },
+      books: {
+        borrowed: [],
+        favorite: [],
+      },
+    },
+  ];
+  localStorage.setItem("users", JSON.stringify(users));
+  console.log("(users) array created");
+}
+
 function check(allowed, level) {
   if (localStorage.getItem("loggedIn")) {
-
     const userData = JSON.parse(localStorage.getItem("loggedIn"));
     // return userData.authLevel;
 

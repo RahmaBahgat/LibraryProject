@@ -3,28 +3,6 @@ const nameRegex = /^[A-Za-z\s'-]{2,30}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
 
-if (localStorage.getItem("users") == null) {
-  let users = [
-    {
-      firstName: "admin",
-      lastName: "admin",
-      email: "admin",
-      password: "admin",
-      authLevel: "1",
-      preferences: {
-        keepLogin: true,
-        profilePic: "",
-      },
-      books: {
-        borrowed: [],
-        favorite: [],
-      },
-    },
-  ];
-  localStorage.setItem("users", JSON.stringify(users));
-  console.log("(users) array created");
-}
-
 const FnameInput = document.getElementById("first-name");
 FnameInput.addEventListener("blur", () => {
   manageAlert(FnameInput, "Fname-alert", nameRegex);
