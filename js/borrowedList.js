@@ -1,54 +1,14 @@
-const defaultBooks = [
-    {
-        title: "Divine Rivals",
-        author: "Rebecca Ross",
-        category: "Fantasy",
-        borrowedOn: "2025-03-15",
-        status: "Not Returned",
-        reviews: [],
-    },
-    {
-        title: "في ممر الفئران",
-        author: "أحمد خالد توفيق",
-        category: "Arabic novel",
-        borrowedOn: "2025-03-20",
-        status: "Not Returned",
-        reviews: [],
-    },
-    {
-        title: "Atomic Habits",
-        author: "James Clear",
-        category: "Self-help",
-        borrowedOn: "2025-04-10",
-        status: "Not Returned",
-        reviews: [],
-    },
-    {
-        title: "The Silent Patient",
-        author: "Alex Michaelides",
-        category: "Thriller",
-        borrowedOn: "2025-04-12",
-        status: "Not Returned",
-        reviews: [],
-    },
-    {
-        title: "Kafka on the Shore",
-        author: "Haruki Murakami",
-        category: "Fiction",
-        borrowedOn: "2025-04-15",
-        status: "Not Returned",
-        reviews: [],
-    },
-];
 
-  // Local Storage Key
+const defaultBooks = [];
+
 const STORAGE_KEY = "borrowedBooksData";
 
-// Retrieve data from localStorage
 let borrowedBooks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultBooks;
 
 const maxBooks = 5;
 let currentBorrowCount = borrowedBooks.filter(b => b.status === "Not Returned").length;
+
+
 
 const countElement = document.getElementById("borrow-count");
 const container = document.getElementById("borrowed-books-container");
@@ -77,7 +37,7 @@ function renderBooks() {
             const formatted = formatFileName(book.title);
             const img = document.createElement("img");
             img.className = "book-image";
-            img.src = `images/${formatted}.jpg`;
+            img.src = `../images/books/${formatted}.jpg`; 
             img.onerror = () => (img.src = "images/default.jpg");
 
             const info = document.createElement("div");
