@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Book Store</title>
+    <title>Add New Book | InOtherWords</title>
     <link rel="stylesheet" href="../css/book page admin.css" />
     <link rel="stylesheet" href="../css/Navbar_Footer.css" />
     <link rel="stylesheet" href="../css/notifications.css" />
@@ -50,73 +50,78 @@
   
       <!-- Navigation Menu -->
       <div class="nav-menu">
-        <div class="dropdown">
-          <a href="notifications.html" class="nav-link"> Notifications</a>
-          <div class="dropdown-content">
-            <p class="notif">Your order #1234 has been shipped.
-              <time>April 16, 2025 — 3:45 PM</time><p>
-            <p class="notif">"The Alchemist" is now 50% off!
-              <time>April 16, 2025 — 1:12 PM</time></a>
-            <p class="notif">A book on your wishlist is back in stock.
-              <time>April 15, 2025 — 10:05 AM</time><p>
-            <a class="notif" href="notifications.html">See all notifications</a>
-          </div>
-        </div>
+        <a href="HomePage-admin.html" class="nav-link">Back to Dashboard</a>
         <a href="profile.html" class="nav-link">Profile</a>
       </div>
     </div>
   </nav>
 
   <div class="container">
-
-    <!-- Left Form Section -->
+    <!-- Form Section -->
     <div class="form-section">
-      <h1 class="title">Edit Books</h1>
-      <p class="subtitle">Add the book information below</p>
-      <form onsubmit="return validation();">
-        <p id="error" class="error-message"></p><br>
+      <h1 class="title">Add New Book</h1>
+      <p class="subtitle">Fill in the book details below</p>
+      <form id="bookForm">
+        <p id="error" class="error-message"></p>
+        
+        <!-- Required Fields -->
         <div class="form-group">
-          <label for="name">Book Name</label>
-          <input type="text" id="name" placeholder="e.g. Atomic Habits" />
+          <label for="id">Book ID*</label>
+          <input type="text" id="id" placeholder="e.g. 26" required>
         </div>
         
         <div class="form-group">
-          <label for="cover-page">Cover Page URL</label>
-          <input type="text" id="image" placeholder="e.g. http:image.com" />
+          <label for="title">Book Title*</label>
+          <input type="text" id="title" placeholder="e.g. Atomic Habits" required>
         </div>
-
+        
         <div class="form-group">
-          <label for="author">Author</label>
-          <input type="text" id="author" placeholder="e.g. James Clear" />
+          <label for="author">Author*</label>
+          <input type="text" id="author" placeholder="e.g. James Clear" required>
         </div>
-
+        
         <div class="form-group">
-          <label for="category">book category</label>
-          <input type="text" id="category 1" placeholder="category 1" /><br><br>
-          <input type="text" id="category 2" placeholder="category 2" /><br><br>
-          <input type="text" id="category 3" placeholder="category 3" />
+          <label for="cover">Cover Image URL*</label>
+          <input type="text" id="cover" placeholder="https://example.com/book-cover.jpg" required>
         </div>
-
-        <div class="checkbox-group">
-          <label for="available">
-            <input type="checkbox" id="available" />
-            <span class="checkmark"></span>
-            Available?
-          </label>
-        </div>
-
+        
         <div class="form-group">
-          <label for="description">Book Description</label>
-          <textarea id="description" placeholder="Write a short description..."></textarea>
+          <label for="genre">Genre*</label>
+          <input type="text" id="genre" placeholder="e.g. Self-Help" required>
         </div>
+        
+        <div class="form-group">
+          <label for="description">Description*</label>
+          <textarea id="description" rows="5" placeholder="Enter a detailed book description..." required></textarea>
+        </div>
+        
+        <!-- Optional Fields -->
+        <div class="form-group">
+          <label for="category">Category (Optional)</label>
+          <input type="text" id="category" placeholder="e.g. Productivity">
+        </div>
+        
+        <div class="form-group">
+          <label for="rating">Rating (Optional)</label>
+          <input type="number" id="rating" min="0" max="5" step="0.1" placeholder="0-5">
+        </div>
+        
+        <div class="form-group">
+          <label for="badge">Badge (Optional)</label>
+          <select id="badge">
+            <option value="">None</option>
+            <option value="new-release">New Release</option>
+            <option value="bestseller">Bestseller</option>
+            <option value="trending">Trending</option>
+          </select>
+        </div>
+        
         <div class="button-group">
-          <input type="button" value="Delete Book" onclick="if(validation()) deleteBook()" />
-          <input type="button" value="Add Book" onclick="if(validation()) addBook()" />
-          <input type="button" value="Discard" onclick="if(validation()) discardBook()" />
+          <button type="button" class="submit-btn" onclick="addBook()">Add Book</button>
+          <button type="reset" class="discard-btn">Clear Form</button>
         </div>
-        
-      </div>
-  </form>
+      </form>
+    </div>
   </div>
 
   <!-- Footer -->
