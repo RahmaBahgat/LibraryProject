@@ -20,8 +20,12 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
-    <link rel="icon" href="../images/favicon-16x16.png" type="image/x-icon">
-      <link rel="shortcut icon" href="../images/favicon-16x16.png" type="image/x-icon">
+    <link rel="icon" href="../images/favicon-16x16.png" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      href="../images/favicon-16x16.png"
+      type="image/x-icon"
+    />
   </head>
   <body>
     <nav class="navbar">
@@ -72,14 +76,14 @@
             />
           </div>
           <div class="user-info">
-            <h2>Jane Doe</h2>
-            <p>Member Since: 1/1/2025</p>
+            <h2 id="user-name">Jane Doe</h2>
+            <p>Access Level: <span id="user-auth"></span></p>
           </div>
         </div>
 
         <div class="details">
           <h3>Contact Information</h3>
-          <p>Email: my.email@example.com</p>
+          <p>Email: <span id="user-email"></span></p>
         </div>
 
         <div class="books">
@@ -297,6 +301,19 @@
     <script src="../js/authentication.js"></script>
     <script>
       check(false, 0);
+
+      const userName = document.getElementById("user-name");
+      const userEmail = document.getElementById("user-email");
+      const userAuthLvl = document.getElementById("user-auth");
+
+      userName.innerHTML = userData.firstName + " " + userData.lastName;
+      userEmail.innerHTML = userData.email;
+
+      if (userData.authLevel > 0) {
+        userAuthLvl.innerHTML = "Admin";
+      } else {
+        userAuthLvl.innerHTML = "User";
+      }
     </script>
   </body>
 </html>
