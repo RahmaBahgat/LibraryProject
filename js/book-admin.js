@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
     localStorage.setItem('libraryBooks', JSON.stringify(existingBooks));
     
     // 4. Show success and redirect
-    alert("Book added successfully!");
+    // alert("Book added successfully!");
     window.location.href = "HomePage-admin.html?added=true";
   };
 });
