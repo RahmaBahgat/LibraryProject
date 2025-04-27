@@ -39,17 +39,14 @@ document.addEventListener("DOMContentLoaded", function() {
       timestamp: new Date().getTime() // For sorting
     };
 
-    // 1. Get existing books from localStorage
+    // Get existing books from localStorage
     let existingBooks = JSON.parse(localStorage.getItem('libraryBooks')) || [];
-    
-    // 2. Add new book to beginning of array
+   
     existingBooks.unshift(newBook);
-    
-    // 3. Save back to localStorage
+   
     localStorage.setItem('libraryBooks', JSON.stringify(existingBooks));
     
-    // 4. Show success and redirect
-    // alert("Book added successfully!");
+    
     window.location.href = "HomePage-admin.html?added=true";
   };
 });

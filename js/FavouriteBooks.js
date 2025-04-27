@@ -301,12 +301,12 @@ function initializeReviewForm(form) {
     starsContainer.appendChild(star);
   }
 
-  // Cancel button handler
+ 
   form.querySelector(".btn-cancel").addEventListener("click", () => {
     form.remove();
   });
 
-  // Submit button handler
+  
   form.querySelector(".btn-submit").addEventListener("click", (e) => {
     e.preventDefault();
     const reviewText = textarea.value.trim();
@@ -322,12 +322,12 @@ function initializeReviewForm(form) {
       rating: currentRating,
     };
 
-    // Add review to book object
+
     const bookId = form.closest(".book-card").dataset.bookId;
     const book = books.find((b) => b.id === bookId);
     book.reviews.push(review);
 
-    // Refresh reviews list
+    
     const reviewsList = form
       .closest(".reviews-section")
       .querySelector(".reviews-list");
