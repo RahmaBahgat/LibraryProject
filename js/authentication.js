@@ -75,7 +75,6 @@ createBtn.addEventListener("click", () => {
     if (checkEmail(emailInput)) {
       console.log("Account Created");
       signUp();
-      window.location.replace("HomePage-user.html");
     }
   } else {
     console.log("Not created");
@@ -124,6 +123,12 @@ function signUp() {
   users.push(newUser);
   localStorage.setItem("users", JSON.stringify(users));
   localStorage.setItem("loggedIn", JSON.stringify(newUser));
+
+  if (isAdmin) {
+    window.location.replace("HomePage-admin.html");
+  } else {
+    window.location.replace("HomePage-user.html");
+  }
 }
 
 function checkEmail(inputID) {
