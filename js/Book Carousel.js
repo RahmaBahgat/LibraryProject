@@ -179,10 +179,10 @@ function generateCarousels(pageType, categories) {
                 </div>
               </a>
             </div>
-            <a href="Author page.html?name=${encodeURIComponent(book.author)}" class="book-info">${book.author}</a>
+            <a href="bookPage.html?id=${book.id}" class="book-info">${book.title}</a>
           </div>
         `;
-      }
+    }
     }).join("");
 
     const adminControls = pageType === "admin" && category.editable ? `
