@@ -179,3 +179,34 @@ body {
 .upload-btn:hover {
   background-color: #5e2e33;
 }
+.book-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.library-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background-color: var(--cream);
+  color: #333;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border: 1px solid #ddd;
+}
+
+.library-btn:hover {
+  background-color: var(--light-gray);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.library-btn i {
+  font-size: 1.2rem;
+  color: var(--brand-red);
+}
