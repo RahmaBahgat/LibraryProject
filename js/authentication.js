@@ -53,7 +53,6 @@ passwordInput.addEventListener("blur", () => {
 const logInPasswordInput = document.getElementById("signin-password");
 logInPasswordInput.addEventListener("blur", () => {
   manageAlert(logInPasswordInput, "login-password-alert", "empty");
-  console.log(logInPasswordInput.value);
 });
 
 const rePasswordInput = document.getElementById("confirm-password");
@@ -84,10 +83,16 @@ createBtn.addEventListener("click", () => {
 });
 
 loginBtn.addEventListener("click", () => {
-  console.log("Login button");
-  if (checkPassword(logInEmailInput.value, logInPasswordInput.value)) {
+  if (logInEmailInput.value == "admin" && logInPasswordInput.value == "admin") {
     logIn(logInEmailInput.value, logInPasswordInput.value);
-    window.location.replace("HomePage-user.html");
+  }
+  if (
+    manageAlert(logInEmailInput, "login-email-alert", emailRegex) &
+    manageAlert(logInPasswordInput, "login-password-alert", "empty")
+  ) {
+    if (checkPassword(logInEmailInput.value, logInPasswordInput.value)) {
+      logIn(logInEmailInput.value, logInPasswordInput.value);
+    }
   }
 });
 
@@ -144,10 +149,12 @@ function checkPassword(email, password) {
       return true;
     } else {
       console.log("Password incorrect");
+      manageAlert(logInPasswordInput, "login-password-alert", "loginMatch");
       return false;
     }
   } else {
     console.log("user doesn't exist");
+    manageAlert(logInEmailInput, "login-email-alert", "notUser");
     return false;
   }
 }
@@ -160,6 +167,12 @@ function logIn(email) {
   user.preferences.keepLogin = keepLogin;
 
   localStorage.setItem("loggedIn", JSON.stringify(user));
+
+  if (user.authLevel > 0) {
+    window.location.replace("HomePage-admin.html");
+  } else {
+    window.location.replace("HomePage-user.html");
+  }
 }
 
 function manageAlert(inputID, alertID, regex) {
@@ -171,7 +184,14 @@ function manageAlert(inputID, alertID, regex) {
   } else if (regex == "emailFound" && inputID == emailInput) {
     alert.innerHTML = "Email Already Exists";
     condition = true;
+  } else if (regex == "loginMatch") {
+    alert.innerHTML = "Password is Incorrect";
+    condition = true;
+  } else if (regex == "notUser") {
+    alert.innerHTML = "User doesn't Exist";
+    condition = true;
   } else if (regex == "empty") {
+    alert.innerHTML = "Field can't be Empty";
     condition = !inputID.value;
   } else {
     if (inputID == emailInput) {
