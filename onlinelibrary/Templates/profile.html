@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Profile</title>
 
-    <link rel="stylesheet" href="../css/profile.css" />
-    <link rel="stylesheet" href="../css/Navbar_Footer.css" />
-    <link rel="stylesheet" href="../css/notifications.css" />
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/notifications.css' %}" />
 
     <!-- MerryWeather Font -->
     <link
@@ -20,10 +20,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
-    <link rel="icon" href="../images/favicon-16x16.png" type="image/x-icon" />
+    <link rel="icon" href="{% static 'images/favicon-16x16.png' %}" type="image/x-icon" />
     <link
       rel="shortcut icon"
-      href="../images/favicon-16x16.png"
+      href="{% static 'images/favicon-16x16.png' %}"
       type="image/x-icon"
     />
   </head>
@@ -209,9 +209,9 @@
           <div class="footer-section">
             <h3>Quick Links</h3>
             <ul>
-              <li><a href="../html/HomePage-user.html">Home</a></li>
-              <li><a href="../html/HomePage-user.html">Explore Books</a></li>
-              <li><a href="../html/about.html">About Us</a></li>
+              <li><a href="{% static 'html/HomePage-user.html' %}">Home</a></li>
+              <li><a href="{% static 'html/HomePage-user.html' %}">Explore Books</a></li>
+              <li><a href="{% static 'html/about.html' %}">About Us</a></li>
               <li><a href="#">Contact</a></li>
             </ul>
           </div>
@@ -220,7 +220,7 @@
             <ul>
               <li><a href="#">FAQ</a></li>
               <li><a href="#">Terms of Service</a></li>
-              <li><a href="../html/privacy.html">Privacy Policy</a></li>
+              <li><a href="{% static 'html/privacy.html' %}">Privacy Policy</a></li>
             </ul>
           </div>
         </div>
@@ -233,8 +233,8 @@
       </div>
     </footer>
 
-    <script src="../js/Navbar_Footer.js"></script>
-    <script src="../js/notifications.js"></script>
+    <script src="{% static 'js/Navbar_Footer.js' %}"></script>
+    <script src="{% static 'js/notifications.js' %}"></script>
     <script>
       const profilePic = document.querySelector("#profile-img");
       const profilePicCon = document.querySelector(".profile-img-container");
@@ -297,8 +297,8 @@
         window.location.pathname = "";
       });
     </script>
-    <script src="../js/checkAuth.js"></script>
-    <script src="../js/authentication.js"></script>
+    <script src="{% static 'js/checkAuth.js' %}"></script>
+    <script src="{% static 'js/authentication.js' %}"></script>
     <script>
       check(false, 0);
 

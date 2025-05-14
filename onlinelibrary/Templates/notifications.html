@@ -5,11 +5,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Notifications</title>
-    <link rel="stylesheet" href="../css/HomePage-admin.css" />
-    <link rel="stylesheet" href="../css/notifications.css" />
-    <link rel="stylesheet" href="../css/Navbar_Footer.css" />
-    <link rel="icon" href="../images/favicon-16x16.png" type="image/x-icon">
-      <link rel="shortcut icon" href="../images/favicon-16x16.png" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/HomePage-admin.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/notifications.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
+    <link rel="icon" href="{% static 'images/favicon-16x16.png' %}" type="image/x-icon">
+      <link rel="shortcut icon" href="{% static 'images/favicon-16x16.png' %}" type="image/x-icon">
   </head>
 
   <body>
@@ -28,7 +28,7 @@
         <div class="nav-menu">
           <a href="HomePage-user.html" class="nav-link">Home</a>
           <a href="profile.html" class="nav-link"> profile</a>
-          <a href="../index.html" class="nav-link"> Sign Out</a>
+          <a href="{% static 'index.html' %}" class="nav-link"> Sign Out</a>
         </div>
       </div>
     </nav>
@@ -89,9 +89,9 @@
           <div class="footer-section">
             <h3>Quick Links</h3>
             <ul>
-              <li><a href="../html/HomePage-user.html">Home</a></li>
-              <li><a href="../html/HomePage-user.html">Explore Books</a></li>
-              <li><a href="../html/about.html">About Us</a></li>
+              <li><a href="{% static 'html/HomePage-user.html' %}">Home</a></li>
+              <li><a href="{% static 'html/HomePage-user.html' %}">Explore Books</a></li>
+              <li><a href="{% static 'html/about.html' %}">About Us</a></li>
               <li><a href="#">Contact</a></li>
             </ul>
           </div>
@@ -100,7 +100,7 @@
             <ul>
               <li><a href="#">FAQ</a></li>
               <li><a href="#">Terms of Service</a></li>
-              <li><a href="../html/privacy.html">Privacy Policy</a></li>
+              <li><a href="{% static 'html/privacy.html' %}">Privacy Policy</a></li>
             </ul>
           </div>
         </div>
@@ -111,9 +111,9 @@
     </footer>
   
 
-    <script src="../js/notifications.js"></script>
-    <script src="../js/Navbar_Footer.js"></script>
-    <script src="../js/checkAuth.js"></script>
+    <script src="{% static 'js/notifications.js' %}"></script>
+    <script src="{% static 'js/Navbar_Footer.js' %}"></script>
+    <script src="{% static 'js/checkAuth.js' %}"></script>
     <script>
       check(false, 0);
     </script>
