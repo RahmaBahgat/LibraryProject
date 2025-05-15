@@ -80,3 +80,36 @@ document.addEventListener("DOMContentLoaded", function() {
   loadBooks();
   // Any other admin-specific initialization
 });
+
+// Function to handle book deletion
+async function deleteBook(bookId) {
+  if (confirm('Are you sure you want to delete this book?')) {
+    try {
+      const response = await fetch(`/library-admin/books/delete/${bookId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+      });
+
+      if (response.ok) {
+        // Reload the page to show updated book list
+        window.location.reload();
+      } else {
+        alert('Error deleting book');
+      }
+    } catch (error) {
+      alert('Error deleting book');
+    }
+  }
+}
+
+// Add event listeners for delete buttons
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const bookId = this.dataset.bookId;
+      deleteBook(bookId);
+    });
+  });
+});

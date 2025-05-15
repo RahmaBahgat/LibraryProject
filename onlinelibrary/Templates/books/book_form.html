@@ -1,0 +1,44 @@
+{% extends 'books/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}{{ action }} Book{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-section">
+        <h2 class="title">{{ action }} Book</h2>
+        <p class="subtitle">Enter book details below</p>
+        
+        {% if form.errors %}
+        <div class="error-message" style="display: block;">
+            Please correct the errors below.
+        </div>
+        {% endif %}
+
+        <form method="post" class="mt-4" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field.errors }}
+                {% if field.name == 'image' %}
+                    {% render_field field class="form-control" accept="image/*" %}
+                {% else %}
+                    {% render_field field class="form-control" %}
+                {% endif %}
+                {% if field.help_text %}
+                <div class="form-text">{{ field.help_text }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <div class="button-group">
+                <button type="submit" class="submit-btn">{{ action }} Book</button>
+                <a href="{% url 'books_admin:admin_home' %}" class="discard-btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+    <div class="image-section"></div>
+</div>
+{% endblock %} 

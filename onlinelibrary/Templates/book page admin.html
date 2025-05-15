@@ -57,72 +57,73 @@
   </nav>
 
   <div class="container">
-    <!-- Form Section -->
     <div class="form-section">
-      <h1 class="title">Add New Book</h1>
-      <p class="subtitle">Fill in the book details below</p>
-      <form id="bookForm">
-        <p id="error" class="error-message"></p>
+        <h1 class="title">
+            {% if book %}Edit {{ book.title }}{% else %}Add New Book{% endif %}
+        </h1>
+        <p class="subtitle">{% if book %}Update the book details{% else %}Fill in the book details below{% endif %}</p>
         
-        <!-- Required Fields -->
-        <div class="form-group">
-          <label for="id">Book ID*</label>
-          <input type="text" id="id" placeholder="e.g. 26" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="title">Book Title*</label>
-          <input type="text" id="title" placeholder="e.g. Atomic Habits" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="author">Author*</label>
-          <input type="text" id="author" placeholder="e.g. James Clear" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="cover">Cover Image URL*</label>
-          <input type="text" id="cover" placeholder="https://example.com/book-cover.jpg" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="genre">Genre*</label>
-          <input type="text" id="genre" placeholder="e.g. Self-Help" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="description">Description*</label>
-          <textarea id="description" rows="5" placeholder="Enter a detailed book description..." required></textarea>
-        </div>
-        
-        <!-- Optional Fields -->
-        <div class="form-group">
-          <label for="category">Category (Optional)</label>
-          <input type="text" id="category" placeholder="e.g. Productivity">
-        </div>
-        
-        <div class="form-group">
-          <label for="rating">Rating (Optional)</label>
-          <input type="number" id="rating" min="0" max="5" step="0.1" placeholder="0-5">
-        </div>
-        
-        <div class="form-group">
-          <label for="badge">Badge (Optional)</label>
-          <select id="badge">
-            <option value="">None</option>
-            <option value="new-release">New Release</option>
-            <option value="bestseller">Bestseller</option>
-            <option value="trending">Trending</option>
-          </select>
-        </div>
-        
-        <div class="button-group">
-          <button type="button" class="submit-btn" onclick="addBook()">Add Book</button>
-          <button type="reset" class="discard-btn">Clear Form</button>
-        </div>
-      </form>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p id="error" class="error-message"></p>
+
+            <div class="form-group">
+                {{ form.title.label_tag }}
+                {{ form.title }}
+                {{ form.title.errors }}
+            </div>
+
+            <div class="form-group">
+                {{ form.author.label_tag }}
+                {{ form.author }}
+                {{ form.author.errors }}
+            </div>
+
+            <div class="form-group">
+                {{ form.description.label_tag }}
+                {{ form.description }}
+                {{ form.description.errors }}
+            </div>
+
+            <div class="form-group">
+                {{ form.isbn.label_tag }}
+                {{ form.isbn }}
+                {{ form.isbn.errors }}
+            </div>
+
+            <div class="form-group">
+                {{ form.price.label_tag }}
+                {{ form.price }}
+                {{ form.price.errors }}
+            </div>
+
+            <div class="form-group">
+                {{ form.stock.label_tag }}
+                {{ form.stock }}
+                {{ form.stock.errors }}
+            </div>
+
+            <div class="form-group">
+                {{ form.image.label_tag }}
+                {{ form.image }}
+                {{ form.image.errors }}
+            </div>
+
+            <div class="form-group">
+                {{ form.badge.label_tag }}
+                {{ form.badge }}
+                {{ form.badge.errors }}
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="submit-btn">
+                    {% if book %}Update{% else %}Add{% endif %} Book
+                </button>
+                <a href="{% url 'books_admin:list_books' %}">
+            </div>
+        </form>
     </div>
-  </div>
+</div>
 
   <!-- Footer -->
   <footer class="footer">
@@ -177,5 +178,7 @@
     <!-- <script>
       check(false, 1);
     </script> -->
+
+    <script src="{% static 'js/Book-admin.js' %}"></script>
 </body>
 </html>

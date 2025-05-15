@@ -1,129 +1,80 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const isAdminPage = window.location.pathname.includes("HomePage-admin.html");
+  const isAdminPage = window.location.pathname.includes("library-admin");
   const container = document.getElementById("book-carousels-container");
   
-  // Load saved books from localStorage
-  const savedBooks = JSON.parse(localStorage.getItem('libraryBooks')) || [];
-
-  const userCategories = [
-    {
-      title: "Suggested For You",
-      subtitle: "Inspired by the stories you've loved.",
-      items: [
-        { type: "book", id: "8" },
-        { type: "book", id: "11" },
-        { type: "book", id: "14" },
-        { type: "book", id: "18" },
-        { type: "book", id: "3" },
-        { type: "book", id: "19" },
-        { type: "book", id: "13" },
-        { type: "book", id: "17" },
-        { type: "book", id: "20" }
-      ]
-    },
-    {
-      title: "Top Picks This Week",
-      subtitle: "What everyone's reading — and loving.",
-      items: [
-        { type: "book", id: "5" },
-        { type: "book", id: "8" },
-        { type: "book", id: "18" },
-        { type: "book", id: "22" }
-      ]
-    },
-    {
-      title: "New Arrivals",
-      subtitle: "The Latest Additions to Your Journey",
-      items: [
-        // Add saved books first (newest first)
-        ...savedBooks.map(book => ({ 
-          type: "book", 
-          id: book.id,
-          customBook: book 
-        })),
-        // Then static books
-        { type: "book", id: "6" },
-        { type: "book", id: "14" },
-        { type: "book", id: "8" },
-        { type: "book", id: "7" },
-        { type: "book", id: "2" },
-        { type: "book", id: "10" }
-      ]
-    },
-    {
-      title: "Can't Put Down Reads",
-      subtitle: "Once you start, there's no escape.",
-      items: [
-        { type: "book", id: "2" },
-        { type: "book", id: "4" },
-        { type: "book", id: "10" },
-        { type: "book", id: "20" },
-        { type: "book", id: "13" },
-        { type: "book", id: "15" },
-        { type: "book", id: "17" }
-      ]
-    },
-    {
-      title: "Coming Soon",
-      subtitle: "Almost here — worth the wait",
-      items: [
-        { type: "book", id: "23" },
-        { type: "book", id: "24" },
-        { type: "book", id: "25" }
-      ]
-    }
-  ];
-
-  const adminCategories = [
-    {
-      title: "New Arrivals",
-      subtitle: "The Latest Additions to Your Journey",
-      items: [
-        // Add saved books first (newest first)
-        ...savedBooks.map(book => ({ 
-          type: "book", 
-          id: book.id,
-          customBook: book 
-        })),
-        // Then static books
-        { type: "book", id: "6" },
-        { type: "book", id: "14" },
-        { type: "book", id: "8" },
-        { type: "book", id: "7" },
-        { type: "book", id: "2" },
-        { type: "book", id: "10" }
-      ],
-      editable: true
-    },
-    {
-      title: "Most Borrowed This Month",
-      subtitle: "Treasures in High Demand",
-      items: [
-        { type: "book", id: "20" },
-        { type: "book", id: "5" },
-        { type: "book", id: "12" },
-        { type: "book", id: "22" }
-      ],
-      editable: true
-    },
-    {
-      title: "Books Needing Review",
-      subtitle: "Waiting for Your Thoughts",
-      items: [
-        { type: "book", id: "18" },
-        { type: "book", id: "17" },
-        { type: "book", id: "4" },
-        { type: "book", id: "13" }
-      ],
-      editable: true
-    }
-  ];
-
-  generateCarousels(
-    isAdminPage ? "admin" : "user",
-    isAdminPage ? adminCategories : userCategories
-  );
+  // Fetch books from Django backend
+  fetch('/library-admin/books/api/list/')
+    .then(response => response.json())
+    .then(data => {
+      const books = data.books;
+      generateCarousels(isAdminPage ? "admin" : "user", getCategories(books, isAdminPage));
+    })
+    .catch(error => {
+      console.error('Error fetching books:', error);
+      // Fallback to static data if fetch fails
+      generateCarousels(isAdminPage ? "admin" : "user", getDefaultCategories(isAdminPage));
+    });
 });
+
+function getCategories(books, isAdmin) {
+  if (isAdmin) {
+    return [
+      {
+        title: "New Arrivals",
+        subtitle: "The Latest Additions to Your Journey",
+        items: books.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 10).map(book => ({
+          type: "book",
+          id: book.id,
+          customBook: {
+            id: book.id,
+            title: book.title,
+            cover: book.image || "/static/images/default-cover.jpg",
+            badge: getBookBadge(book)
+          }
+        })),
+        editable: true
+      },
+      {
+        title: "Most Borrowed This Month",
+        subtitle: "Treasures in High Demand",
+        items: books.filter(book => book.stock < 5).map(book => ({
+          type: "book",
+          id: book.id,
+          customBook: {
+            id: book.id,
+            title: book.title,
+            cover: book.image || "/static/images/default-cover.jpg",
+            badge: "trending"
+          }
+        })),
+        editable: true
+      },
+      {
+        title: "Books Needing Review",
+        subtitle: "Waiting for Your Thoughts",
+        items: books.slice(0, 4).map(book => ({
+          type: "book",
+          id: book.id,
+          customBook: {
+            id: book.id,
+            title: book.title,
+            cover: book.image || "/static/images/default-cover.jpg"
+          }
+        })),
+        editable: true
+      }
+    ];
+  }
+  // Return user categories if not admin
+  return getDefaultCategories(false);
+}
+
+function getBookBadge(book) {
+  const daysSinceCreation = (new Date() - new Date(book.created_at)) / (1000 * 60 * 60 * 24);
+  if (daysSinceCreation <= 7) return "new-release";
+  if (book.stock < 3) return "trending";
+  return null;
+}
 
 function getIconClass(title) {
   const iconMap = {
@@ -156,7 +107,7 @@ function generateCarousels(pageType, categories) {
               ${series.books.map((seriesBook) => `
                 <p>
                   <span>
-                    <a href="bookPage.html?id=${seriesBook.id}" class="book-link">
+                    <a href="/library-admin/books/book/${seriesBook.id}/" class="book-link">
                       <img class="spine" src="${seriesBook.spine}" alt="${seriesBook.title} Spine">
                       <img class="cover" src="${seriesBook.cover}" alt="${seriesBook.title} Cover">
                       ${seriesBook.badge ? `<span class="book-badge badge-${seriesBook.badge}">${formatBadgeText(seriesBook.badge)}</span>` : ''}
@@ -172,21 +123,25 @@ function generateCarousels(pageType, categories) {
         return `
           <div class="carousel-item">
             <div class="static-card">
-              <a href="bookPage.html?id=${book.id}" class="card-link">
+              <a href="/library-admin/books/book/${book.id}/" class="card-link">
                 <div class="book-cover-container">
                   <img src="${book.cover}" alt="${book.title}">
                   ${book.badge ? `<span class="book-badge badge-${book.badge}">${formatBadgeText(book.badge)}</span>` : ''}
                 </div>
               </a>
             </div>
-            <a href="bookPage.html?id=${book.id}" class="book-info">${book.title}</a>
+            <a href="/library-admin/books/book/${book.id}/" class="book-info">${book.title}</a>
           </div>
         `;
-    }
+      }
     }).join("");
 
     const adminControls = pageType === "admin" && category.editable ? `
-      
+      <div class="admin-controls">
+        <button onclick="location.href='/library-admin/books/add/'">
+          <i class="fas fa-plus"></i> Add Book
+        </button>
+      </div>
     ` : "";
 
     const sectionHTML = `
