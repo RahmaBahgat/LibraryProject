@@ -85,3 +85,6 @@ def notifications(request):
 @login_required
 def admin_notifications(request):
     return render(request, 'notifications-admin.html')
+
+def index(request):
+    return render(request, 'index.html')

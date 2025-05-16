@@ -41,3 +41,30 @@ function EditOrDelete() {
 //         1Click
 //     )
 // }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Update copyright year
+    const yearElement = document.querySelector('.current-year');
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+    }
+
+    // Chat button functionality
+    const chatButton = document.querySelector('.chat-button');
+    if (chatButton) {
+        chatButton.addEventListener('click', function() {
+            alert('Live chat feature coming soon! Please email us at support@inotherwords.com for immediate assistance.');
+        });
+    }
+
+    // Mobile navigation toggle
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            navToggle.classList.toggle('active');
+        });
+    }
+});

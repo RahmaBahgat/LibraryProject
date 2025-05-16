@@ -25,11 +25,17 @@ urlpatterns = [
     path('django-admin/', admin.site.urls),
     
     # Public Pages
+<<<<<<< Updated upstream
     path('', views.home, name='home'),
+=======
+    path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
+>>>>>>> Stashed changes
     path('about/', views.about, name='about'),
     path('privacy/', views.privacy, name='privacy'),
-    path('help/', views.help, name='help'),
-    
+    # path('help/', views.help_center, name='help_center'),
+    path('help/', include('help.urls')),
+
     # Book Pages
     path('library-admin/books/', include('books.urls')),
     

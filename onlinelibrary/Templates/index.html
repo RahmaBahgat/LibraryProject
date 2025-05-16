@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,8 +9,8 @@
       name="description"
       content="InOtherWords - Where Every Page Tells a Story. Discover your next favorite book in our curated library collection."
     />
-    <link rel="stylesheet" href="./css/index-style.css" />
-    <link rel="stylesheet" href="./css/Navbar_Footer.css" />
+    <link rel="stylesheet" href="{% static 'css/index-style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
 
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
@@ -43,11 +44,9 @@
           <span></span>
         </button>
         <div class="nav-menu">
-          <a href="./html/privacy.html" class="nav-link">Privacy</a>
-          <a href="./html/about.html" class="nav-link">About Us</a>
-          <a href="./html/LogIn_SignUp page.html" class="btn btn-primary"
-            >Join Us</a
-          >
+          <a href="{% url 'privacy' %}" class="nav-link">Privacy</a>
+          <a href="{% url 'about' %}" class="nav-link">About Us</a>
+          <a href="{% url 'login-signup' %}" class="btn btn-primary">Join Us</a>
         </div>
       </div>
     </nav>
@@ -231,19 +230,19 @@
           <div class="footer-section">
             <h3>Quick Links</h3>
             <ul>
-              <li><a href="index.html">Home</a></li>
-              <li><a href="./html/HomePage-user.html">Explore Books</a></li>
-              <!-- <li><a href="">Categories</a></li> -->
-              <li><a href="./html/about.html">About Us</a></li>
+              <li><a href="{% url 'index' %}">Home</a></li>
+              <li><a href="{% url 'login-signup' %}">Explore Books</a></li>
+              <li><a href="{% url 'about' %}">About Us</a></li>
               <li><a href="#">Contact</a></li>
             </ul>
           </div>
           <div class="footer-section">
             <h3>Help & Support</h3>
             <ul>
+              <li><a href="{% url 'help-center' %}">Help</a></li>
               <li><a href="#">FAQ</a></li>
               <li><a href="#">Terms of Service</a></li>
-              <li><a href="./html/privacy.html">Privacy Policy</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
             </ul>
           </div>
         </div>
@@ -256,11 +255,13 @@
       </div>
     </footer>
 
-    <script src="./js/data.js"></script>
-    <script src="./js/index_script.js"></script>
-    <script src="./js/Navbar_Footer.js"></script>
-    <script src="js/authentication.js"></script>
+    <script src="{% static 'js/data.js' %}"></script>
+    <script src="{% static 'js/index_script.js' %}"></script>
+    <script src="{% static 'js/Navbar_Footer.js' %}"></script>
+    <script src="{% static 'js/authentication.js' %}"></script>
     <script src="{% static 'js/checkAuth.js' %}"></script>
+    <script src="{% static 'js/help.js' %}"></script>
+
     <script>
       loginCheck();
     </script>
