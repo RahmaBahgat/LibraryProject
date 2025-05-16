@@ -21,8 +21,10 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
+    # Django Admin
+    path('django-admin/', admin.site.urls),
+    
     # Public Pages
-    path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
     path('privacy/', views.privacy, name='privacy'),
@@ -42,7 +44,7 @@ urlpatterns = [
     path('login-signup/', views.login_signup, name='login-signup'),
     
     # Admin Pages
-    path('admin/home/', views.admin_home, name='admin-home'),
+    path('library-admin/', views.admin_home, name='admin-home'),
     path('notifications/', views.notifications, name='notifications'),
     path('admin/notifications/', views.admin_notifications, name='admin-notifications'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

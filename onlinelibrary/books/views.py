@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.core.serializers import serialize
 import json
-from .models import Book
+from .models import Book, BorrowedBook
 from .forms import BookForm
 from django.urls import reverse
 
@@ -19,7 +19,7 @@ def book_detail(request, id):
 
 @login_required
 @user_passes_test(is_admin)
-def admin_home(request):
+def admin_book_management(request):
     books = Book.objects.all().order_by('-created_at')
     # Use the to_dict method for serialization
     books_data = [book.to_dict() for book in books]
@@ -44,7 +44,7 @@ def add_book(request):
             book = form.save()
             messages.success(request, 'Book added successfully!')
             # Redirect back to admin home with success parameter
-            return redirect(f"{reverse('books_admin:admin_home')}?added=true")
+            return redirect(f"{reverse('books_admin:admin_book_management')}?added=true")
     else:
         form = BookForm()
     return render(request, 'books/book_form.html', {'form': form, 'action': 'Add'})
@@ -58,7 +58,7 @@ def edit_book(request, id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Book updated successfully!')
-            return redirect('books_admin:admin_home')
+            return redirect('books_admin:admin_book_management')
     else:
         form = BookForm(instance=book)
     return render(request, 'books/book_form.html', {'form': form, 'action': 'Edit', 'book': book})
@@ -91,3 +91,24 @@ def api_list_books(request):
         'created_at': book.created_at.isoformat()
     } for book in books]
     return JsonResponse({'books': books_data})
+
+@login_required
+def home_user(request):
+    borrowed_books = BorrowedBook.objects.filter(user=request.user)
+    recommended_books = Book.objects.order_by('-rating')[:5]
+    context = {
+        'borrowed_books': borrowed_books,
+        'recommended_books': recommended_books,
+    }
+    return render(request, 'HomePage-user.html', context)
+
+@login_required
+@user_passes_test(is_admin)
+def admin_dashboard(request):
+    total_books = Book.objects.count()
+    borrowed_count = BorrowedBook.objects.filter(return_date__isnull=True).count()
+    context = {
+        'total_books': total_books,
+        'borrowed_count': borrowed_count,
+    }
+    return render(request, 'HomePage-admin.html', context)
