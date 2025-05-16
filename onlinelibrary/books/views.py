@@ -83,8 +83,8 @@ def edit_book(request, book_id):
 
 @login_required
 @user_passes_test(is_admin)
-def delete_book(request, book_id):
-    book = get_object_or_404(Book, id=book_id)
+def delete_book(request, id):
+    book = get_object_or_404(Book, id=id)
     title = book.title
     book.delete()
     # Create notifications for all admins
