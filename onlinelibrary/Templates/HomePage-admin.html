@@ -84,32 +84,49 @@
         <!-- Navigation Menu -->
         <div class="nav-menu">
           <div class="dropdown">
-            <a href="{% url 'notifications' %}" class="nav-link">Notifications</a>
+            <a href="{% url 'books_admin:admin_book_management' %}" class="nav-link">
+              <i class="fas fa-book-open"></i> Manage Books
+            </a>
+          </div>
+
+          <div class="dropdown">
+            <a href="{% url 'notifications' %}" class="nav-link">
+              <i class="fas fa-bell"></i> Notifications
+            </a>
             <div class="dropdown-content">
-              <p class="notif">
-                Your order #1234 has been shipped.
-                <time>April 16, 2025 — 3:45 PM</time>
-              </p>
-              <p class="notif">
-                "The Alchemist" is now 50% off!
-                <time>April 16, 2025 — 1:12 PM</time>
-              </p>
-              <p class="notif">
-                A book on your wishlist is back in stock.
-                <time>April 15, 2025 — 10:05 AM</time>
-              </p>
-              <a class="notif" href="{% url 'notifications' %}"
-                >See all notifications</a
-              >
+              {% for notification in notifications|slice:":5" %}
+                <p class="notif">
+                  {{ notification.message }}
+                  <time>{{ notification.created_at|date:"F j, Y — g:i A" }}</time>
+                </p>
+              {% empty %}
+                <p class="notif">No new notifications</p>
+              {% endfor %}
+              <a class="notif" href="{% url 'notifications' %}">See all notifications</a>
             </div>
           </div>
 
           <div class="dropdown">
-            <a href="{% url 'profile' %}"><i class="fas fa-user"></i> My Profile</a>
-            <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+            <a href="#" class="nav-link">
+              <i class="fas fa-user-shield"></i> Admin
+            </a>
+            <div class="dropdown-content">
+              <a href="{% url 'profile' %}">
+                <i class="fas fa-user-circle"></i> My Profile
+              </a>
+              <a href="{% url 'books_admin:admin_book_management' %}">
+                <i class="fas fa-tasks"></i> Dashboard
+              </a>
+              <a href="{% url 'help-center' %}">
+                <i class="fas fa-question-circle"></i> Help Center
+              </a>
+              <a href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i> Sign Out
+              </a>
+            </div>
           </div>
 
-          <button id="theme">🌙</button>
+          <button id="theme" aria-label="Toggle theme">🌙</button>
         </div>
       </div>
     </nav>
@@ -129,7 +146,10 @@
             <p class="stat-number">{{ borrowed_count }}</p>
           </div>
         </div>
-        <a href="{% url 'books_admin:add_book' %}" class="manage-books-btn">Add New Book</a>
+        <a href="{% url 'books_admin:add_book' %}" class="manage-books-btn">
+          <i class="fas fa-plus"></i>
+          Add New Book
+        </a>
         <br />
       </center>
     </div>
