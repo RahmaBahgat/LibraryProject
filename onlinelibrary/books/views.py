@@ -60,8 +60,8 @@ def add_book(request):
 
 @login_required
 @user_passes_test(is_admin)
-def edit_book(request, book_id):
-    book = get_object_or_404(Book, id=book_id)
+def edit_book(request, id):
+    book = get_object_or_404(Book, id=id)
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES, instance=book)
         if form.is_valid():
