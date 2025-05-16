@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+=======
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+>>>>>>> 71663c7f2fd49d11ccbee77b51a79d254450c2fa
 
 # Public Pages
 def home(request):
@@ -26,9 +32,11 @@ def book_admin(request):
     return render(request, 'book page admin.html')
 
 # User Pages
+@login_required
 def profile(request):
     return render(request, 'profile.html')
 
+@login_required
 def favorites(request):
     return render(request, 'FavouriteBooks.html')
 
@@ -37,6 +45,7 @@ def borrowed_list(request):
 
 # Auth Pages
 def login_page(request):
+<<<<<<< HEAD
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -51,12 +60,12 @@ def login_page(request):
             messages.error(request, 'Invalid username or password.')
     
     return render(request, 'LogIn_SignUp page.html')
+=======
+    return render(request, 'accounts/login.html')
+>>>>>>> 71663c7f2fd49d11ccbee77b51a79d254450c2fa
 
 def signup_page(request):
-    return render(request, 'LogIn_SignUp page.html')
-
-def login_signup(request):
-    return render(request, 'LogIn_SignUp page.html')
+    return render(request, 'accounts/signup.html')
 
 # Admin Pages
 def admin_home(request):

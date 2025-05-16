@@ -1,9 +1,9 @@
-{% load static %}\n<!DOCTYPE html>
+{% load static %}<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>InOtherWords - Login/Signup</title>
+    <title>InOtherWords - Signup</title>
     <link rel="stylesheet" href="{% static 'css/LogIn_SignUp page.css' %}" />
     <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
     <link
@@ -65,48 +65,66 @@
         <div class="sign-in" id="sign-in">
           <h1>Welcome Back</h1>
           <p>Discover your next great read with InOtherWords</p>
-          <button class="switch-button" id="slide-right-button">Sign In</button>
+          <button class="switch-button" id="switch-signup">Sign In</button>
         </div>
         <div class="sign-up" id="sign-up">
           <h1>New Chapter Begins</h1>
           <p>Start your reading adventure with us today</p>
-          <button class="switch-button" id="slide-left-button">Sign Up</button>
+          <button class="switch-button" id="slide-right-button">Sign Up</button>
         </div>
       </div>
       <div class="form">
         <div class="sign-in" id="sign-in-info">
           <h1>Sign In</h1>
           <p class="small">use your email account</p>
-          <form class="login-form" method="POST" action="{% url 'login' %}">
-            {% csrf_token %}
+          <form class="login-form">
             <div class="form-group">
-              <label for="username">Username</label>
-              <input type="text" id="username" name="username" required />
+              <label for="email">Email</label>
+              <input type="email" id="email" required />
+              <span class="input-alert" id="login-email-alert"
+                >Email must consist of @ and . at the end</span
+              >
             </div>
 
             <div class="form-group">
               <label for="signin-password">Password</label>
               <div class="password-wrapper">
-                <input type="password" id="signin-password" name="password" required />
+                <input type="password" id="signin-password" required />
                 <span class="toggle-eye" data-target="signin-password">
                   <i class="fa-regular fa-eye" style="color: #6b6552"></i>
                 </span>
               </div>
+              <span class="input-alert" id="login-password-alert">
+                Password can't be empty
+              </span>
             </div>
-
-            {% if messages %}
-            <div class="messages">
-              {% for message in messages %}
-              <p class="error-message">{{ message }}</p>
-              {% endfor %}
-            </div>
-            {% endif %}
 
             <div class="forgot-id">
               <a href="">Forgot password?</a>
             </div>
 
-            <button type="submit" class="login-button">
+            <div class="filter-switch signin-toggle">
+              <input
+                checked
+                id="signin-option1"
+                name="signin-options"
+                type="radio"
+              />
+              <label class="option" for="signin-option1">Admin</label>
+              <input id="signin-option2" name="signin-options" type="radio" />
+              <label class="option" for="signin-option2">User</label>
+              <span class="background"></span>
+            </div>
+
+            <div class="agreement-section">
+              <label class="remember-me">
+                <input type="checkbox" id="keep-login" />
+                <span class="checkmark"></span>
+                Keep me signed in. <a href="#">Details</a>
+              </label>
+            </div>
+
+            <button type="button" class="login-button" id="login-btn">
               Sign In
             </button>
           </form>
@@ -114,10 +132,11 @@
         <div class="sign-up" id="sign-up-info">
           <h1>Create Account</h1>
           <p class="small">use your email for registration</p>
-          <form class="login-form">
+          <form class="login-form" method="post" action="{% url 'signup' %}">
+            {% csrf_token %}
             <div class="form-group">
               <label for="first-name">First Name</label>
-              <input type="text" id="first-name" required />
+              <input type="text" id="first-name" name="first-name" required />
               <span class="input-alert" id="Fname-alert"
                 >Name must consist of only letters</span
               >
@@ -125,7 +144,7 @@
 
             <div class="form-group">
               <label for="last-name">Last Name</label>
-              <input type="text" id="last-name" required />
+              <input type="text" id="last-name" name="last-name" required />
               <span class="input-alert" id="Lname-alert"
                 >Name must consist of only letters</span
               >
@@ -133,7 +152,7 @@
 
             <div class="form-group">
               <label for="newEmail">Email</label>
-              <input type="email" id="newEmail" required />
+              <input type="email" id="newEmail" name="email" required />
               <span class="input-alert" id="email-alert"
                 >Email must consist of @ and . at the end</span
               >
@@ -142,7 +161,12 @@
             <div class="form-group">
               <label for="signup-password">Password</label>
               <div class="password-wrapper">
-                <input type="password" id="signup-password" required />
+                <input
+                  type="password"
+                  id="signup-password"
+                  name="password"
+                  required
+                />
                 <span class="toggle-eye" data-target="signup-password">
                   <i class="fa-regular fa-eye" style="color: #6b6552"></i>
                 </span>
@@ -156,7 +180,12 @@
             <div class="form-group">
               <label for="confirm-password">Confirm Password</label>
               <div class="password-wrapper">
-                <input type="password" id="confirm-password" required />
+                <input
+                  type="password"
+                  id="confirm-password"
+                  name="confirm-password"
+                  required
+                />
                 <span class="toggle-eye" data-target="confirm-password">
                   <i class="fa-regular fa-eye" style="color: #6b6552"></i>
                 </span>
@@ -167,14 +196,9 @@
             </div>
 
             <div class="filter-switch signup-toggle">
-              <input
-                checked
-                id="signup-option1"
-                name="signup-options"
-                type="radio"
-              />
+              <input checked id="signup-option1" name="role" type="radio" />
               <label class="option" for="signup-option1">Admin</label>
-              <input id="signup-option2" name="signup-options" type="radio" />
+              <input id="signup-option2" name="role" type="radio" />
               <label class="option" for="signup-option2">User</label>
               <span class="background"></span>
             </div>
@@ -193,7 +217,7 @@
               </label>
             </div>
 
-            <button type="button" class="login-button" id="create-btn">
+            <button type="submit" class="login-button" id="create-btn">
               Create Account
             </button>
           </form>
@@ -213,7 +237,10 @@
     <!-- <script src="{% static 'js/authentication.js' %}"></script> -->
     <!-- <script src="{% static 'js/checkAuth.js' %}"></script> -->
     <script>
-      loginCheck();
+      document.getElementById("switch-signup").addEventListener("click", () => {
+        window.location.href = "{% url 'login' %}";
+      });
+      openSignUp();
     </script>
   </body>
 </html>
