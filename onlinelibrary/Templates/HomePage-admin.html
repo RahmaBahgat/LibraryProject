@@ -105,13 +105,8 @@
           </div>
 
           <div class="dropdown">
-            <a href="{% url 'profile' %}" class="nav-link">Profile</a>
-            <div class="dropdown-content">
-              <a href="{% url 'profile' %}"><i class="fas fa-user"></i> My Profile</a>
-              <a href="{% url 'login' %}"
-                ><i class="fas fa-sign-out-alt"></i> Sign Out</a
-              >
-            </div>
+            <a href="{% url 'profile' %}"><i class="fas fa-user"></i> My Profile</a>
+            <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
           </div>
 
           <button id="theme">🌙</button>

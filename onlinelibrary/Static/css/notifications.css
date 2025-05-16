@@ -6,169 +6,284 @@
   --cream: #efe9e1;
 }
 
-.notif-page {
-  /* max-width: 1200px; */
-  width: 800px;
-  height: fit-content;
-  margin: 60px auto;
-  padding: 20px;
-  font-family: "Merriweather", serif;  
+.notifications-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
 }
 
-.notif-page h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #333;
-  text-align: center;
+.notifications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
-.notification-item {
-  padding: 15px;
-  margin-bottom: 12px;
-  background: #f8f8f8;
-  border-left: 5px solid var(--brand-red);
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: background 0.2s ease;
+.notifications-header h1 {
+  font-family: 'Merriweather', serif;
+  color: var(--dark-brown);
+  font-size: 2rem;
+  margin: 0;
 }
 
-.notification-item:hover {
-  background: #eaeaea;
+.notifications-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
-.notification-item time {
-  display: block;
-  font-size: 0.8rem;
-  color: #777;
-  margin-top: 5px;
-}
-.notification-item-admin {
-  padding: 20px;
-  background: white;
-  border-left: 5px solid var(--warm-taupe);
-  border-radius: 5px;
-  font-size: 1rem;
-  width: 100%; /* make it fill container */
-  box-sizing: border-box;
-  font-weight: 700;
-}
-
-.notification-item-admin input[type="text"],
-.notification-item-admin input[type="email"] {
-  padding: 8px;
-  margin-top: 5px;
-  width: 700px;
-  max-width: 100%;
-  border: 1px solid var(--dark-brown);
-  background: lightgray;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.notification-item-admin input[type="button"] {
-  padding: 8px 12px;
-  margin: 5px 5px 0 0;
-  background-color: var(--dark-brown);
+.mark-all-read {
+  background-color: var(--brand-red);
   color: white;
   border: none;
+  padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
-  font-weight: bold;
+  font-family: 'Merriweather', serif;
+  transition: background-color 0.2s ease;
 }
 
-.notification-item-admin input[type="button"]:hover {
-  background-color: var(--brand-red);
+.mark-all-read:hover {
+  background-color: #5a2c30;
 }
 
-.not-details {
+.notification-filter {
+  padding: 0.5rem;
+  border: 1px solid var(--warm-taupe);
+  border-radius: 4px;
+  background-color: white;
+  color: var(--dark-brown);
+  font-family: 'Merriweather', serif;
+  min-width: 150px;
+}
+
+.notifications-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-.noti-title {
-  font-size: 1.9rem;
-  font-weight: 100;
-  color: #333;
+  gap: 1rem;
 }
 
-.dropbtn {
-  background-color: var(--brand);
-  color: #AC9C8D;
-  padding: 0.rem 1.5rem;
-  font-size: 1rem;
-  font-family: 'Merriweather', serif;
-  border: none;
+.notification-card {
+  background-color: white;
+  border: 1px solid var(--light-gray);
   border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.dropbtn:hover {
-  background-color: #5a2c30;
-  
-}
-
-.dropdown {
+  padding: 1.5rem;
+  transition: all 0.3s ease;
   position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: var(--cream);
-  min-width: 250px;
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
-  z-index: 10;
-  
-  border-radius: 10px;
   overflow: hidden;
 }
 
-.dropdown-content a {
-  color: var(--dark-brown);
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  font-family: 'Merriweather', serif;
-  font-size: 0.95rem;
-  transition: background-color 0.3s ease;
+.notification-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown-content a:hover {
+.notification-card.unread {
   background-color: var(--cream);
-  color: var(--brand-red);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  background-color: var(--cream); /* optional, if you want the background to change too */
-  transition: box-shadow 0.3s ease, background-color 0.3s ease;
-
-  
 }
 
-.dropdown:hover .dropdown-content {
-  display: block;
-  }
-  .notif {
-  padding: 12px 16px;
-  margin: 0;
-  font-family: 'Merriweather', serif;
-  font-size: 0.95rem;
+.notification-card.unread::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--brand-red);
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.notification-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.notification-type-icon {
+  color: var(--brand-red);
+  display: flex;
+  align-items: center;
+}
+
+.notification-type {
   color: var(--dark-brown);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
-.notif:hover {
-  background-color: var(--cream);
+.notification-date {
+  color: var(--warm-taupe);
+  font-size: 0.85rem;
+}
+
+.unread-indicator {
+  width: 8px;
+  height: 8px;
+  background-color: var(--brand-red);
+  border-radius: 50%;
+}
+
+.notification-content {
+  padding-left: 2.5rem;
+}
+
+.notification-title {
+  color: var(--dark-brown);
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem 0;
+  font-family: 'Merriweather', serif;
+}
+
+.notification-message {
+  color: var(--warm-taupe);
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+.notification-sender {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--warm-taupe);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.notification-sender svg {
   color: var(--brand-red);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.related-book {
+  background-color: var(--cream);
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.book-info {
+  display: flex;
+  gap: 1rem;
+}
+
+.book-image {
+  flex-shrink: 0;
+}
+
+.book-thumbnail {
+  width: 80px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.book-details {
+  flex-grow: 1;
+}
+
+.book-details h4 {
+  color: var(--dark-brown);
+  font-family: 'Merriweather', serif;
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+}
+
+.book-author {
+  color: var(--warm-taupe);
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.book-status {
+  margin-top: 0.5rem;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.status-badge.in-stock {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.out-of-stock {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.no-notifications {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: var(--cream);
+  border-radius: 8px;
+  color: var(--warm-taupe);
+}
+
+.no-notifications svg {
+  color: var(--brand-red);
+  margin-bottom: 1rem;
+}
+
+.no-notifications p {
+  font-family: 'Merriweather', serif;
+  font-size: 1.25rem;
+  color: var(--dark-brown);
+  margin: 0 0 0.5rem 0;
+}
+
+.no-notifications span {
+  font-size: 0.9rem;
 }
 
 @media (max-width: 768px) {
-  .dropdown:hover .dropdown-content {
-    display: none;
-    }
-  
+  .notifications-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .notifications-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .notification-filter {
+    width: 100%;
+  }
+
+  .book-info {
+    flex-direction: column;
+  }
+
+  .book-image {
+    text-align: center;
+  }
+
+  .book-details {
+    text-align: center;
+  }
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }

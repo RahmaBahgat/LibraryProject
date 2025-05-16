@@ -40,13 +40,90 @@ class Book(models.Model):
         }
 
 class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    NOTIFICATION_TYPES = [
+        ('personal', 'Personal'),
+        ('global', 'Global'),
+        ('system', 'System'),
+        ('book_added', 'Book Added'),
+        ('book_edited', 'Book Edited'),
+        ('book_removed', 'Book Removed'),
+        ('book_borrowed', 'Book Borrowed'),
+        ('book_returned', 'Book Returned'),
+    ]
+
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications_received', null=True, blank=True)
+    sender = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='notifications_sent', null=True, blank=True)
+    title = models.CharField(max_length=200)
     message = models.TextField()
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+    related_book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.notification_type}: {self.title}"
+
+    @classmethod
+    def send_personal_notification(cls, sender, recipient, title, message):
+        return cls.objects.create(
+            sender=sender,
+            recipient=recipient,
+            title=title,
+            message=message,
+            notification_type='personal'
+        )
+
+    @classmethod
+    def send_global_notification(cls, sender, title, message):
+        return cls.objects.create(
+            sender=sender,
+            title=title,
+            message=message,
+            notification_type='global'
+        )
+
+    @classmethod
+    def send_system_notification(cls, title, message, recipient=None):
+        return cls.objects.create(
+            recipient=recipient,
+            title=title,
+            message=message,
+            notification_type='system'
+        )
+
+    @classmethod
+    def send_book_notification(cls, notification_type, book, admin_user, message=None):
+        """Send book-related notifications to admin and create system notification"""
+        title_map = {
+            'book_added': f'Book Added: {book.title}',
+            'book_edited': f'Book Updated: {book.title}',
+            'book_removed': f'Book Removed: {book.title}',
+            'book_borrowed': f'Book Borrowed: {book.title}',
+            'book_returned': f'Book Returned: {book.title}',
+        }
+        
+        # Create admin notification
+        if admin_user and notification_type in ['book_added', 'book_edited', 'book_removed']:
+            cls.objects.create(
+                recipient=admin_user,
+                title=title_map[notification_type],
+                message=message or f"You have {notification_type.replace('_', ' ')} the book '{book.title}'",
+                notification_type=notification_type,
+                related_book=book if notification_type != 'book_removed' else None
+            )
+
+        # Create system notification for borrowing/returning
+        if notification_type in ['book_borrowed', 'book_returned']:
+            cls.objects.create(
+                recipient=admin_user,
+                title=title_map[notification_type],
+                message=message or f"The book '{book.title}' has been {notification_type.replace('book_', '')}",
+                notification_type=notification_type,
+                related_book=book
+            )
 
 class BorrowedBook(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

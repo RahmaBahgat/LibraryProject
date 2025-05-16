@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'onlinelibrary',  # Add your app name here
     'books.apps.BooksConfig',  # Add this line
-    # 'widget_tweaks',  # Add this line
+    'widget_tweaks',  # Add this line
 ]
 
 MIDDLEWARE = [
@@ -139,5 +139,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Login URL configuration
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'

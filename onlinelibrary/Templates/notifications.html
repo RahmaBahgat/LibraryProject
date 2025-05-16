@@ -1,121 +1,132 @@
-{% load static %}\n<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Notifications</title>
-    <link rel="stylesheet" href="{% static 'css/HomePage-admin.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/notifications.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
-    <link rel="icon" href="{% static 'images/favicon-16x16.png' %}" type="image/x-icon">
-      <link rel="shortcut icon" href="{% static 'images/favicon-16x16.png' %}" type="image/x-icon">
-  </head>
+{% block title %}Notifications - InOtherWords Library{% endblock %}
 
-  <body>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+{% endblock %}
 
-    <nav class="navbar">
-      <div class="nav-container">
-        <div class="nav-logo">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="logo-icon"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-          <span>InOtherWords</span>
+{% block content %}
+<div class="notifications-container">
+    <div class="notifications-header">
+        <h1>Your Notifications</h1>
+        <div class="notifications-actions">
+            <button class="mark-all-read">Mark All as Read</button>
+            <div class="filter-dropdown">
+                <label for="notification-filter" class="visually-hidden">Filter notifications</label>
+                <select id="notification-filter" class="notification-filter" aria-label="Filter notifications">
+                    <option value="all">All Notifications</option>
+                    <option value="unread">Unread</option>
+                    <option value="books">Book Related</option>
+                    <option value="personal">Personal</option>
+                    <option value="global">Global</option>
+                </select>
+            </div>
         </div>
-        <button class="nav-toggle" aria-label="Toggle navigation">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-        <div class="nav-menu">
-          <a href="HomePage-user.html" class="nav-link">Home</a>
-          <a href="profile.html" class="nav-link"> profile</a>
-          <a href="{% static 'index.html' %}" class="nav-link"> Sign Out</a>
-        </div>
-      </div>
-    </nav>
-
-    <div class="notif-page">
-      <h1>🔔 Notifications</h1>
-
-      <div class="notification-item">
-        📦 Your order #1234 has been shipped.
-        <time>April 16, 2025 — 3:45 PM</time>
-      </div>
-
-      <div class="notification-item">
-        💰 "The Alchemist" is now 50% off!
-        <time>April 16, 2025 — 1:12 PM</time>
-      </div>
-
-      <div class="notification-item">
-        📚 A book on your wishlist is back in stock.
-        <time>April 15, 2025 — 10:05 AM</time>
-      </div>
-
-      <div class="notification-item">
-        🔐 New login from Cairo, Egypt.
-        <time>April 15, 2025 — 08:33 AM</time>
-      </div>
-
-      <div class="notification-item">
-        🎉 Welcome! You've earned 200 loyalty points.
-        <time>April 14, 2025 — 06:45 PM</time>
-      </div>
     </div>
+    
+    <div class="notifications-list">
+        {% if notifications %}
+            {% for notification in notifications %}
+                <div class="notification-card {% if not notification.is_read %}unread{% endif %}" 
+                     data-id="{{ notification.id }}"
+                     data-type="{{ notification.notification_type }}">
+                    <div class="notification-header">
+                        <div class="notification-meta">
+                            <span class="notification-type-icon">
+                                {% if notification.notification_type == 'personal' %}
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                {% elif notification.notification_type == 'global' %}
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                    </svg>
+                                {% else %}
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                    </svg>
+                                {% endif %}
+                            </span>
+                            <span class="notification-type">{{ notification.get_notification_type_display }}</span>
+                            <span class="notification-date">{{ notification.created_at|date:"M d, Y H:i" }}</span>
+                        </div>
+                        {% if not notification.is_read %}
+                            <span class="unread-indicator"></span>
+                        {% endif %}
+                    </div>
 
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <div class="footer-logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="logo-icon"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-            <span>InOtherWords</span>
-          </div>
-          <p>Connecting readers with stories that matter since 2025. Our community is built on a shared love of literature.</p>
-          <div class="social-links">
-            <a href="#" aria-label="Facebook">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-            </a>
-            <a href="#" aria-label="Twitter">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
-            </a>
-            <a href="#" aria-label="Instagram">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
-            </a>
-            <a href="#" aria-label="Email">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-            </a>
-          </div>
-        </div>
-        <div class="footer-links">
-          <div class="footer-section">
-            <h3>Quick Links</h3>
-            <ul>
-              <li><a href="{% static 'html/HomePage-user.html' %}">Home</a></li>
-              <li><a href="{% static 'html/HomePage-user.html' %}">Explore Books</a></li>
-              <li><a href="{% static 'html/about.html' %}">About Us</a></li>
-              <li><a href="#">Contact</a></li>
-            </ul>
-          </div>
-          <div class="footer-section">
-            <h3>Help & Support</h3>
-            <ul>
-              <li><a href="#">FAQ</a></li>
-              <li><a href="#">Terms of Service</a></li>
-              <li><a href="{% static 'html/privacy.html' %}">Privacy Policy</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; <span class="current-year"></span> InOtherWords Library. All rights reserved.</p>
-      </div>
-    </footer>
-  
+                    <div class="notification-content">
+                        <h3 class="notification-title">{{ notification.title }}</h3>
+                        <p class="notification-message">{{ notification.message }}</p>
+                        
+                        {% if notification.sender %}
+                            <div class="notification-sender">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                <span>{{ notification.sender.username }}</span>
+                            </div>
+                        {% endif %}
 
-    <script src="{% static 'js/notifications.js' %}"></script>
-    <script src="{% static 'js/Navbar_Footer.js' %}"></script>
-    <!-- <script src="{% static 'js/checkAuth.js' %}"></script> -->
-    <script>
-      check(false, 0);
-    </script>
-  </body>
-</html>
+                        {% if notification.related_book %}
+                            <div class="related-book">
+                                <div class="book-info">
+                                    {% if notification.related_book.image %}
+                                        <div class="book-image">
+                                            <img src="{{ notification.related_book.image.url }}" 
+                                                 alt="{{ notification.related_book.title }}" 
+                                                 class="book-thumbnail">
+                                        </div>
+                                    {% endif %}
+                                    <div class="book-details">
+                                        <h4>{{ notification.related_book.title }}</h4>
+                                        <p class="book-author">by {{ notification.related_book.author }}</p>
+                                        <div class="book-status">
+                                            {% if notification.related_book.stock > 0 %}
+                                                <span class="status-badge in-stock">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <path d="M20 6L9 17l-5-5"></path>
+                                                    </svg>
+                                                    In Stock ({{ notification.related_book.stock }})
+                                                </span>
+                                            {% else %}
+                                                <span class="status-badge out-of-stock">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                    </svg>
+                                                    Out of Stock
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-notifications">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+                <p>You're all caught up!</p>
+                <span>No notifications to display</span>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/notifications.js' %}"></script>
+{% endblock %}

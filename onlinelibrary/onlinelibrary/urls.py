@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
+from books.views_notifications import user_notifications, admin_notifications, mark_notification_read
 
 urlpatterns = [
     # Django Admin
@@ -26,6 +27,7 @@ urlpatterns = [
     
     # Public Pages
     path('', views.index, name='index'),
+    path('home/', views.home, name='home'),  # User home page
     path('about/', views.about, name='about'),
     path('privacy/', views.privacy, name='privacy'),
     path('help/', include('help.urls')),
@@ -41,9 +43,13 @@ urlpatterns = [
     # Auth Pages
     path('login/', views.login_page, name='login'),
     path('signup/', views.signup_page, name='signup'),
+    path('logout/', views.logout_page, name='logout'),
     
     # Admin Pages
     path('library-admin/', views.admin_home, name='admin-home'),
-    path('notifications/', views.notifications, name='notifications'),
-    path('admin/notifications/', views.admin_notifications, name='admin-notifications'),
+    
+    # Notification Pages
+    path('notifications/', user_notifications, name='notifications'),
+    path('library-admin/notifications/', admin_notifications, name='admin-notifications'),
+    path('notifications/<int:notification_id>/mark-read/', mark_notification_read, name='mark-notification-read'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -4,9 +4,10 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.core.serializers import serialize
 import json
-from .models import Book, BorrowedBook
+from .models import Book, BorrowedBook, Notification, User
 from .forms import BookForm
 from django.urls import reverse
+from django.utils import timezone
 
 def is_admin(user):
     return user.is_staff
@@ -42,8 +43,16 @@ def add_book(request):
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             book = form.save()
+            # Create notifications for all admins
+            for admin in User.objects.filter(is_staff=True):
+                Notification.objects.create(
+                    recipient=admin,
+                    title=f'Book Added: {book.title}',
+                    message=f"Admin {request.user.username} has added the book '{book.title}' to the library",
+                    notification_type='book_added',
+                    related_book=book
+                )
             messages.success(request, 'Book added successfully!')
-            # Redirect back to admin home with success parameter
             return redirect(f"{reverse('books_admin:admin_book_management')}?added=true")
     else:
         form = BookForm()
@@ -51,29 +60,43 @@ def add_book(request):
 
 @login_required
 @user_passes_test(is_admin)
-def edit_book(request, id):
-    book = get_object_or_404(Book, id=id)
+def edit_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES, instance=book)
         if form.is_valid():
-            form.save()
+            book = form.save()
+            # Create notifications for all admins
+            for admin in User.objects.filter(is_staff=True):
+                Notification.objects.create(
+                    recipient=admin,
+                    title=f'Book Updated: {book.title}',
+                    message=f"Admin {request.user.username} has updated the book '{book.title}'",
+                    notification_type='book_edited',
+                    related_book=book
+                )
             messages.success(request, 'Book updated successfully!')
             return redirect('books_admin:admin_book_management')
     else:
         form = BookForm(instance=book)
-    return render(request, 'books/book_form.html', {'form': form, 'action': 'Edit', 'book': book})
+    return render(request, 'books/book_form.html', {'form': form, 'book': book, 'action': 'Edit'})
 
 @login_required
 @user_passes_test(is_admin)
-def delete_book(request, id):
-    book = get_object_or_404(Book, id=id)
-    if request.method == 'POST':
-        if book.image:
-            book.image.delete()
-        book.delete()
-        messages.success(request, 'Book deleted successfully!')
-        return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'error'}, status=400)
+def delete_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    title = book.title
+    book.delete()
+    # Create notifications for all admins
+    for admin in User.objects.filter(is_staff=True):
+        Notification.objects.create(
+            recipient=admin,
+            title=f'Book Removed: {title}',
+            message=f"Admin {request.user.username} has removed the book '{title}' from the library",
+            notification_type='book_removed'
+        )
+    messages.success(request, 'Book deleted successfully!')
+    return redirect('books_admin:admin_book_management')
 
 @login_required
 @user_passes_test(is_admin)
@@ -112,3 +135,75 @@ def admin_dashboard(request):
         'borrowed_count': borrowed_count,
     }
     return render(request, 'HomePage-admin.html', context)
+
+@login_required
+def borrow_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if book.stock > 0:
+        # Create borrowed book record
+        borrowed = BorrowedBook.objects.create(
+            user=request.user,
+            book=book
+        )
+        book.stock -= 1
+        book.save()
+        
+        # Create notification for the user
+        Notification.objects.create(
+            recipient=request.user,
+            title=f'Book Borrowed: {book.title}',
+            message=f"You have successfully borrowed '{book.title}'",
+            notification_type='book_borrowed',
+            related_book=book
+        )
+        
+        # Create notification for admins
+        for admin in User.objects.filter(is_staff=True):
+            Notification.objects.create(
+                recipient=admin,
+                title=f'Book Borrowed: {book.title}',
+                message=f"User {request.user.username} has borrowed '{book.title}'",
+                notification_type='book_borrowed',
+                related_book=book
+            )
+        
+        messages.success(request, f'You have successfully borrowed {book.title}')
+        return redirect('index')
+    else:
+        messages.error(request, 'This book is currently out of stock')
+        return redirect('index')
+
+@login_required
+def return_book(request, borrowed_id):
+    borrowed = get_object_or_404(BorrowedBook, id=borrowed_id, user=request.user)
+    if not borrowed.is_returned:
+        borrowed.is_returned = True
+        borrowed.return_date = timezone.now()
+        borrowed.save()
+        
+        # Update book stock
+        book = borrowed.book
+        book.stock += 1
+        book.save()
+        
+        # Create notification for the user
+        Notification.objects.create(
+            recipient=request.user,
+            title=f'Book Returned: {book.title}',
+            message=f"You have successfully returned '{book.title}'",
+            notification_type='book_returned',
+            related_book=book
+        )
+        
+        # Create notification for admins
+        for admin in User.objects.filter(is_staff=True):
+            Notification.objects.create(
+                recipient=admin,
+                title=f'Book Returned: {book.title}',
+                message=f"User {request.user.username} has returned '{book.title}'",
+                notification_type='book_returned',
+                related_book=book
+            )
+        
+        messages.success(request, f'You have successfully returned {book.title}')
+    return redirect('borrowed-list')

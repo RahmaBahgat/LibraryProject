@@ -263,4 +263,188 @@ document.addEventListener('DOMContentLoaded', function() {
             addBook();
         });
     }
+        });
+    }
+});
+        });
+    }
+});
+                        item.style.opacity = '0';
+                        setTimeout(() => item.remove(), 300);
+                        showNotification('Book deleted successfully', 'success');
+                    } else {
+                        const error = await response.json();
+                        showNotification(error.message || 'Error deleting book', 'error');
+                    }
+                } catch (error) {
+                    showNotification('Error deleting book', 'error');
+                }
+            }
+        });
+    });
+
+    // Form Submission Handler
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                });
+
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else if (!response.ok) {
+                    const error = await response.json();
+                    showFormErrors(error.errors);
+                }
+            } catch (error) {
+                showNotification('Error submitting form', 'error');
+            }
+        });
+    });
+});
+
+// Helper Functions
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+function showFormErrors(errors) {
+    document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+    for (const [field, messages] of Object.entries(errors)) {
+        const input = document.querySelector(`[name="${field}"]`);
+        if (input) {
+            const errorContainer = input.closest('.form-group').querySelector('.error-message');
+            errorContainer.textContent = messages.join(', ');
+        }
+    }
+}
+
+// Handle form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('bookForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            addBook();
+        });
+    }
+                        item.style.opacity = '0';
+                        setTimeout(() => item.remove(), 300);
+                        showNotification('Book deleted successfully', 'success');
+                    } else {
+                        const error = await response.json();
+                        showNotification(error.message || 'Error deleting book', 'error');
+                    }
+                } catch (error) {
+                    showNotification('Error deleting book', 'error');
+                }
+            }
+        });
+    });
+
+    // Form Submission Handler
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                });
+
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else if (!response.ok) {
+                    const error = await response.json();
+                    showFormErrors(error.errors);
+                }
+            } catch (error) {
+                showNotification('Error submitting form', 'error');
+            }
+        });
+    });
+});
+
+// Helper Functions
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+function showFormErrors(errors) {
+    document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+    for (const [field, messages] of Object.entries(errors)) {
+        const input = document.querySelector(`[name="${field}"]`);
+        if (input) {
+            const errorContainer = input.closest('.form-group').querySelector('.error-message');
+            errorContainer.textContent = messages.join(', ');
+        }
+    }
+}
+
+// Handle form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('bookForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            addBook();
+        });
+    }
 });

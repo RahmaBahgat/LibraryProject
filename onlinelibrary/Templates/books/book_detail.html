@@ -116,7 +116,7 @@
                 <div class="book-actions">
                     <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit Book</a>
                     <button class="delete-btn" data-book-id="{{ book.id }}">Delete Book</button>
-                    <a href="{% url 'books_admin:admin_home' %}" class="btn btn-secondary">Back to Dashboard</a>
+                    <a href="{% url 'books_admin:admin_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
                 </div>
             </div>
         </div>
@@ -141,7 +141,7 @@
                 });
 
                 if (response.ok) {
-                    window.location.href = "{% url 'books_admin:admin_home' %}";
+                    window.location.href = "{% url 'books_admin:admin_dashboard' %}";
                 } else {
                     alert('Error deleting book');
                 }
