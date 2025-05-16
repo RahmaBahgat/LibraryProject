@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 # Public Pages
 def home(request):
@@ -41,6 +42,7 @@ def borrowed_list(request):
     return render(request, 'borrowed-list.html')
 
 # Auth Pages
+@ensure_csrf_cookie
 def login_page(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -57,6 +59,7 @@ def login_page(request):
     
     return render(request, 'LogIn_SignUp page.html')
 
+@ensure_csrf_cookie
 def signup_page(request):
     if request.method == 'POST':
         username = request.POST.get('username')

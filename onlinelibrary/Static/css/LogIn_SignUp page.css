@@ -199,19 +199,19 @@ html {
 }
 
 .form-right-slide-in {
-  animation: form-slide-in-right 1s;
+  animation: form-slide-in-right 1s linear forwards;
 }
 
 .form-right-slide-out {
-  animation: form-slide-out-right 1s;
+  animation: form-slide-out-right 1s linear forwards;
 }
 
 .form-left-slide-in {
-  animation: form-slide-in-left 1s;
+  animation: form-slide-in-left 1s linear forwards;
 }
 
 .form-left-slide-out {
-  animation: form-slide-out-left 1s;
+  animation: form-slide-out-left 1s linear forwards;
 }
 
 .form .sign-in h1 {

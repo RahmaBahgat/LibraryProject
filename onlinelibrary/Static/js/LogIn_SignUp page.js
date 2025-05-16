@@ -12,6 +12,10 @@ var rightText = document.getElementById("sign-up");
 var accountForm = document.getElementById("sign-in-info");
 var signinForm = document.getElementById("sign-up-info");
 
+// Add event listeners for the slide buttons
+document.getElementById("slide-right-button").addEventListener("click", openSignIn);
+document.getElementById("slide-left-button").addEventListener("click", openSignUp);
+
 // Open the Sign Up page
 function openSignUp() {
   // Remove classes so that animations can restart on the next 'switch'
