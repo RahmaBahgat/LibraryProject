@@ -51,10 +51,10 @@
           <span></span>
         </button>
         <div class="nav-menu">
-          <a href="{% static 'index.html' %}" class="nav-link">Home</a>
-          <a href="privacy.html" class="nav-link">Privacy</a>
-          <a href="about.html" class="nav-link">About Us</a>
-          <a href="help.html" class="nav-link"> Help</a>
+          <a href="{% url 'index' %}" class="nav-link">Home</a>
+          <a href="{% url 'privacy' %}" class="nav-link">Privacy</a>
+          <a href="{% url 'about' %}" class="nav-link">About Us</a>
+          <a href="{% url 'help-center' %}" class="nav-link">Help</a>
         </div>
       </div>
     </nav>
@@ -136,6 +136,56 @@
               </div>
             </div>
 
+            <div class="form-group">
+              <label for="confirm-password">Confirm Password</label>
+              <div class="password-wrapper">
+                <input type="password" id="confirm-password" name="confirm_password" required />
+                <span class="toggle-eye" data-target="confirm-password">
+                  <i class="fa-regular fa-eye" style="color: #6b6552"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Account Type</label>
+              <div class="role-selection">
+                <input type="radio" id="user-role" name="role" value="user" checked required>
+                <label for="user-role" class="role-card">
+                  <div class="role-icon">
+                    <i class="fas fa-user"></i>
+                  </div>
+                  <div class="role-info">
+                    <span class="role-title">Regular User</span>
+                    <span class="role-desc">Browse and borrow books</span>
+                  </div>
+                </label>
+
+                <input type="radio" id="admin-role" name="role" value="admin" required>
+                <label for="admin-role" class="role-card">
+                  <div class="role-icon">
+                    <i class="fas fa-user-shield"></i>
+                  </div>
+                  <div class="role-info">
+                    <span class="role-title">Administrator</span>
+                    <span class="role-desc">Manage books and users</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group terms-group">
+              <div class="terms-checkbox">
+                <input type="checkbox" id="accept-terms" name="accept_terms" required>
+                <label for="accept-terms" class="checkbox-label">
+                  <span class="checkmark"></span>
+                  <span class="terms-text">
+                    I accept the <a href="{% url 'privacy' %}" target="_blank">Terms of Service</a> and 
+                    <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a>
+                  </span>
+                </label>
+              </div>
+            </div>
+
             {% if messages %}
             <div class="messages">
               {% for message in messages %}
@@ -144,7 +194,7 @@
             </div>
             {% endif %}
 
-            <button type="submit" class="login-button">
+            <button type="submit" class="login-button" id="signup-submit">
               Create Account
             </button>
           </form>
