@@ -1,12 +1,8 @@
-<<<<<<< HEAD
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-=======
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-
->>>>>>> 71663c7f2fd49d11ccbee77b51a79d254450c2fa
+from django.contrib.auth.models import User
 
 # Public Pages
 def home(request):
@@ -40,12 +36,12 @@ def profile(request):
 def favorites(request):
     return render(request, 'FavouriteBooks.html')
 
+@login_required
 def borrowed_list(request):
     return render(request, 'borrowed-list.html')
 
 # Auth Pages
 def login_page(request):
-<<<<<<< HEAD
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -60,19 +56,29 @@ def login_page(request):
             messages.error(request, 'Invalid username or password.')
     
     return render(request, 'LogIn_SignUp page.html')
-=======
-    return render(request, 'accounts/login.html')
->>>>>>> 71663c7f2fd49d11ccbee77b51a79d254450c2fa
 
 def signup_page(request):
-    return render(request, 'accounts/signup.html')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+        
+        # Create the user
+        user = User.objects.create_user(username=username, email=email, password=password)
+        login(request, user)
+        return redirect('home')
+    
+    return render(request, 'LogIn_SignUp page.html')
 
 # Admin Pages
+@login_required
 def admin_home(request):
     return render(request, 'HomePage-admin.html')
 
+@login_required
 def notifications(request):
     return render(request, 'notifications.html')
 
+@login_required
 def admin_notifications(request):
     return render(request, 'notifications-admin.html')
