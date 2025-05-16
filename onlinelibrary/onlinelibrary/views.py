@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
 
 # Public Pages
 def home(request):
@@ -24,9 +26,11 @@ def book_admin(request):
     return render(request, 'book page admin.html')
 
 # User Pages
+@login_required
 def profile(request):
     return render(request, 'profile.html')
 
+@login_required
 def favorites(request):
     return render(request, 'FavouriteBooks.html')
 
@@ -35,13 +39,10 @@ def borrowed_list(request):
 
 # Auth Pages
 def login_page(request):
-    return render(request, 'LogIn_SignUp page.html')
+    return render(request, 'accounts/login.html')
 
 def signup_page(request):
-    return render(request, 'LogIn_SignUp page.html')
-
-def login_signup(request):
-    return render(request, 'LogIn_SignUp page.html')
+    return render(request, 'accounts/signup.html')
 
 # Admin Pages
 def admin_home(request):

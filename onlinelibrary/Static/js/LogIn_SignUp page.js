@@ -4,10 +4,6 @@ let isPasswordVisible = false;
 
 var overlay = document.getElementById("overlay");
 
-// Buttons to 'switch' the page
-var openSignUpButton = document.getElementById("slide-left-button");
-var openSignInButton = document.getElementById("slide-right-button");
-
 // The sidebars
 var leftText = document.getElementById("sign-in");
 var rightText = document.getElementById("sign-up");
@@ -17,7 +13,7 @@ var accountForm = document.getElementById("sign-in-info");
 var signinForm = document.getElementById("sign-up-info");
 
 // Open the Sign Up page
-openSignUp = () => {
+function openSignUp() {
   // Remove classes so that animations can restart on the next 'switch'
   leftText.classList.remove("overlay-text-left-animation-out");
   overlay.classList.remove("open-sign-in");
@@ -38,10 +34,10 @@ openSignUp = () => {
     signinForm.style.display = "flex";
     signinForm.classList += " form-right-slide-in";
   }, 200);
-};
+}
 
 // Open the Sign In page
-openSignIn = () => {
+function openSignIn() {
   // Remove classes so that animations can restart on the next 'switch'
   leftText.classList.remove("overlay-text-left-animation");
   overlay.classList.remove("open-sign-up");
@@ -62,11 +58,7 @@ openSignIn = () => {
     accountForm.style.display = "flex";
     accountForm.classList += " form-left-slide-in";
   }, 200);
-};
-
-// When a 'switch' button is pressed, switch page
-openSignUpButton.addEventListener("click", openSignUp, false);
-openSignInButton.addEventListener("click", openSignIn, false);
+}
 
 document.querySelectorAll(".toggle-eye").forEach((toggle) => {
   toggle.addEventListener("click", () => {
@@ -81,16 +73,16 @@ document.querySelectorAll(".toggle-eye").forEach((toggle) => {
   });
 });
 
-document.querySelectorAll('.filter-switch').forEach(toggle => {
-  const inputs = toggle.querySelectorAll('input');
-  const background = toggle.querySelector('.background');
-  
-  inputs.forEach(input => {
-    input.addEventListener('change', () => {
-      if (input.id.includes('option2')) {
-        background.style.left = '50%';
+document.querySelectorAll(".filter-switch").forEach((toggle) => {
+  const inputs = toggle.querySelectorAll("input");
+  const background = toggle.querySelector(".background");
+
+  inputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      if (input.id.includes("option2")) {
+        background.style.left = "50%";
       } else {
-        background.style.left = '0';
+        background.style.left = "0";
       }
     });
   });

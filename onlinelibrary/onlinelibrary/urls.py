@@ -37,9 +37,8 @@ urlpatterns = [
     path('borrowed/', views.borrowed_list, name='borrowed-list'),
     
     # Auth Pages
-    path('login/', views.login_page, name='login'),
-    path('signup/', views.signup_page, name='signup'),
-    path('login-signup/', views.login_signup, name='login-signup'),
+    path('accounts/login/', views.login_page, name='login'),
+    path('accounts/signup/', views.signup_page, name='signup'),
     
     # Admin Pages
     path('admin/home/', views.admin_home, name='admin-home'),

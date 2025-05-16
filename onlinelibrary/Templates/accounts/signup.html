@@ -1,9 +1,9 @@
-{% load static %}\n<!DOCTYPE html>
+{% load static %}<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>InOtherWords - Login/Signup</title>
+    <title>InOtherWords - Signup</title>
     <link rel="stylesheet" href="{% static 'css/LogIn_SignUp page.css' %}" />
     <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
     <link
@@ -65,12 +65,12 @@
         <div class="sign-in" id="sign-in">
           <h1>Welcome Back</h1>
           <p>Discover your next great read with InOtherWords</p>
-          <button class="switch-button" id="slide-right-button">Sign In</button>
+          <button class="switch-button" id="switch-signup">Sign In</button>
         </div>
         <div class="sign-up" id="sign-up">
           <h1>New Chapter Begins</h1>
           <p>Start your reading adventure with us today</p>
-          <button class="switch-button" id="slide-left-button">Sign Up</button>
+          <button class="switch-button" id="slide-right-button">Sign Up</button>
         </div>
       </div>
       <div class="form">
@@ -231,7 +231,10 @@
     <!-- <script src="{% static 'js/authentication.js' %}"></script> -->
     <!-- <script src="{% static 'js/checkAuth.js' %}"></script> -->
     <script>
-      loginCheck();
+      document.getElementById("switch-signup").addEventListener("click", () => {
+        window.location.href = "{% url 'login' %}";
+      });
+      openSignUp();
     </script>
   </body>
 </html>
