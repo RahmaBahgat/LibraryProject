@@ -161,3 +161,12 @@ def admin_notifications(request):
 
 def index(request):
     return render(request, 'index.html')
+
+
+@login_required
+def profile_view(request):
+    return render(request, 'Profile.html', {
+        'user': request.user,
+        'profile': request.user.profile,
+    })
+    
