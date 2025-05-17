@@ -129,15 +129,109 @@
       <div class="container">
         <center>
           <h1>
-            Welcome back,
-            <span id="user-name" style="text-transform: capitalize"></span>.
+            Welcome back, {{ user.first_name|default:user.username|title }}.
             Your literary journey continues...
           </h1>
           <br /><br />
         </center>
       </div>
 
-      <div id="book-carousels-container"></div>
+      <div id="book-carousels-container">
+        <!-- Recommended Books Section -->
+        {% if recommended_books %}
+        <div class="section-wrapper">
+          <div class="section-header">
+            <h2><i class="fas fa-magic"></i> Recommended for You</h2>
+            <p class="section-subtitle">Based on your reading preferences</p>
+          </div>
+          <div class="book-carousel">
+            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-track">
+              {% for book in recommended_books %}
+                {% include 'includes/book_card.html' with book=book %}
+              {% endfor %}
+            </div>
+            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Trending Books Section -->
+        {% if trending_books %}
+        <div class="section-wrapper">
+          <div class="section-header">
+            <h2><i class="fas fa-fire"></i> Trending Now</h2>
+            <p class="section-subtitle">Popular books this week</p>
+          </div>
+          <div class="book-carousel">
+            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-track">
+              {% for book in trending_books %}
+                {% include 'includes/book_card.html' with book=book %}
+              {% endfor %}
+            </div>
+            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- New Releases Section -->
+        {% if new_releases %}
+        <div class="section-wrapper">
+          <div class="section-header">
+            <h2><i class="fas fa-star"></i> New Releases</h2>
+            <p class="section-subtitle">Fresh additions to our library</p>
+          </div>
+          <div class="book-carousel">
+            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-track">
+              {% for book in new_releases %}
+                {% include 'includes/book_card.html' with book=book %}
+              {% endfor %}
+            </div>
+            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Similar Books Section (if user has borrowed books) -->
+        {% if similar_books %}
+        <div class="section-wrapper">
+          <div class="section-header">
+            <h2><i class="fas fa-books"></i> Because You Borrowed</h2>
+            <p class="section-subtitle">Similar to your recent reads</p>
+          </div>
+          <div class="book-carousel">
+            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-track">
+              {% for book in similar_books %}
+                {% include 'includes/book_card.html' with book=book %}
+              {% endfor %}
+            </div>
+            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Highly Rated Books Section -->
+        {% if highly_rated_books %}
+        <div class="section-wrapper">
+          <div class="section-header">
+            <h2><i class="fas fa-award"></i> Highly Rated</h2>
+            <p class="section-subtitle">Reader favorites with 4+ stars</p>
+          </div>
+          <div class="book-carousel">
+            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-track">
+              {% for book in highly_rated_books %}
+                {% include 'includes/book_card.html' with book=book %}
+              {% endfor %}
+            </div>
+            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+        {% endif %}
+      </div>
     </main>
 
     <!-- Footer -->

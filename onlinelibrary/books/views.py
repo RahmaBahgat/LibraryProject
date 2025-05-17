@@ -4,10 +4,11 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.core.serializers import serialize
 import json
-from .models import Book, BorrowedBook, Notification, User
+from .models import Book, BorrowedBook, Notification, User, Genre, BookReview
 from .forms import BookForm
 from django.urls import reverse
 from django.utils import timezone
+from .services import BookRecommendationService
 
 def is_admin(user):
     return user.is_staff
@@ -16,7 +17,40 @@ def is_admin(user):
 @user_passes_test(is_admin)
 def book_detail(request, id):
     book = get_object_or_404(Book, id=id)
-    return render(request, 'books/book_detail.html', {'book': book})
+    recommendation_service = BookRecommendationService(request.user)
+    similar_books = recommendation_service.get_similar_books(book)
+    
+    # Get or create user review
+    user_review = BookReview.objects.filter(book=book, user=request.user).first()
+    
+    if request.method == 'POST':
+        # Handle review submission
+        rating = request.POST.get('rating')
+        review_text = request.POST.get('review_text')
+        
+        if rating and review_text:
+            if user_review:
+                user_review.rating = rating
+                user_review.review_text = review_text
+                user_review.save()
+            else:
+                BookReview.objects.create(
+                    book=book,
+                    user=request.user,
+                    rating=rating,
+                    review_text=review_text
+                )
+            messages.success(request, 'Your review has been submitted!')
+            return redirect('book_detail', book_id=id)
+    
+    context = {
+        'book': book,
+        'similar_books': similar_books,
+        'user_review': user_review,
+        'reviews': book.reviews.exclude(user=request.user),
+    }
+    
+    return render(request, 'books/book_detail.html', context)
 
 @login_required
 @user_passes_test(is_admin)
@@ -117,12 +151,35 @@ def api_list_books(request):
 
 @login_required
 def home_user(request):
-    borrowed_books = BorrowedBook.objects.filter(user=request.user)
-    recommended_books = Book.objects.order_by('-rating')[:5]
+    # Get user's borrowed books
+    borrowed_books = BorrowedBook.objects.filter(user=request.user, is_returned=False)
+    
+    # Initialize recommendation service
+    recommendation_service = BookRecommendationService(request.user)
+    
+    # Get different types of recommendations
+    recommended_books = recommendation_service.get_recommendations(limit=10)
+    trending_books = recommendation_service.get_trending_books(days=7, limit=5)
+    new_releases = recommendation_service.get_new_releases(days=30, limit=5)
+    
+    # If user has borrowed books, get similar books to their most recent borrow
+    similar_books = []
+    if borrowed_books.exists():
+        latest_borrowed = borrowed_books.order_by('-borrow_date').first().book
+        similar_books = recommendation_service.get_similar_books(latest_borrowed, limit=5)
+    
+    # Get highly rated books
+    highly_rated = Book.objects.filter(average_rating__gte=4.0).order_by('-average_rating')[:5]
+    
     context = {
         'borrowed_books': borrowed_books,
         'recommended_books': recommended_books,
+        'trending_books': trending_books,
+        'new_releases': new_releases,
+        'similar_books': similar_books,
+        'highly_rated_books': highly_rated,
     }
+    
     return render(request, 'HomePage-user.html', context)
 
 @login_required

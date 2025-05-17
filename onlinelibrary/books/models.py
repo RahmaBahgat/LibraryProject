@@ -2,6 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from decimal import Decimal
 from django.utils import timezone
+from django.db.models import Avg
+
+class Genre(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
 
 class Book(models.Model):
     BADGE_CHOICES = [
@@ -21,9 +29,17 @@ class Book(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     badge = models.CharField(max_length=20, choices=BADGE_CHOICES, null=True, blank=True)
+    genres = models.ManyToManyField(Genre, related_name='books')
+    total_borrows = models.IntegerField(default=0)
+    average_rating = models.FloatField(default=0.0)
 
     def __str__(self):
         return self.title
+
+    def update_average_rating(self):
+        avg_rating = self.reviews.aggregate(Avg('rating'))['rating__avg']
+        self.average_rating = avg_rating if avg_rating else 0.0
+        self.save()
 
     def to_dict(self):
         return {
@@ -32,12 +48,42 @@ class Book(models.Model):
             'author': self.author,
             'description': self.description,
             'isbn': self.isbn,
-            'price': str(self.price),  # Convert Decimal to string
+            'price': str(self.price),
             'stock': self.stock,
             'image': self.image.url if self.image else None,
             'created_at': self.created_at.isoformat(),
             'badge': self.badge,
+            'average_rating': self.average_rating,
+            'genres': [genre.name for genre in self.genres.all()],
         }
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    favorite_genres = models.ManyToManyField(Genre, blank=True)
+    
+    def get_reading_preferences(self):
+        borrowed_books = BorrowedBook.objects.filter(user=self.user)
+        favorite_authors = borrowed_books.values('book__author').annotate(
+            count=models.Count('book__author')
+        ).order_by('-count')[:5]
+        return {
+            'favorite_genres': list(self.favorite_genres.values_list('name', flat=True)),
+            'favorite_authors': [item['book__author'] for item in favorite_authors]
+        }
+
+class BookReview(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
+    review_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('book', 'user')
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.book.update_average_rating()
 
 class Notification(models.Model):
     NOTIFICATION_TYPES = [
@@ -134,6 +180,12 @@ class BorrowedBook(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.book.title}"
+
+    def save(self, *args, **kwargs):
+        if not self.pk:  # If this is a new borrow
+            self.book.total_borrows += 1
+            self.book.save()
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['-borrow_date']
