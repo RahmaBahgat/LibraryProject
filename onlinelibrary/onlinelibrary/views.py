@@ -169,4 +169,17 @@ def profile_view(request):
         'user': request.user,
         'profile': request.user.profile,
     })
-    
+
+def login_view(request):
+    if request.method == "POST":
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            username = request.POST.get("username")
+            password = request.POST.get("password")
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return JsonResponse({"success": True, "redirect_url": "/"})
+            else:
+                return JsonResponse({"success": False, "errors": ["Invalid username or password."]
+    })
