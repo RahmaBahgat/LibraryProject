@@ -77,7 +77,7 @@
         <div class="sign-in" id="sign-in-info">
           <h1>Sign In</h1>
           <p class="small">use your email account</p>
-          <form class="login-form" method="POST" action="{% url 'login' %}">
+          <form id="login-form"class="login-form" method="POST" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="form-group">
               <label for="username">Username</label>
@@ -114,7 +114,7 @@
         <div class="sign-up" id="sign-up-info">
           <h1>Create Account</h1>
           <p class="small">use your email for registration</p>
-          <form class="login-form" method="POST" action="{% url 'signup' %}">
+          <form id="signup-form" class="login-form" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
             <div class="form-group">
               <label for="username">Username</label>
