@@ -85,13 +85,13 @@
         <div class="nav-menu">
           <div class="dropdown">
             <a href="{% url 'books_admin:admin_book_management' %}" class="nav-link">
-              Manage Books
+              <i class="fas fa-book-open"></i> Manage Books
             </a>
           </div>
 
           <div class="dropdown">
             <a href="{% url 'notifications' %}" class="nav-link">
-              Notifications
+              <i class="fas fa-bell"></i> Notifications
             </a>
             <div class="dropdown-content">
               {% for notification in notifications|slice:":5" %}
@@ -107,12 +107,29 @@
           </div>
 
           <div class="dropdown">
-            <a href="#" class="nav-link">Admin</a>
+            <a href="{% url 'profile' %}" class="nav-link">
+              <i class="fas fa-user-shield"></i> Admin
+            </a>
             <div class="dropdown-content">
-              <a href="{% url 'profile' %}">My Profile</a>
-              <a href="{% url 'books_admin:admin_book_management' %}">Dashboard</a>
-              <a href="{% url 'help-center' %}">Help Center</a>
-              <a href="{% url 'logout' %}">Sign Out</a>
+              <a href="{% url 'profile' %}">
+                <i class="fas fa-user-circle"></i> My Profile<!-- Inside each template where needed -->
+                  <div class="user-status"></div>
+                  {% if user.is_authenticated %}
+                      <div data-user-status="true" data-user-type="{{ user.profile.user_type }}"></div>
+                  {% else %}
+                      <div data-user-status="false" data-user-type="guest"></div>
+                  {% endif %}
+
+              </a>
+              <a href="{% url 'books_admin:admin_book_management' %}">
+                <i class="fas fa-tasks"></i> Dashboard
+              </a>
+              <a href="{% url 'help-center' %}">
+                <i class="fas fa-question-circle"></i> Help Center
+              </a>
+              <a href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i> Sign Out
+              </a>
             </div>
           </div>
 
