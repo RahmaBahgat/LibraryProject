@@ -5,6 +5,103 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+<style>
+    /* Hide search bar on notifications page */
+    .nav-search {
+        display: none !important;
+    }
+
+    .notifications-container {
+        max-width: 1200px;
+        margin: 6rem auto 2rem; /* Increased top margin for spacing after navbar */
+        padding: 0 1rem;
+    }
+
+    .notifications-list {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+    }
+
+    .notifications-list h2 {
+        color: var(--brand-red);
+        margin-bottom: 1.5rem;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .notification-card {
+        padding: 1rem;
+        border-bottom: 1px solid var(--cream);
+        transition: background-color 0.3s ease;
+    }
+
+    .notification-card:last-child {
+        border-bottom: none;
+    }
+
+    .notification-card:hover {
+        background-color: var(--cream);
+    }
+
+    .notification-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .notification-type {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-weight: 600;
+    }
+
+    .type-global {
+        background-color: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .type-personal {
+        background-color: #fce4ec;
+        color: #c2185b;
+    }
+
+    .type-book_borrowed,
+    .type-book_returned {
+        background-color: #f3e5f5;
+        color: #7b1fa2;
+    }
+
+    .notification-date {
+        font-size: 0.85rem;
+        color: var(--warm-taupe);
+    }
+
+    .notification-title {
+        font-size: 1.1rem;
+        color: var(--dark-brown);
+        margin-bottom: 0.5rem;
+    }
+
+    .notification-message {
+        color: var(--dark-brown);
+        margin-bottom: 0.5rem;
+        line-height: 1.5;
+    }
+
+    .notification-meta {
+        font-size: 0.85rem;
+        color: var(--warm-taupe);
+    }
+
+    .no-notifications {
+        text-align: center;
+        padding: 2rem;
+        color: var(--warm-taupe);
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -17,6 +114,7 @@
     </div>
     
     <div class="notifications-list">
+        <h2>Your Notifications</h2>
         {% if notifications %}
             {% for notification in notifications %}
                 <div class="notification-card {% if not notification.is_read %}unread{% endif %}" 

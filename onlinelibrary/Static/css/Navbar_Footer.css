@@ -173,17 +173,18 @@
 .footer {
     background-color: var(--dark-brown);
     color: var(--cream);
-    padding: 2rem 0 1rem;
+    width: 100%;
+    margin: 0;
+    padding: 3rem 0 0;
 }
 
 .footer-content {
-    max-width: 1280px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 3rem;
-    margin-bottom: 3rem;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 4rem;
 }
 
 .footer-brand {
@@ -273,10 +274,11 @@
 }
 
 .footer-bottom {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+    margin-top: 3rem;
+    width: 100%;
     text-align: center;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(239, 233, 225, 0.2);
-    color: rgba(239, 233, 225, 0.6);
 }
 
 /* Mobile Menu */
@@ -328,56 +330,98 @@
 }
 
 .dropdown {
-  position: relative;
-  display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 .dropdown-content {
-  display: none;
-  position: absolute;
-  right: 0;
-  background-color: var(--cream);
-  min-width: 300px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-  z-index: 1;
-  border-radius: 8px;
-  padding: 0.5rem;
-  margin-top: 0.5rem;
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    z-index: 1000;
+    padding: 0.5rem 0;
 }
 
 .dropdown:hover .dropdown-content {
-  display: block;
+    display: block;
+}
+
+/* Add a small delay before hiding to prevent accidental mouseout */
+.dropdown .dropdown-content {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    transform: translateY(-10px);
+}
+
+.dropdown:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Add padding to create hover space between nav link and dropdown */
+.dropdown::after {
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 100%;
+    bottom: -20px;
+    left: 0;
 }
 
 .notif {
-  padding: 0.75rem;
-  border-bottom: 1px solid var(--warm-taupe);
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--dark-brown);
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--warm-taupe);
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--dark-brown);
 }
 
 .notif:last-child {
-  border-bottom: none;
+    border-bottom: none;
 }
 
 .notif time {
-  display: block;
-  font-size: 0.8rem;
-  color: var(--warm-taupe);
-  margin-top: 0.25rem;
+    display: block;
+    font-size: 0.8rem;
+    color: var(--warm-taupe);
+    margin-top: 0.25rem;
 }
 
 .notif.unread {
-  background-color: rgba(var(--brand-red-rgb), 0.1);
+    background-color: rgba(var(--brand-red-rgb), 0.1);
 }
 
 .notif a {
-  color: var(--brand-red);
-  text-decoration: none;
-  font-weight: 500;
+    color: var(--brand-red);
+    text-decoration: none;
+    font-weight: 500;
 }
 
 .notif a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
+}
+
+.dropdown-content a {
+    color: var(--dark-brown);
+    padding: 0.75rem 1.25rem;
+    text-decoration: none;
+    display: block;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.dropdown-content a:hover {
+    background-color: var(--cream);
+    color: var(--brand-red);
+}
+
+/* Add divider between dropdown items */
+.dropdown-content a:not(:last-child) {
+    border-bottom: 1px solid var(--cream);
 }

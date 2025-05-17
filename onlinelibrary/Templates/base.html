@@ -1,56 +1,82 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}InOtherWords Library{% endblock %}</title>
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <!-- Common CSS -->
     <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
     {% block extra_css %}{% endblock %}
     
-    <!-- Favicon -->
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="icon" href="{% static 'images/favicon-16x16.png' %}" type="image/x-icon">
     <link rel="shortcut icon" href="{% static 'images/favicon-16x16.png' %}" type="image/x-icon">
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
+            <!-- Logo -->
             <div class="nav-logo">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="logo-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                     <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                 </svg>
                 <span>InOtherWords</span>
             </div>
+
+            <!-- Search Bar -->
+            <div class="nav-search">
+                <form id="searchForm">
+                    <div class="book-list"></div>
+                    <input id="searchBar" type="text" placeholder="Search books..." aria-label="Search books">
+                    <button type="submit" aria-label="Search">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="M21 21l-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
             <button class="nav-toggle" aria-label="Toggle navigation">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
+
+            <!-- Navigation Menu -->
             <div class="nav-menu">
                 {% if user.is_authenticated %}
                     {% if user.is_staff %}
-                        <a href="{% url 'books_admin:admin_dashboard' %}" class="nav-link">Home</a>
+                        <div class="dropdown">
+                            <a href="{% url 'books_admin:admin_book_management' %}" class="nav-link">Manage Books</a>
+                        </div>
                         <div class="dropdown">
                             <a href="{% url 'admin-notifications' %}" class="nav-link">Notifications</a>
                             <div class="dropdown-content">
-                                {% if admin_notifications %}
-                                    {% for notification in admin_notifications|slice:":5" %}
-                                        <p class="notif {% if not notification.is_read %}unread{% endif %}">
-                                            {{ notification.message }}
-                                            <time>{{ notification.created_at|date:"F j, Y — g:i A" }}</time>
-                                        </p>
-                                    {% endfor %}
-                                    <a class="notif" href="{% url 'admin-notifications' %}">See all notifications</a>
-                                {% else %}
+                                {% for notification in notifications|slice:":5" %}
+                                    <p class="notif">
+                                        {{ notification.message }}
+                                        <time>{{ notification.created_at|date:"F j, Y — g:i A" }}</time>
+                                    </p>
+                                {% empty %}
                                     <p class="notif">No new notifications</p>
-                                {% endif %}
+                                {% endfor %}
+                                <a class="notif" href="{% url 'admin-notifications' %}">See all notifications</a>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <a href="#" class="nav-link">Admin</a>
+                            <div class="dropdown-content">
+                                <a href="{% url 'profile' %}">My Profile</a>
+                                <a href="{% url 'books_admin:admin_book_management' %}">Dashboard</a>
+                                <a href="{% url 'help-center' %}">Help Center</a>
+                                <a href="{% url 'logout' %}">Sign Out</a>
                             </div>
                         </div>
                     {% else %}
@@ -58,26 +84,26 @@
                         <div class="dropdown">
                             <a href="{% url 'notifications' %}" class="nav-link">Notifications</a>
                             <div class="dropdown-content">
-                                {% if user_notifications %}
-                                    {% for notification in user_notifications|slice:":5" %}
-                                        <p class="notif {% if not notification.is_read %}unread{% endif %}">
-                                            {{ notification.message }}
-                                            <time>{{ notification.created_at|date:"F j, Y — g:i A" }}</time>
-                                        </p>
-                                    {% endfor %}
-                                    <a class="notif" href="{% url 'notifications' %}">See all notifications</a>
-                                {% else %}
+                                {% for notification in notifications|slice:":5" %}
+                                    <p class="notif">
+                                        {{ notification.message }}
+                                        <time>{{ notification.created_at|date:"F j, Y — g:i A" }}</time>
+                                    </p>
+                                {% empty %}
                                     <p class="notif">No new notifications</p>
-                                {% endif %}
+                                {% endfor %}
+                                <a class="notif" href="{% url 'notifications' %}">See all notifications</a>
                             </div>
                         </div>
                         <a href="{% url 'profile' %}" class="nav-link">Profile</a>
+                        <a href="{% url 'logout' %}" class="nav-link">Sign Out</a>
                     {% endif %}
-                    <a href="{% url 'logout' %}" class="nav-link">Sign Out</a>
                 {% else %}
                     <a href="{% url 'login' %}" class="nav-link">Sign In</a>
-                    <a href="{% url 'login' %}" class="nav-link">Sign Up</a>
+                    <a href="{% url 'signup' %}" class="nav-link">Sign Up</a>
                 {% endif %}
+                
+                <button id="theme" aria-label="Toggle theme">🌙</button>
             </div>
         </div>
     </nav>
@@ -149,11 +175,9 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    
     <!-- Common JS -->
     <script src="{% static 'js/Navbar_Footer.js' %}"></script>
+    <script src="{% static 'js/notifications.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html> 
