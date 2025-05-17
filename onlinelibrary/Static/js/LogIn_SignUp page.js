@@ -91,3 +91,67 @@ document.querySelectorAll(".filter-switch").forEach((toggle) => {
     });
   });
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const loginForm = document.getElementById("login-form");
+  const signupForm = document.getElementById("signup-form");
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(loginForm);
+
+      const response = await fetch(loginForm.action, {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+      const errorContainer = document.getElementById("login-error-container");
+      errorContainer.innerHTML = "";
+
+      if (data.success) {
+        window.location.href = data.redirect_url;
+      } else {
+        data.errors.forEach((err) => {
+          const p = document.createElement("p");
+          p.classList.add("error-message");
+          p.textContent = err;
+          errorContainer.appendChild(p);
+        });
+      }
+    });
+  }
+
+  if (signupForm) {
+    signupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(signupForm);
+
+      const response = await fetch(signupForm.action, {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+      const errorContainer = document.getElementById("signup-error-container");
+      errorContainer.innerHTML = "";
+
+      if (data.success) {
+        window.location.href = data.redirect_url;
+      } else {
+        data.errors.forEach((err) => {
+          const p = document.createElement("p");
+          p.classList.add("error-message");
+          p.textContent = err;
+          errorContainer.appendChild(p);
+        });
+      }
+    });
+  }
+});
