@@ -52,4 +52,6 @@ urlpatterns = [
     path('notifications/', user_notifications, name='notifications'),
     path('library-admin/notifications/', admin_notifications, name='admin-notifications'),
     path('notifications/<int:notification_id>/mark-read/', mark_notification_read, name='mark-notification-read'),
+    #profile pages
+    path('profile/', views.profile, name='profile'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
