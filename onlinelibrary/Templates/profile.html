@@ -57,7 +57,15 @@
           <span></span>
         </button>
         <div class="nav-menu">
+          {% if user.is_staff or user.is_superuser %}
+          <a
+            href="{% url 'books_admin:admin_book_management' %}"
+            class="nav-link"
+            >Home</a
+          >
+          {% else %}
           <a href="{% url 'home' %}" class="nav-link">Home</a>
+          {% endif %}
           <a href="{% url 'privacy' %}" class="nav-link">Privacy</a>
           <a href="{% url 'about' %}" class="nav-link">About Us</a>
           <a href="{% url 'help-center' %}" class="nav-link">Help</a>
