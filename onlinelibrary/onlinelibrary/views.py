@@ -220,3 +220,7 @@ def profile_view(request):
         'user': request.user,
         'profile': request.user.profile,
     })
+
+
+def borrowed_list(request):
+    return render(request, 'borrowed_list.html')
