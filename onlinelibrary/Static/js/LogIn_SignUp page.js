@@ -136,6 +136,12 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error('CSRF token not found. Please refresh the page.');
       }
 
+      // Show loading state
+      const submitButton = form.querySelector('button[type="submit"]');
+      const originalText = submitButton.textContent;
+      submitButton.textContent = 'Please wait...';
+      submitButton.disabled = true;
+
       const response = await fetch(form.action, {
         method: 'POST',
         headers: {
@@ -155,17 +161,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (response.ok && data.success) {
-        if (data.message) {
-          const successMsg = document.createElement('p');
-          successMsg.classList.add('success-message');
-          successMsg.textContent = data.message;
-          errorContainer.appendChild(successMsg);
-        }
-
-        setTimeout(() => {
-          window.location.href = data.redirect_url;
-        }, 500);
+        // Immediately redirect on success
+        window.location.href = data.redirect_url;
       } else {
+        // Reset button state
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+        
         const errors = data.errors || ['An error occurred. Please try again.'];
         errors.forEach(error => {
           const errorMsg = document.createElement('p');
@@ -180,6 +182,11 @@ document.addEventListener("DOMContentLoaded", () => {
       errorMsg.classList.add('error-message');
       errorMsg.textContent = error.message || 'An error occurred. Please try again.';
       errorContainer.appendChild(errorMsg);
+      
+      // Reset button state
+      const submitButton = form.querySelector('button[type="submit"]');
+      submitButton.textContent = originalText;
+      submitButton.disabled = false;
     }
   }
 
