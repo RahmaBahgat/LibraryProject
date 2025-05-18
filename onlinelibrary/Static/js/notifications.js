@@ -126,7 +126,70 @@ function errorhandle() {
   }
 }
 
+// Update notification badge
+function updateNotificationBadge() {
+    const unreadCount = document.querySelectorAll('.notification-card.unread').length;
+    const badge = document.querySelector('.notification-badge');
+    
+    if (badge) {
+        if (unreadCount > 0) {
+            badge.textContent = unreadCount;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+}
+
+// Fetch notifications periodically
+function fetchNotifications() {
+    fetch('/notifications/get-latest/', {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const dropdownContent = document.querySelector('.dropdown-content');
+        if (dropdownContent && data.notifications) {
+            // Update dropdown content
+            let html = '';
+            data.notifications.forEach(notif => {
+                html += `
+                    <p class="notif ${!notif.is_read ? 'unread' : ''}">
+                        ${notif.message}
+                        <time>${new Date(notif.created_at).toLocaleDateString('en-US', {
+                            month: 'long',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true
+                        })}</time>
+                    </p>
+                `;
+            });
+            html += '<a class="notif" href="/notifications/">See all notifications</a>';
+            dropdownContent.innerHTML = html;
+            
+            // Update badge
+            updateNotificationBadge();
+        }
+    })
+    .catch(error => console.error('Error fetching notifications:', error));
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Add notification badge to navbar
+    const notificationLink = document.querySelector('a[href*="notifications"]');
+    if (notificationLink) {
+        const badge = document.createElement('span');
+        badge.className = 'notification-badge';
+        badge.style.display = 'none';
+        notificationLink.appendChild(badge);
+    }
+
     // Mark notifications as read when clicked
     const notifications = document.querySelectorAll('.notification-card.unread');
     notifications.forEach(notification => {
@@ -143,11 +206,19 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.status === 'success') {
                     this.classList.remove('unread');
+                    updateNotificationBadge();
                 }
             })
             .catch(error => console.error('Error:', error));
         });
     });
+
+    // Initial notification count
+    updateNotificationBadge();
+
+    // Fetch notifications every 30 seconds
+    fetchNotifications();
+    setInterval(fetchNotifications, 30000);
 });
 
 // Helper function to get CSRF token from cookies

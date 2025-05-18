@@ -50,6 +50,7 @@ urlpatterns = [
     
     # Notification Pages
     path('notifications/', user_notifications, name='notifications'),
+    path('notifications/get-latest/', user_notifications, {'get_latest': True}, name='get-latest-notifications'),
     path('library-admin/notifications/', admin_notifications, name='admin-notifications'),
     path('notifications/<int:notification_id>/mark-read/', mark_notification_read, name='mark-notification-read'),
     #profile pages

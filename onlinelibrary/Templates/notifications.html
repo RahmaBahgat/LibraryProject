@@ -13,8 +13,38 @@
 
     .notifications-container {
         max-width: 1200px;
-        margin: 6rem auto 2rem; /* Increased top margin for spacing after navbar */
+        margin: 6rem auto 0; /* Remove bottom margin */
         padding: 0 1rem;
+        min-height: calc(100vh - 400px);
+    }
+
+    /* Footer styles override */
+    .footer {
+        background-color: var(--dark-brown);
+        color: var(--cream);
+        width: 100%;
+        padding: 3rem 0 0;
+        margin: 0;
+        position: relative;
+        left: 0;
+        right: 0;
+        box-sizing: border-box;
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        box-sizing: border-box;
+    }
+
+    .footer-bottom {
+        margin: 0;
+        padding: 1.5rem 0;
+        text-align: center;
+        border-top: 1px solid rgba(239, 233, 225, 0.1);
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .notifications-list {
@@ -22,6 +52,7 @@
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         padding: 1.5rem;
+        margin-bottom: 3rem; /* Space before footer */
     }
 
     .notifications-list h2 {

@@ -10,7 +10,7 @@ def is_admin(user):
     return user.is_staff
 
 @login_required
-def user_notifications(request):
+def user_notifications(request, get_latest=False):
     """View for users to see their notifications"""
     # For regular users: show personal notifications and system notifications
     notifications = Notification.objects.filter(
@@ -18,6 +18,19 @@ def user_notifications(request):
         Q(notification_type='global') |  # Global announcements
         Q(notification_type__in=['book_borrowed', 'book_returned'], recipient=request.user)  # Book-related notifications
     ).order_by('-created_at')
+    
+    if get_latest:
+        # Return only the latest 5 notifications as JSON
+        latest_notifications = notifications[:5]
+        return JsonResponse({
+            'notifications': [{
+                'id': notif.id,
+                'message': notif.message,
+                'created_at': notif.created_at.isoformat(),
+                'is_read': notif.is_read,
+                'type': notif.notification_type
+            } for notif in latest_notifications]
+        })
     
     return render(request, 'notifications.html', {
         'notifications': notifications

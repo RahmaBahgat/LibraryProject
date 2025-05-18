@@ -9,6 +9,23 @@
     <link rel="stylesheet" href="{% static 'css/HomePage-admin.css' %}" />
     <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
     <link rel="stylesheet" href="{% static 'css/notifications.css' %}" />
+    <style>
+      .main-content {
+        min-height: calc(100vh - 300px); /* Adjust for footer height */
+        padding-bottom: 0; /* Remove bottom padding */
+        margin-bottom: 0; /* Remove bottom margin */
+      }
+
+      #book-carousels-container {
+        margin-bottom: 0; /* Remove bottom margin */
+        padding-bottom: 3rem; /* Add some padding before footer */
+      }
+
+      /* Override footer styles */
+      .footer {
+        margin-top: 0;
+      }
+    </style>
 
     <!-- Fonts -->
     <link
@@ -51,11 +68,10 @@
         <!-- Search Bar -->
         <div class="nav-search">
           <form id="searchForm">
-            <div class="book-list"></div>
             <input
               id="searchBar"
               type="text"
-              placeholder="Search books..."
+              placeholder="Search!"
               aria-label="Search books"
             />
             <button type="submit" aria-label="Search">
@@ -83,44 +99,59 @@
 
         <!-- Navigation Menu -->
         <div class="nav-menu">
-          <a href="./borrowed_list.html" class="nav-link">My Books</a>
-          <a href="FavouriteBooks.html" class="nav-link">Fav Books</a>
+          <div class="dropdown">
+            <a href="{% url 'borrowed-list' %}" class="nav-link">
+              <i class="fas fa-book-open"></i> My Books
+            </a>
+          </div>
 
           <div class="dropdown">
-            <a href="notifications.html" class="nav-link">Notifications</a>
+            <a href="{% url 'favorites' %}" class="nav-link">
+              <i class="fas fa-heart"></i> Fav Books
+            </a>
+          </div>
+
+          <div class="dropdown">
+            <a href="{% url 'notifications' %}" class="nav-link">
+              <i class="fas fa-bell"></i> Notifications
+            </a>
             <div class="dropdown-content">
-              <p class="notif">
-                Your order #1234 has been shipped.
-                <time>April 16, 2025 — 3:45 PM</time>
-              </p>
-              <p class="notif">
-                "The Alchemist" is now 50% off!
-                <time>April 16, 2025 — 1:12 PM</time>
-              </p>
-              <p class="notif">
-                A book on your wishlist is back in stock.
-                <time>April 15, 2025 — 10:05 AM</time>
-              </p>
-              <a class="notif" href="notifications.html"
-                >See all notifications</a
-              >
+              {% for notification in notifications|slice:":5" %}
+                <p class="notif">
+                  {{ notification.message }}
+                  <time>{{ notification.created_at|date:"F j, Y — g:i A" }}</time>
+                </p>
+              {% empty %}
+                <p class="notif">No new notifications</p>
+              {% endfor %}
+              <a class="notif" href="{% url 'notifications' %}">See all notifications</a>
             </div>
           </div>
 
-          <!-- Profile dropdown -->
-          <!-- Dropdown toggle -->
           <div class="dropdown">
-            <a href="{% url 'profile' %}">
-              <button class="btn btn-outline dropdown-toggle">Admin ▼</button>
+            <a href="{% url 'profile' %}" class="nav-link">
+              <i class="fas fa-user"></i> {{ user.first_name|default:user.username|title }}
             </a>
-        <div class="dropdown-menu hidden">
-          <a href="{% url 'profile' %}" class="btn btn-outline dropdown-item">My Profile</a>
-          <a href="/dashboard" class="btn btn-outline dropdown-item">Dashboard</a>
-          <a href="/help" class="btn btn-outline dropdown-item">Help Center</a>
-          <a href="/logout" class="btn btn-primary dropdown-item">Sign Out</a>
-        </div>
-      </div>
+            <div class="dropdown-content">
+              <a href="{% url 'profile' %}">
+                <i class="fas fa-user-circle"></i> My Profile
+              </a>
+              <a href="{% url 'borrowed-list' %}">
+                <i class="fas fa-book"></i> My Books
+              </a>
+              <a href="{% url 'favorites' %}">
+                <i class="fas fa-heart"></i> Favorite Books
+              </a>
+              <a href="{% url 'help-center' %}">
+                <i class="fas fa-question-circle"></i> Help Center
+              </a>
+              <a href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i> Sign Out
+              </a>
+            </div>
+          </div>
 
+          <button id="theme" aria-label="Toggle theme">🌙</button>
         </div>
       </div>
     </nav>
