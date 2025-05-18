@@ -5,8 +5,11 @@
             <div class="book-cover-container">
                 {% if book.image %}
                     <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                {% elif book.cover_path %}
+                    <img src="{% static book.cover_path %}" alt="{{ book.title }}" class="book-cover">
                 {% else %}
-                    <div class="no-image">No Image</div>
+                    <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="no-image">No Cover</div>
                 {% endif %}
                 {% if book.badge %}
                     <span class="book-badge badge-{{ book.badge }}">{{ book.get_badge_display }}</span>
@@ -25,20 +28,6 @@
                     {% endif %}
                 {% endfor %}
                 <span class="rating-count">({{ book.reviews.count }})</span>
-            </div>
-            <p class="book-price">${{ book.price }}</p>
-            {% if book.stock > 0 %}
-                <p class="book-stock available">Available</p>
-            {% else %}
-                <p class="book-stock unavailable">Out of Stock</p>
-            {% endif %}
-            <div class="book-actions">
-                {% if book.stock > 0 and not book in user.borrowedbook_set.all %}
-                    <a href="{% url 'borrow_book' book.id %}" class="borrow-btn">Borrow</a>
-                {% endif %}
-                <button class="favorite-btn" data-book-id="{{ book.id }}">
-                    <i class="{% if book in user.profile.favorite_books.all %}fas{% else %}far{% endif %} fa-heart"></i>
-                </button>
             </div>
         </div>
     </div>

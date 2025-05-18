@@ -4,9 +4,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
-from books.models import Notification
+from books.models import Notification, Book
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.middleware.csrf import get_token
+from django.db.models import Q
 
 def get_notifications(request):
     if request.user.is_authenticated:
@@ -197,11 +198,6 @@ def logout_page(request):
     logout(request)
     return redirect('index')
 
-# Admin Pages
-@login_required
-def admin_home(request):
-    return render(request, 'HomePage-admin.html')
-
 @login_required
 def notifications(request):
     return render(request, 'notifications.html')
@@ -212,7 +208,6 @@ def admin_notifications(request):
 
 def index(request):
     return render(request, 'index.html')
-
 
 @login_required
 def profile_view(request):

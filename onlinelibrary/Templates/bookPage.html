@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Book Page</title>
+    <title>{{ book.title }} | InOtherWords</title>
 
     <!-- CSS Style -->
     <link rel="stylesheet" href="{% static 'css/bookPage.css' %}" />
     <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
     <link rel="stylesheet" href="{% static 'css/notifications.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/book-card.css' %}" />
 
     <!-- FontAwesome -->
     <link
@@ -50,21 +51,22 @@
           <span></span>
         </button>
         <div class="nav-menu">
-          <a href="borrowed_list.html" class="nav-link">My Books</a>
-          <a href="FavouriteBooks.html" class="nav-link">Fav Books</a>
+          <a href="{% url 'home' %}" class="nav-link">Home</a>
+          <a href="{% url 'borrowed-list' %}" class="nav-link">My Books</a>
+          <a href="{% url 'favorites' %}" class="nav-link">Favorites</a>
           <div class="dropdown">
             <a href="{% url 'notifications' %}" class="nav-link">Notifications</a>
             <div class="dropdown-content">
-              <p class="notif">Your order #1234 has been shipped.
-                <time>April 16, 2025 — 3:45 PM</time></p>
-              <p class="notif">"The Alchemist" is now 50% off!
-                <time>April 16, 2025 — 1:12 PM</time></p>
-              <p class="notif">A book on your wishlist is back in stock.
-                <time>April 15, 2025 — 10:05 AM</time></p>
+              {% for notification in notifications|slice:":3" %}
+                <p class="notif">{{ notification.title }}
+                  <time>{{ notification.created_at|date:"F j, Y — g:i A" }}</time></p>
+              {% empty %}
+                <p class="notif">No new notifications</p>
+              {% endfor %}
               <a class="notif" href="{% url 'notifications' %}">See all notifications</a>
             </div>
           </div>
-          <a href="profile.html" class="nav-link">Profile</a>
+          <a href="{% url 'profile' %}" class="nav-link">Profile</a>
         </div>
       </div>
     </nav>
@@ -72,39 +74,77 @@
     <section class="content">
       <div class="container">
         <div class="img-container">
-          <img
-            src="../images/first-cover.jpg"
-            alt="get-out-of-your-head-cover"
-          />
+          {% if book.image %}
+            <img src="{{ book.image.url }}" alt="{{ book.title }}" />
+          {% elif book.cover_path %}
+            <img src="{% static book.cover_path %}" alt="{{ book.title }}" />
+          {% else %}
+            <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" />
+          {% endif %}
         </div>
 
         <div class="details-container">
           <div class="head-details">
-            <h5 class="book-category">Category</h5>
-            <h2 class="book-title">Book Title</h2>
-            <h4 class="book-author">Book Author</h4>
+            <h5 class="book-category">
+              {% if book.genres.all %}
+                {% for genre in book.genres.all %}
+                  {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              {% else %}
+                {{ book.genre|default:"Uncategorized" }}
+              {% endif %}
+            </h5>
+            <h2 class="book-title">{{ book.title }}</h2>
+            <h4 class="book-author">{{ book.author }}</h4>
+            
+            <!-- Book Rating -->
+            <div class="book-rating">
+              {% for i in "12345"|make_list %}
+                {% if forloop.counter <= book.average_rating|floatformat:"0" %}
+                  <i class="fas fa-star"></i>
+                {% else %}
+                  <i class="far fa-star"></i>
+                {% endif %}
+              {% endfor %}
+              <span class="rating-count">({{ book.reviews.count }})</span>
+            </div>
           </div>
           <div class="description">
             <p class="book-description">Book Description :</p>
-            <p class="p-description">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum
-              officiis culpa impedit sint nam vitae labore, voluptates libero
-              neque accusantium sequi laboriosam? Delectus suscipit quod
-              officia, laboriosam debitis accusantium! Maiores!
-            </p>
+            <p class="p-description">{{ book.description }}</p>
 
             <div class="btns-avl">
               <div class="btns">
-                <button id="borrow-btn" class="btn">Borrow</button>
-                <button id="fav-btn" class="btn">
-                  <span class="add-to-favorites">Add to Favorites</span>
-                  <span class="icon">♡</span>
+                {% if is_borrowed %}
+                  <button id="borrow-btn" class="btn borrowed" disabled>Borrowed</button>
+                {% else %}
+                  <a href="{% url 'borrow_book' book.id %}" id="borrow-btn" class="btn">Borrow</a>
+                {% endif %}
+                
+                <button id="fav-btn" class="btn {% if is_favorite %}favorited{% endif %}">
+                  <span class="fav-text">{% if is_favorite %}Remove from Favorites{% else %}Add to Favorites{% endif %}</span>
+                  <span class="icon">{% if is_favorite %}❤️{% else %}♡{% endif %}</span>
                 </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+      
+      {% if similar_books %}
+      <div class="container">
+        <div class="similar-books-section">
+          <h3>Similar Books You Might Enjoy</h3>
+          <div class="book-carousel">
+            <div class="carousel-track">
+              {% for book in similar_books %}
+                {% include 'includes/book_card.html' with book=book %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </section>
 
     <!-- Footer -->
@@ -135,9 +175,9 @@
           <div class="footer-section">
             <h3>Quick Links</h3>
             <ul>
-              <li><a href="{% static 'html/HomePage-user.html' %}">Home</a></li>
-              <li><a href="{% static 'html/HomePage-user.html' %}">Explore Books</a></li>
-              <li><a href="{% static 'html/about.html' %}">About Us</a></li>
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li><a href="{% url 'home' %}">Explore Books</a></li>
+              <li><a href="{% url 'about' %}">About Us</a></li>
               <li><a href="#">Contact</a></li>
             </ul>
           </div>
@@ -146,7 +186,7 @@
             <ul>
               <li><a href="#">FAQ</a></li>
               <li><a href="#">Terms of Service</a></li>
-              <li><a href="{% static 'html/privacy.html' %}">Privacy Policy</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
             </ul>
           </div>
         </div>
@@ -158,11 +198,6 @@
 
     <script src="{% static 'js/Navbar_Footer.js' %}"></script>
     <script src="{% static 'js/notifications.js' %}"></script>
-    <script src="{% static 'js/data.js' %}"></script>
     <script src="{% static 'js/bookPage.js' %}"></script>
-    <!-- <script src="{% static 'js/checkAuth.js' %}"></script> -->
-    <script>
-      check(false, 0);
-    </script>
   </body>
 </html>

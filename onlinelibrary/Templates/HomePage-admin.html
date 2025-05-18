@@ -162,19 +162,17 @@
     </div>
 
     <div id="book-carousels-container">
-      {% if books_list %}
+      <!-- New Releases Section -->
+      {% if new_releases %}
         <div class="section-wrapper">
           <div class="section-header">
-            <h2>
-              <i class="fas fa-book-open"></i> All Books
-              <span class="edit-icon"><i class="fas fa-edit"></i></span>
-            </h2>
-            <p class="section-subtitle">Manage Your Library Collection</p>
+            <h2><i class="fas fa-star"></i> New Releases</h2>
+            <p class="section-subtitle">Latest additions to our library</p>
           </div>
           <div class="book-carousel">
             <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
             <div class="carousel-track">
-              {% for book in books_list %}
+              {% for book in new_releases %}
                 <div class="carousel-item">
                   <div class="static-card">
                     <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
@@ -184,16 +182,12 @@
                         {% else %}
                           <div class="no-image">No Image</div>
                         {% endif %}
-                        {% if book.badge %}
-                          <span class="book-badge badge-{{ book.badge }}">{{ book.get_badge_display }}</span>
-                        {% endif %}
+                        <span class="book-badge badge-new-release">New Release</span>
                       </div>
                     </a>
                   </div>
                   <div class="book-info">{{ book.title }}</div>
                   <p class="author">{{ book.author }}</p>
-                  <p class="price">${{ book.price }}</p>
-                  <p class="stock">Stock: {{ book.stock }}</p>
                   <div class="book-actions">
                     <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
                     <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
@@ -204,9 +198,199 @@
             <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
           </div>
         </div>
-      {% else %}
-        <p class="no-books">No books available. Add some books to get started!</p>
       {% endif %}
+
+      <!-- Trending Books Section -->
+      {% if trending_books %}
+        <div class="section-wrapper">
+          <div class="section-header">
+            <h2><i class="fas fa-fire"></i> Trending Now</h2>
+            <p class="section-subtitle">Most popular books this week</p>
+          </div>
+          <div class="book-carousel">
+            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-track">
+              {% for book in trending_books %}
+                <div class="carousel-item">
+                  <div class="static-card">
+                    <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
+                      <div class="book-cover-container">
+                        {% if book.image %}
+                          <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                        {% else %}
+                          <div class="no-image">No Image</div>
+                        {% endif %}
+                        <span class="book-badge badge-trending">Trending</span>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="book-info">{{ book.title }}</div>
+                  <p class="author">{{ book.author }}</p>
+                  <div class="book-actions">
+                    <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
+                    <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Bestsellers Section -->
+      {% if bestsellers %}
+        <div class="section-wrapper">
+          <div class="section-header">
+            <h2><i class="fas fa-crown"></i> Bestsellers</h2>
+            <p class="section-subtitle">Our most popular titles</p>
+          </div>
+          <div class="book-carousel">
+            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-track">
+              {% for book in bestsellers %}
+                <div class="carousel-item">
+                  <div class="static-card">
+                    <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
+                      <div class="book-cover-container">
+                        {% if book.image %}
+                          <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                        {% else %}
+                          <div class="no-image">No Image</div>
+                        {% endif %}
+                        <span class="book-badge badge-bestseller">Bestseller</span>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="book-info">{{ book.title }}</div>
+                  <p class="author">{{ book.author }}</p>
+                  <div class="book-actions">
+                    <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
+                    <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Coming Soon Section -->
+      {% if coming_soon %}
+        <div class="section-wrapper">
+          <div class="section-header">
+            <h2><i class="fas fa-clock"></i> Coming Soon</h2>
+            <p class="section-subtitle">Upcoming releases</p>
+          </div>
+          <div class="book-carousel">
+            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-track">
+              {% for book in coming_soon %}
+                <div class="carousel-item">
+                  <div class="static-card">
+                    <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
+                      <div class="book-cover-container">
+                        {% if book.image %}
+                          <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                        {% else %}
+                          <div class="no-image">No Image</div>
+                        {% endif %}
+                        <span class="book-badge badge-coming-soon">Coming Soon</span>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="book-info">{{ book.title }}</div>
+                  <p class="author">{{ book.author }}</p>
+                  <div class="book-actions">
+                    <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
+                    <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Highly Rated Section -->
+      {% if highly_rated %}
+        <div class="section-wrapper">
+          <div class="section-header">
+            <h2><i class="fas fa-star"></i> Highly Rated</h2>
+            <p class="section-subtitle">Books rated 4.5+ stars</p>
+          </div>
+          <div class="book-carousel">
+            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-track">
+              {% for book in highly_rated %}
+                <div class="carousel-item">
+                  <div class="static-card">
+                    <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
+                      <div class="book-cover-container">
+                        {% if book.image %}
+                          <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                        {% else %}
+                          <div class="no-image">No Image</div>
+                        {% endif %}
+                      </div>
+                    </a>
+                  </div>
+                  <div class="book-info">{{ book.title }}</div>
+                  <p class="author">{{ book.author }}</p>
+                  <p class="rating">Rating: {{ book.average_rating|floatformat:1 }} ★</p>
+                  <div class="book-actions">
+                    <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
+                    <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Genre Sections -->
+      {% if fiction_books %}
+        <div class="section-wrapper">
+          <div class="section-header">
+            <h2><i class="fas fa-book"></i> Fiction</h2>
+            <p class="section-subtitle">Fiction books collection</p>
+          </div>
+          <div class="book-carousel">
+            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-track">
+              {% for book in fiction_books %}
+                <div class="carousel-item">
+                  <div class="static-card">
+                    <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
+                      <div class="book-cover-container">
+                        {% if book.image %}
+                          <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                        {% else %}
+                          <div class="no-image">No Image</div>
+                        {% endif %}
+                      </div>
+                    </a>
+                  </div>
+                  <div class="book-info">{{ book.title }}</div>
+                  <p class="author">{{ book.author }}</p>
+                  <div class="book-actions">
+                    <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
+                    <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Similar sections for Fantasy and Thriller books -->
+      
     </div>
 
     <footer class="footer">

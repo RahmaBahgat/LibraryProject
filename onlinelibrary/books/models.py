@@ -60,6 +60,7 @@ class Book(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     favorite_genres = models.ManyToManyField(Genre, blank=True)
+    favorite_books = models.ManyToManyField(Book, blank=True, related_name='favorited_by')
     
     def get_reading_preferences(self):
         borrowed_books = BorrowedBook.objects.filter(user=self.user)

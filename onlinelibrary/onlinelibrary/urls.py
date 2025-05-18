@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 from books.views_notifications import user_notifications, admin_notifications, mark_notification_read
+from books.views import home_user, home_admin, book_detail, borrow_book, api_featured_books, api_book_categories
 
 urlpatterns = [
     # Django Admin
@@ -27,13 +28,14 @@ urlpatterns = [
     
     # Public Pages
     path('', views.index, name='index'),
-    path('home/', views.home, name='home'),  # User home page
+    path('home/', home_user, name='home'),  # User home page
     path('about/', views.about, name='about'),
     path('privacy/', views.privacy, name='privacy'),
     path('help/', include('help.urls')),
 
     # Book Pages
     path('library-admin/books/', include('books.urls')),
+    path('book/<int:id>/', book_detail, name='book_detail'),  # Book detail page
     
     # User Pages
     path('profile/', views.profile, name='profile'),
@@ -46,13 +48,21 @@ urlpatterns = [
     path('logout/', views.logout_page, name='logout'),
     
     # Admin Pages
-    path('library-admin/', views.admin_home, name='admin-home'),
+    path('library-admin/', home_admin, name='admin-home'),
     
     # Notification Pages
     path('notifications/', user_notifications, name='notifications'),
     path('notifications/get-latest/', user_notifications, {'get_latest': True}, name='get-latest-notifications'),
     path('library-admin/notifications/', admin_notifications, name='admin-notifications'),
     path('notifications/<int:notification_id>/mark-read/', mark_notification_read, name='mark-notification-read'),
-    #profile pages
+    
+    # Profile pages
     path('profile/', views.profile, name='profile'),
+    
+    # Book actions
+    path('book/<int:book_id>/borrow/', borrow_book, name='borrow_book'),
+    
+    # API endpoints
+    path('api/books/featured/', api_featured_books, name='api_featured_books'),
+    path('api/books/categories/', api_book_categories, name='api_book_categories'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
