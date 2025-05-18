@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', bookSearch);
 
 function bookSearch() {
@@ -51,18 +50,25 @@ function bookSearch() {
       </div>
     `;
     
-    const booksHTML = matchingBooks.map(book => `
-      <div class="carousel-item" data-book-id="${book.id}">
-        <div class="static-card">
-          <a href="./Booksdetails/book.html?id=${book.id}" class="card-link">
-            <img src="${book.cover}" alt="${book.title}">
+    const booksHTML = matchingBooks.map(book => {
+      // Get the correct image path
+      const imagePath = book.image
+        ? (book.image.startsWith('/') ? book.image : '/media/' + book.image)
+        : (book.cover_path ? '/static/' + book.cover_path : '/static/images/books/default-cover.jpg');
+      
+      return `
+        <div class="carousel-item" data-book-id="${book.id}">
+          <div class="static-card">
+            <a href="/library-admin/books/book/${book.id}/" class="card-link">
+              <img src="${imagePath}" alt="${book.title}" onerror="this.onerror=null; this.src='/static/images/books/default-cover.jpg';">
+            </a>
+          </div>
+          <a href="Author page.html?name=${encodeURIComponent(book.author)}" class="book-info">
+            ${book.author}
           </a>
         </div>
-        <a href="Author page.html?name=${encodeURIComponent(book.author)}" class="book-info">
-          ${book.author}
-        </a>
-      </div>
-    `).join('');
+      `;
+    }).join('');
     
     bookCarouselsContainer.innerHTML = `
       <div class="section-wrapper">
