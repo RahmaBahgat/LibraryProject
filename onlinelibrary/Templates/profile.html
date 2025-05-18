@@ -108,7 +108,7 @@
         <div class="books">
           <h3>My Library</h3>
           <div class="book-buttons">
-            {% if user.is_superuser %}
+            {% if user.is_staff or user.is_superuser %}
             <a
               href="{% url 'books_admin:admin_book_management' %}"
               class="library-btn"
