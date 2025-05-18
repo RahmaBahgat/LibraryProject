@@ -41,6 +41,13 @@ def help(request):
     context = {**get_notifications(request)}
     return render(request, 'help.html', context)  # Make sure help.html exists in templates/
 
+def terms(request):
+    return render(request, 'terms.html')
+
+def faq(request):
+    context = {**get_notifications(request)}
+    return render(request, 'faq.html', context)
+
 # Book Pages
 def book_list(request):
     context = {**get_notifications(request)}

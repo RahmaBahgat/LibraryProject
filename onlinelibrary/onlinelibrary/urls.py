@@ -31,6 +31,8 @@ urlpatterns = [
     path('home/', home_user, name='home'),  # User home page
     path('about/', views.about, name='about'),
     path('privacy/', views.privacy, name='privacy'),
+    path('terms/', views.terms, name='terms'),
+    path('faq/', views.faq, name='faq'),
     path('help/', include('help.urls')),  # Include help app URLs
 
     # Book Pages
