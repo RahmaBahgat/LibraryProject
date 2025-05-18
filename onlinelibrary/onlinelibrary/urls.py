@@ -58,6 +58,7 @@ urlpatterns = [
     
     # Profile pages
     path('profile/', views.profile, name='profile'),
+    path('profile/update-picture/', views.update_profile_picture, name='update_profile_picture'),
     
     # Book actions
     path('book/<int:book_id>/borrow/', borrow_book, name='borrow_book'),

@@ -59,6 +59,7 @@ class Book(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     favorite_genres = models.ManyToManyField(Genre, blank=True)
     favorite_books = models.ManyToManyField(Book, blank=True, related_name='favorited_by')
     

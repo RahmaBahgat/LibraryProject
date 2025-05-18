@@ -216,6 +216,17 @@ def profile_view(request):
         'profile': request.user.profile,
     })
 
-
 def borrowed_list(request):
     return render(request, 'borrowed_list.html')
+
+@login_required
+def update_profile_picture(request):
+    if request.method == 'POST' and request.FILES.get('profile_picture'):
+        profile = request.user.profile
+        if profile.profile_picture:
+            # Delete old profile picture file
+            profile.profile_picture.delete()
+        profile.profile_picture = request.FILES['profile_picture']
+        profile.save()
+        messages.success(request, 'Profile picture updated successfully!')
+    return redirect('profile')
