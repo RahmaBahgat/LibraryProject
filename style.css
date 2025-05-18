@@ -1,3 +1,188 @@
+/* Ensure theme variables are applied to all elements */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Base theme variables */
+:root {
+    --background: #FFFFFF;
+    --text-primary: #322D29;
+    --text-secondary: #666666;
+    --card-bg: #FFFFFF;
+    --border-color: #D9D9D9;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+    --background: #1A1A1A;
+    --text-primary: #EFE9E1;
+    --text-secondary: #AC9C8D;
+    --card-bg: #2C2522;
+    --border-color: #4A4A4A;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Apply theme colors */
+body {
+    background-color: var(--background);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    margin-right: 1rem;
+    width: 40px;
+    height: 40px;
+}
+
+.theme-toggle:hover {
+    background-color: var(--border-color);
+    transform: scale(1.1);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Theme icons */
+.sun-icon, .moon-icon {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+}
+
+.sun-icon {
+    display: block;
+}
+
+.moon-icon {
+    display: none;
+}
+
+[data-theme="dark"] .sun-icon {
+    display: none;
+}
+
+[data-theme="dark"] .moon-icon {
+    display: block;
+}
+
+/* Apply theme to other elements */
+.navbar, .footer {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+.hero-content, .carousel-section, .about-section, .testimonials {
+    background-color: var(--background);
+    color: var(--text-primary);
+}
+
+/* Debug styles to verify theme application */
+body {
+    background-color: var(--background) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Theme toggle button styles */
+.theme-toggle {
+    background: var(--card-bg) !important;
+    border: 2px solid var(--border-color) !important;
+    cursor: pointer !important;
+    padding: 8px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: var(--text-primary) !important;
+    transition: all 0.3s ease !important;
+    margin-right: 1rem !important;
+    position: relative !important;
+    width: 40px !important;
+    height: 40px !important;
+    z-index: 1000 !important;
+}
+
+.theme-toggle:hover {
+    background-color: var(--light-gray) !important;
+    transform: scale(1.1) !important;
+}
+
+.theme-toggle:active {
+    transform: scale(0.95) !important;
+}
+
+.theme-toggle:focus {
+    outline: 2px solid var(--brand-red);
+    outline-offset: 2px;
+}
+
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none; /* Ensure clicks go to button */
+}
+
+/* Add a tooltip to the theme toggle */
+.theme-toggle::after {
+    content: "Toggle dark mode";
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    border: 1px solid var(--border-color);
+}
+
+.theme-toggle:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Update existing components for dark mode */
+.navbar {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.hero-content {
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+.carousel-section, .about-section, .testimonials {
+    background-color: var(--background);
+}
+
+.footer {
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+}
 
 p {
     font-size: medium;
@@ -7,14 +192,6 @@ p {
 h1{
     color: var(--brand-red);
     text-align: center;
-}
-
-:root {
-    --dark-brown: #322D29;
-    --brand-red: #72383D;
-    --warm-taupe: #AC9C8D;
-    --light-gray: #D9D9D9;
-    --cream: #EFE9E1;
 }
 
 .image-container {
@@ -38,4 +215,30 @@ h1{
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+/* Force theme application */
+html[data-theme="dark"] {
+    --background: #1A1A1A !important;
+    --text-primary: #EFE9E1 !important;
+    --text-secondary: #AC9C8D !important;
+    --card-bg: #2C2522 !important;
+    --border-color: #4A4A4A !important;
+    --shadow-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+html[data-theme="light"] {
+    --background: #FFFFFF !important;
+    --text-primary: #322D29 !important;
+    --text-secondary: #666666 !important;
+    --card-bg: #FFFFFF !important;
+    --border-color: #D9D9D9 !important;
+    --shadow-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Force background and text colors */
+body {
+    background-color: var(--background) !important;
+    color: var(--text-primary) !important;
+    transition: background-color 0.3s ease, color 0.3s ease !important;
 }
