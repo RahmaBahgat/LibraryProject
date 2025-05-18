@@ -1,5 +1,5 @@
 {% load static %}<!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,10 +9,305 @@
     <link rel="stylesheet" href="{% static 'css/HomePage-admin.css' %}" />
     <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
     <link rel="stylesheet" href="{% static 'css/notifications.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/book-card.css' %}" />
+    <style>
+      :root {
+        --primary-color: #72383d;
+        --secondary-color: #ff6b6b;
+        --accent-color: #ffd166;
+        --text-color: #2d3436;
+        --background-color: #f9f9f9;
+        --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        --hover-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        --transition-speed: 0.3s;
+      }
+
+      body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-family: 'Merriweather', serif;
+      }
+
+      .main-content {
+        min-height: calc(100vh - 300px);
+        padding-bottom: 0;
+        margin-bottom: 0;
+      }
+
+      .welcome-header {
+        text-align: center;
+        margin: 2rem 0;
+      }
+
+      .welcome-header h1 {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        font-family: 'Playfair Display', serif;
+        margin-bottom: 1rem;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+      }
+
+      #book-carousels-container {
+        margin-bottom: 0;
+        padding-bottom: 3rem;
+      }
+
+      .section-wrapper {
+        margin-bottom: 3rem;
+        padding: 0 1.5rem;
+      }
+
+      .section-header {
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 0.5rem;
+      }
+
+      .section-header h2 {
+        color: var(--primary-color);
+        font-size: 1.8rem;
+        font-weight: 700;
+      }
+
+      .section-header i {
+        margin-right: 0.5rem;
+        color: var(--secondary-color);
+      }
+
+      .section-subtitle {
+        color: #666;
+        font-style: italic;
+        margin-top: 0.5rem;
+      }
+
+      .dashboard-stats {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: var(--card-shadow);
+        text-align: center;
+        min-width: 200px;
+      }
+
+      .stat-card h3 {
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--secondary-color);
+      }
+
+      .manage-books-btn {
+        display: inline-block;
+        background: var(--primary-color);
+        color: white;
+        padding: 0.8rem 1.5rem;
+        border-radius: 5px;
+        text-decoration: none;
+        margin: 1rem 0;
+        transition: all var(--transition-speed);
+      }
+
+      .manage-books-btn:hover {
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+      }
+
+      .book-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.8rem;
+        padding-top: 0.8rem;
+        border-top: 1px solid #eee;
+      }
+
+      .edit-btn, .delete-btn {
+        flex: 1;
+        padding: 0.5rem;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all var(--transition-speed);
+        text-align: center;
+        font-weight: 500;
+      }
+
+      .edit-btn {
+        background: var(--primary-color);
+        color: white;
+        text-decoration: none;
+      }
+
+      .delete-btn {
+        background: #dc3545;
+        color: white;
+      }
+
+      .edit-btn:hover, .delete-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+      }
+
+      @media (max-width: 768px) {
+        .dashboard-stats {
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .stat-card {
+          width: 100%;
+          max-width: 300px;
+        }
+
+        .book-card {
+          width: 180px;
+        }
+
+        .book-cover-container {
+          height: 260px;
+        }
+
+        .book-title {
+          font-size: 1rem;
+        }
+
+        .carousel-track {
+          gap: 1rem;
+        }
+      }
+
+      /* Book carousel styling */
+      .book-carousel {
+        position: relative;
+        padding: 0 2rem;
+        margin: 0 auto;
+        max-width: 1400px;
+      }
+
+      .carousel-track {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+        padding: 1rem 0;
+        gap: 2rem;
+      }
+
+      .carousel-track::-webkit-scrollbar {
+        display: none; /* Chrome/Safari/Opera */
+      }
+
+      /* Book card styling */
+      .book-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: var(--card-shadow);
+        transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        width: 220px;
+        flex-shrink: 0;
+        overflow: hidden;
+      }
+
+      .book-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--hover-shadow);
+      }
+
+      .book-cover-container {
+        position: relative;
+        width: 100%;
+        height: 320px;
+        overflow: hidden;
+      }
+
+      .book-cover {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform var(--transition-speed);
+      }
+
+      .book-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+
+      .book-info {
+        padding: 1rem;
+        background: white;
+      }
+
+      .book-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-color);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        height: 2.8em;
+      }
+
+      .book-author {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 0.5rem;
+        font-style: italic;
+      }
+
+      .book-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .book-rating i {
+        color: var(--accent-color);
+      }
+
+      .rating-count {
+        color: #666;
+        font-size: 0.8rem;
+      }
+
+      .book-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: white;
+        background: var(--primary-color);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        z-index: 2;
+      }
+
+      .badge-new-release { background-color: #2ecc71; }
+      .badge-trending { background-color: #e74c3c; }
+      .badge-bestseller { background-color: #f1c40f; }
+      .badge-coming-soon { background-color: #9b59b6; }
+    </style>
 
     <!-- Fonts -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Playfair+Display:wght@700&display=swap"
       rel="stylesheet"
     />
     <link
@@ -138,11 +433,12 @@
       </div>
     </nav>
 
-    <div class="container">
-      <center>
-        <p class="archive-message">
-          <span>Access granted. The archive is now yours to command.</span>
-        </p>
+    <div class="main-content">
+      <div class="container">
+        <div class="welcome-header">
+          <h1>Welcome to the Admin Dashboard</h1>
+        </div>
+        
         <div class="dashboard-stats">
           <div class="stat-card">
             <h3>Total Books</h3>
@@ -152,247 +448,115 @@
             <h3>Borrowed Books</h3>
             <p class="stat-number">{{ borrowed_count }}</p>
           </div>
+          <div class="stat-card">
+            <h3>Total Users</h3>
+            <p class="stat-number">{{ total_users }}</p>
+          </div>
         </div>
-        <a href="{% url 'books_admin:add_book' %}" class="manage-books-btn">
-          <i class="fas fa-plus"></i>
-          Add New Book
-        </a>
-        <br />
-      </center>
+
+        <center>
+          <a href="{% url 'books_admin:add_book' %}" class="manage-books-btn">
+            <i class="fas fa-plus"></i> Add New Book
+          </a>
+        </center>
+      </div>
+
+      <div id="book-carousels-container">
+        <!-- New Releases Section -->
+        {% if new_releases %}
+          <div class="section-wrapper">
+            <div class="section-header">
+              <h2><i class="fas fa-star"></i> New Releases</h2>
+              <p class="section-subtitle">Fresh additions to our library</p>
+            </div>
+            <div class="book-carousel">
+              <button class="carousel-nav prev" aria-label="Previous">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="carousel-track">
+                {% for book in new_releases %}
+                  {% include 'includes/book_card.html' with book=book show_admin_actions=True %}
+                {% endfor %}
+              </div>
+              <button class="carousel-nav next" aria-label="Next">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Trending Books Section -->
+        {% if trending_books %}
+          <div class="section-wrapper">
+            <div class="section-header">
+              <h2><i class="fas fa-fire"></i> Trending Now</h2>
+              <p class="section-subtitle">Popular books this week</p>
+            </div>
+            <div class="book-carousel">
+              <button class="carousel-nav prev" aria-label="Previous">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="carousel-track">
+                {% for book in trending_books %}
+                  {% include 'includes/book_card.html' with book=book show_admin_actions=True %}
+                {% endfor %}
+              </div>
+              <button class="carousel-nav next" aria-label="Next">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Bestsellers Section -->
+        {% if bestsellers %}
+          <div class="section-wrapper">
+            <div class="section-header">
+              <h2><i class="fas fa-crown"></i> Bestsellers</h2>
+              <p class="section-subtitle">Most popular books in our library</p>
+            </div>
+            <div class="book-carousel">
+              <button class="carousel-nav prev" aria-label="Previous">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="carousel-track">
+                {% for book in bestsellers %}
+                  {% include 'includes/book_card.html' with book=book show_admin_actions=True %}
+                {% endfor %}
+              </div>
+              <button class="carousel-nav next" aria-label="Next">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Highly Rated Section -->
+        {% if highly_rated %}
+          <div class="section-wrapper">
+            <div class="section-header">
+              <h2><i class="fas fa-award"></i> Highly Rated</h2>
+              <p class="section-subtitle">Reader favorites with 4+ stars</p>
+            </div>
+            <div class="book-carousel">
+              <button class="carousel-nav prev" aria-label="Previous">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="carousel-track">
+                {% for book in highly_rated %}
+                  {% include 'includes/book_card.html' with book=book show_admin_actions=True %}
+                {% endfor %}
+              </div>
+              <button class="carousel-nav next" aria-label="Next">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        {% endif %}
+      </div>
     </div>
 
-    <div id="book-carousels-container">
-      <!-- New Releases Section -->
-      {% if new_releases %}
-        <div class="section-wrapper">
-          <div class="section-header">
-            <h2><i class="fas fa-star"></i> New Releases</h2>
-            <p class="section-subtitle">Latest additions to our library</p>
-          </div>
-          <div class="book-carousel">
-            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
-            <div class="carousel-track">
-              {% for book in new_releases %}
-                <div class="carousel-item">
-                  <div class="static-card">
-                    <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
-                      <div class="book-cover-container">
-                        {% if book.image %}
-                          <img src="{{ book.image.url }}" alt="{{ book.title }}">
-                        {% else %}
-                          <div class="no-image">No Image</div>
-                        {% endif %}
-                        <span class="book-badge badge-new-release">New Release</span>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="book-info">{{ book.title }}</div>
-                  <p class="author">{{ book.author }}</p>
-                  <div class="book-actions">
-                    <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
-                    <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
-            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
-          </div>
-        </div>
-      {% endif %}
-
-      <!-- Trending Books Section -->
-      {% if trending_books %}
-        <div class="section-wrapper">
-          <div class="section-header">
-            <h2><i class="fas fa-fire"></i> Trending Now</h2>
-            <p class="section-subtitle">Most popular books this week</p>
-          </div>
-          <div class="book-carousel">
-            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
-            <div class="carousel-track">
-              {% for book in trending_books %}
-                <div class="carousel-item">
-                  <div class="static-card">
-                    <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
-                      <div class="book-cover-container">
-                        {% if book.image %}
-                          <img src="{{ book.image.url }}" alt="{{ book.title }}">
-                        {% else %}
-                          <div class="no-image">No Image</div>
-                        {% endif %}
-                        <span class="book-badge badge-trending">Trending</span>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="book-info">{{ book.title }}</div>
-                  <p class="author">{{ book.author }}</p>
-                  <div class="book-actions">
-                    <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
-                    <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
-            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
-          </div>
-        </div>
-      {% endif %}
-
-      <!-- Bestsellers Section -->
-      {% if bestsellers %}
-        <div class="section-wrapper">
-          <div class="section-header">
-            <h2><i class="fas fa-crown"></i> Bestsellers</h2>
-            <p class="section-subtitle">Our most popular titles</p>
-          </div>
-          <div class="book-carousel">
-            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
-            <div class="carousel-track">
-              {% for book in bestsellers %}
-                <div class="carousel-item">
-                  <div class="static-card">
-                    <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
-                      <div class="book-cover-container">
-                        {% if book.image %}
-                          <img src="{{ book.image.url }}" alt="{{ book.title }}">
-                        {% else %}
-                          <div class="no-image">No Image</div>
-                        {% endif %}
-                        <span class="book-badge badge-bestseller">Bestseller</span>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="book-info">{{ book.title }}</div>
-                  <p class="author">{{ book.author }}</p>
-                  <div class="book-actions">
-                    <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
-                    <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
-            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
-          </div>
-        </div>
-      {% endif %}
-
-      <!-- Coming Soon Section -->
-      {% if coming_soon %}
-        <div class="section-wrapper">
-          <div class="section-header">
-            <h2><i class="fas fa-clock"></i> Coming Soon</h2>
-            <p class="section-subtitle">Upcoming releases</p>
-          </div>
-          <div class="book-carousel">
-            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
-            <div class="carousel-track">
-              {% for book in coming_soon %}
-                <div class="carousel-item">
-                  <div class="static-card">
-                    <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
-                      <div class="book-cover-container">
-                        {% if book.image %}
-                          <img src="{{ book.image.url }}" alt="{{ book.title }}">
-                        {% else %}
-                          <div class="no-image">No Image</div>
-                        {% endif %}
-                        <span class="book-badge badge-coming-soon">Coming Soon</span>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="book-info">{{ book.title }}</div>
-                  <p class="author">{{ book.author }}</p>
-                  <div class="book-actions">
-                    <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
-                    <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
-            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
-          </div>
-        </div>
-      {% endif %}
-
-      <!-- Highly Rated Section -->
-      {% if highly_rated %}
-        <div class="section-wrapper">
-          <div class="section-header">
-            <h2><i class="fas fa-star"></i> Highly Rated</h2>
-            <p class="section-subtitle">Books rated 4.5+ stars</p>
-          </div>
-          <div class="book-carousel">
-            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
-            <div class="carousel-track">
-              {% for book in highly_rated %}
-                <div class="carousel-item">
-                  <div class="static-card">
-                    <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
-                      <div class="book-cover-container">
-                        {% if book.image %}
-                          <img src="{{ book.image.url }}" alt="{{ book.title }}">
-                        {% else %}
-                          <div class="no-image">No Image</div>
-                        {% endif %}
-                      </div>
-                    </a>
-                  </div>
-                  <div class="book-info">{{ book.title }}</div>
-                  <p class="author">{{ book.author }}</p>
-                  <p class="rating">Rating: {{ book.average_rating|floatformat:1 }} ★</p>
-                  <div class="book-actions">
-                    <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
-                    <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
-            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
-          </div>
-        </div>
-      {% endif %}
-
-      <!-- Genre Sections -->
-      {% if fiction_books %}
-        <div class="section-wrapper">
-          <div class="section-header">
-            <h2><i class="fas fa-book"></i> Fiction</h2>
-            <p class="section-subtitle">Fiction books collection</p>
-          </div>
-          <div class="book-carousel">
-            <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
-            <div class="carousel-track">
-              {% for book in fiction_books %}
-                <div class="carousel-item">
-                  <div class="static-card">
-                    <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
-                      <div class="book-cover-container">
-                        {% if book.image %}
-                          <img src="{{ book.image.url }}" alt="{{ book.title }}">
-                        {% else %}
-                          <div class="no-image">No Image</div>
-                        {% endif %}
-                      </div>
-                    </a>
-                  </div>
-                  <div class="book-info">{{ book.title }}</div>
-                  <p class="author">{{ book.author }}</p>
-                  <div class="book-actions">
-                    <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
-                    <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
-            <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
-          </div>
-        </div>
-      {% endif %}
-
-      <!-- Similar sections for Fantasy and Thriller books -->
-      
-    </div>
-
+    <!-- Footer -->
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-brand">
@@ -419,69 +583,16 @@
           </p>
           <div class="social-links">
             <a href="#" aria-label="Facebook">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path
-                  d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
-                ></path>
-              </svg>
+              <i class="fab fa-facebook"></i>
             </a>
             <a href="#" aria-label="Twitter">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path
-                  d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"
-                ></path>
-              </svg>
+              <i class="fab fa-twitter"></i>
             </a>
             <a href="#" aria-label="Instagram">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
-                <path
-                  d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
-                ></path>
-                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
-              </svg>
+              <i class="fab fa-instagram"></i>
             </a>
             <a href="#" aria-label="Email">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-              </svg>
+              <i class="fas fa-envelope"></i>
             </a>
           </div>
         </div>
@@ -489,9 +600,9 @@
           <div class="footer-section">
             <h3>Quick Links</h3>
             <ul>
-              <li><a href="{% static 'html/HomePage-user.html' %}">Home</a></li>
-              <li><a href="{% static 'html/HomePage-user.html' %}">Explore Books</a></li>
-              <li><a href="{% static 'html/about.html' %}">About Us</a></li>
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li><a href="{% url 'books_admin:admin_book_management' %}">Manage Books</a></li>
+              <li><a href="{% url 'about' %}">About Us</a></li>
               <li><a href="#">Contact</a></li>
             </ul>
           </div>
@@ -500,7 +611,7 @@
             <ul>
               <li><a href="#">FAQ</a></li>
               <li><a href="#">Terms of Service</a></li>
-              <li><a href="{% static 'html/privacy.html' %}">Privacy Policy</a></li>
+              <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
             </ul>
           </div>
         </div>

@@ -1,15 +1,14 @@
 {% load static %}
 <div class="carousel-item">
     <div class="book-card">
-        <a href="{% url 'book_detail' book.id %}" class="book-link">
+        <a href="{% if show_admin_actions %}{% url 'books_admin:book_detail' book.id %}{% else %}{% url 'book_detail' book.id %}{% endif %}" class="book-link">
             <div class="book-cover-container">
                 {% if book.image %}
                     <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
                 {% elif book.cover_path %}
-                    <img src="{% static book.cover_path %}" alt="{{ book.title }}" class="book-cover">
+                    <img src="{% static book.cover_path %}" alt="{{ book.title }}" class="book-cover" onerror="this.onerror=null; this.src='{% static 'images/books/default-cover.jpg' %}';">
                 {% else %}
-                    <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="no-image">No Cover</div>
+                    <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
                 {% endif %}
                 {% if book.badge %}
                     <span class="book-badge badge-{{ book.badge }}">{{ book.get_badge_display }}</span>
@@ -29,6 +28,12 @@
                 {% endfor %}
                 <span class="rating-count">({{ book.reviews.count }})</span>
             </div>
+            {% if show_admin_actions %}
+            <div class="book-actions">
+                <a href="{% url 'books_admin:edit_book' book.id %}" class="edit-btn">Edit</a>
+                <button class="delete-btn" data-book-id="{{ book.id }}">Delete</button>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div> 

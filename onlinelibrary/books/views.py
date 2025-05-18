@@ -9,7 +9,7 @@ from .forms import BookForm
 from django.urls import reverse
 from django.utils import timezone
 from .services import BookRecommendationService
-from django.db.models import Q
+from django.db.models import Q, Count
 
 def is_admin(user):
     return user.is_staff
@@ -98,22 +98,80 @@ def admin_book_management(request):
     all_books = Book.objects.all()
     
     # Get books by badge
-    new_releases = all_books.filter(badge='new-release')
-    trending_books = all_books.filter(badge='trending')
-    bestsellers = all_books.filter(badge='bestseller')
-    coming_soon = all_books.filter(badge='coming-soon')
+    new_releases = all_books.filter(badge='new-release')[:10]
+    trending_books = all_books.filter(badge='trending')[:10]
+    bestsellers = all_books.filter(badge='bestseller')[:10]
+    coming_soon = all_books.filter(badge='coming-soon')[:10]
     
     # Get books by rating
-    highly_rated = all_books.filter(average_rating__gte=4.5).order_by('-average_rating')
+    highly_rated = all_books.filter(average_rating__gte=4.5).order_by('-average_rating')[:10]
     
-    # Get books by genre
-    fiction_books = all_books.filter(Q(genre='Fiction') | Q(genres__name='Fiction')).distinct()
-    fantasy_books = all_books.filter(Q(genre='Fantasy') | Q(genres__name='Fantasy')).distinct()
-    thriller_books = all_books.filter(Q(genre='Thriller') | Q(genres__name='Thriller')).distinct()
+    # Get books by genre - Updated to use genres field
+    fiction_books = all_books.filter(genres__name='Fiction').distinct()[:10]
+    fantasy_books = all_books.filter(genres__name='Fantasy').distinct()[:10]
+    thriller_books = all_books.filter(genres__name='Thriller').distinct()[:10]
+    
+    # Library stats
+    total_books = all_books.count()
+    borrowed_count = BorrowedBook.objects.filter(return_date__isnull=True).count()
+    total_users = User.objects.filter(is_staff=False).count()
+    recent_additions = all_books.order_by('-created_at')[:5]
+    
+    # Get recent activity
+    recent_borrows = BorrowedBook.objects.filter(is_returned=False).order_by('-borrow_date')[:5]
+    recent_returns = BorrowedBook.objects.filter(is_returned=True).order_by('-return_date')[:5]
+    
+    # Get notifications for admin
+    notifications = Notification.objects.filter(
+        Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global')
+    ).order_by('-created_at')[:10]
+    
+    # Load book cover paths from data.js
+    try:
+        import os
+        import re
+        from django.conf import settings
+        
+        # Path to the data.js file
+        data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
+        
+        if os.path.exists(data_js_path):
+            with open(data_js_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+                # Extract book titles and cover paths using regex
+                pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
+                matches = re.findall(pattern, content, re.DOTALL)
+                
+                # Process all book lists
+                book_lists = [
+                    new_releases, trending_books, bestsellers, coming_soon, 
+                    highly_rated, fiction_books, fantasy_books, thriller_books, 
+                    recent_additions, all_books[:20]
+                ]
+                
+                # Add cover paths to all books
+                for book_list in book_lists:
+                    if book_list:
+                        for book in book_list:
+                            # Try to find a matching cover path
+                            for title, cover_path in matches:
+                                if book.title.strip() == title.strip():
+                                    # Convert relative path to static path format
+                                    static_path = cover_path.replace('../', '')
+                                    # Remove any leading slashes to make it relative to static root
+                                    static_path = static_path.lstrip('/')
+                                    book.cover_path = static_path
+                                    break
+    except Exception as e:
+        print(f"Error loading book cover paths: {str(e)}")
     
     context = {
-        'total_books': all_books.count(),
-        'borrowed_count': BorrowedBook.objects.filter(return_date__isnull=True).count(),
+        'total_books': total_books,
+        'borrowed_count': borrowed_count,
+        'total_users': total_users,
+        'recent_additions': recent_additions,
+        'recent_borrows': recent_borrows,
+        'recent_returns': recent_returns,
         'new_releases': new_releases,
         'trending_books': trending_books,
         'bestsellers': bestsellers,
@@ -122,7 +180,8 @@ def admin_book_management(request):
         'fiction_books': fiction_books,
         'fantasy_books': fantasy_books,
         'thriller_books': thriller_books,
-        'all_books': all_books,
+        'all_books': all_books[:20],  # Limit to first 20 books for performance
+        'notifications': notifications,
     }
     
     return render(request, 'HomePage-admin.html', context)
@@ -234,7 +293,7 @@ def api_featured_books(request):
     elif category.startswith('genre_'):
         # Extract genre name from the category parameter
         genre_name = category.replace('genre_', '')
-        books = books.filter(Q(genre=genre_name) | Q(genres__name=genre_name)).distinct()[:10]
+        books = books.filter(genres__name=genre_name).distinct()[:10]
     else:
         # All featured books
         books = books.order_by('-created_at')[:10]
@@ -326,10 +385,12 @@ def home_user(request):
     # Calculate favorite genres based on user's history
     if total_borrowed > 0:
         genre_counts = {}
-        user_books = BorrowedBook.objects.filter(user=request.user).values_list('book__genre', flat=True)
-        for genre in user_books:
-            if genre:
-                genre_counts[genre] = genre_counts.get(genre, 0) + 1
+        user_borrowed_books = BorrowedBook.objects.filter(user=request.user).select_related('book')
+        for borrowed in user_borrowed_books:
+            for genre in borrowed.book.genres.all():
+                genre_name = genre.name
+                if genre_name:
+                    genre_counts[genre_name] = genre_counts.get(genre_name, 0) + 1
         
         # Get the top 3 genres
         if genre_counts:
@@ -389,36 +450,24 @@ def home_user(request):
 def home_admin(request):
     # Get all books
     all_books = Book.objects.all()
-    
-    # Get books by badge
-    new_releases = all_books.filter(badge='new-release')[:10]
-    trending_books = all_books.filter(badge='trending')[:10]
-    bestsellers = all_books.filter(badge='bestseller')[:10]
-    coming_soon = all_books.filter(badge='coming-soon')[:10]
-    
-    # Get books by rating
-    highly_rated = all_books.filter(average_rating__gte=4.5).order_by('-average_rating')[:10]
-    
-    # Get books by genre
-    fiction_books = all_books.filter(Q(genre='Fiction') | Q(genres__name='Fiction')).distinct()[:10]
-    fantasy_books = all_books.filter(Q(genre='Fantasy') | Q(genres__name='Fantasy')).distinct()[:10]
-    thriller_books = all_books.filter(Q(genre='Thriller') | Q(genres__name='Thriller')).distinct()[:10]
-    
-    # Library stats
-    total_books = all_books.count()
-    borrowed_count = BorrowedBook.objects.filter(return_date__isnull=True).count()
-    total_users = User.objects.filter(is_staff=False).count()
-    recent_additions = all_books.order_by('-created_at')[:5]
-    
-    # Get recent activity
-    recent_borrows = BorrowedBook.objects.filter(is_returned=False).order_by('-borrow_date')[:5]
-    recent_returns = BorrowedBook.objects.filter(is_returned=True).order_by('-return_date')[:5]
-    
-    # Get notifications for admin
-    notifications = Notification.objects.filter(
-        Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global')
-    ).order_by('-created_at')[:10]
-    
+
+    # Get new releases (books added in the last 30 days)
+    new_releases = Book.objects.filter(created_at__gte=timezone.now() - timezone.timedelta(days=30))
+
+    # Get trending books (most borrowed recently)
+    trending_books = Book.objects.filter(badge='trending')[:10]
+
+    # Get bestsellers
+    bestsellers = Book.objects.filter(badge='bestseller')[:10]
+
+    # Get highly rated books
+    highly_rated = Book.objects.filter(average_rating__gte=4.0).order_by('-average_rating')[:10]
+
+    # Get statistics
+    total_books = Book.objects.count()
+    borrowed_count = BorrowedBook.objects.filter(is_returned=False).count()
+    total_users = User.objects.count()
+
     # Load book cover paths from data.js
     try:
         import os
@@ -442,34 +491,27 @@ def home_admin(request):
                     cover_paths[title] = static_path
         
         # Add cover_path to each book object
-        for book_list in [new_releases, trending_books, bestsellers, coming_soon, highly_rated, 
-                         fiction_books, fantasy_books, thriller_books, recent_additions, all_books[:20]]:
+        for book_list in [new_releases, trending_books, bestsellers, highly_rated]:
             if book_list:  # Check if the list exists and is not None
                 for book in book_list:
                     if book.title in cover_paths:
                         book.cover_path = cover_paths[book.title]
+                    elif not book.image:  # If no image and no cover path found, set default
+                        book.cover_path = 'images/books/default-cover.jpg'
     except Exception as e:
         print(f"Error loading book cover paths: {str(e)}")
-    
+
     context = {
-        'total_books': total_books,
-        'borrowed_count': borrowed_count,
-        'total_users': total_users,
-        'recent_additions': recent_additions,
-        'recent_borrows': recent_borrows,
-        'recent_returns': recent_returns,
         'new_releases': new_releases,
         'trending_books': trending_books,
         'bestsellers': bestsellers,
-        'coming_soon': coming_soon,
         'highly_rated': highly_rated,
-        'fiction_books': fiction_books,
-        'fantasy_books': fantasy_books,
-        'thriller_books': thriller_books,
-        'all_books': all_books[:20],  # Limit to first 20 books for performance
-        'notifications': notifications,
+        'total_books': total_books,
+        'borrowed_count': borrowed_count,
+        'total_users': total_users,
+        'notifications': Notification.objects.filter(recipient=request.user).order_by('-created_at')[:5]
     }
-    
+
     return render(request, 'HomePage-admin.html', context)
 
 @login_required
