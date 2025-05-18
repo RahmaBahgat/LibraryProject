@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
 from books.models import Notification
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.middleware.csrf import get_token
 
 def get_notifications(request):
     if request.user.is_authenticated:
@@ -70,21 +72,50 @@ def borrowed_list(request):
 # Auth Pages
 @ensure_csrf_cookie
 def login_page(request):
+    # If user is already authenticated, redirect them
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == 'POST':
+        # Ensure we have the required fields
         username = request.POST.get('username')
         password = request.POST.get('password')
+        
+        if not username or not password:
+            error_message = 'Please provide both username and password.'
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'errors': [error_message]}, status=400)
+            messages.error(request, error_message)
+            return render(request, 'LogIn_SignUp page.html')
+
+        # Attempt to authenticate
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
             login(request, user)
-            if user.is_staff:
-                return redirect('/library-admin/books/')
-            else:
-                return redirect('home')  # Redirect regular users to user home page
+            redirect_url = '/library-admin/books/' if user.is_staff else '/home/'
+            
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': True,
+                    'redirect_url': redirect_url
+                })
+            return redirect(redirect_url)
         else:
-            messages.error(request, 'Invalid username or password.')
+            error_message = 'Invalid username or password.'
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'errors': [error_message]
+                }, status=400)
+            messages.error(request, error_message)
+            return render(request, 'LogIn_SignUp page.html')
     
-    return render(request, 'LogIn_SignUp page.html')
+    # For GET requests, just render the page with a fresh CSRF token
+    response = render(request, 'LogIn_SignUp page.html')
+    # Ensure CSRF token is set in cookie
+    get_token(request)
+    return response
 
 @ensure_csrf_cookie
 def signup_page(request):
@@ -96,27 +127,35 @@ def signup_page(request):
         role = request.POST.get('role')
         accept_terms = request.POST.get('accept_terms')
 
+        errors = []
+        
+        # Validate passwords match
+        if password != confirm_password:
+            errors.append('Passwords do not match.')
+
+        # Check if username already exists
+        if User.objects.filter(username=username).exists():
+            errors.append('Username already exists.')
+
+        # Check if email already exists
+        if User.objects.filter(email=email).exists():
+            errors.append('Email already exists.')
+
+        # Validate terms acceptance
+        if not accept_terms:
+            errors.append('You must accept the Terms of Service and Privacy Policy.')
+
+        if errors:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'errors': errors
+                })
+            for error in errors:
+                messages.error(request, error)
+            return render(request, 'LogIn_SignUp page.html')
+
         try:
-            # Validate passwords match
-            if password != confirm_password:
-                messages.error(request, 'Passwords do not match.')
-                return render(request, 'LogIn_SignUp page.html')
-
-            # Check if username already exists
-            if User.objects.filter(username=username).exists():
-                messages.error(request, 'Username already exists.')
-                return render(request, 'LogIn_SignUp page.html')
-
-            # Check if email already exists
-            if User.objects.filter(email=email).exists():
-                messages.error(request, 'Email already exists.')
-                return render(request, 'LogIn_SignUp page.html')
-
-            # Validate terms acceptance
-            if not accept_terms:
-                messages.error(request, 'You must accept the Terms of Service and Privacy Policy.')
-                return render(request, 'LogIn_SignUp page.html')
-
             # Create the user
             user = User.objects.create_user(username=username, email=email, password=password)
             
@@ -128,16 +167,28 @@ def signup_page(request):
             # Log the user in
             login(request, user)
             
-            # Redirect based on role
-            if user.is_staff:
-                messages.success(request, 'Welcome! You have been registered as an administrator.')
-                return redirect('/library-admin/books/')
-            else:
-                messages.success(request, 'Welcome! Your account has been created successfully.')
-                return redirect('home')
+            # Determine redirect URL based on role
+            redirect_url = '/library-admin/books/' if user.is_staff else '/home/'
+            success_message = 'Welcome! ' + ('You have been registered as an administrator.' if user.is_staff else 'Your account has been created successfully.')
+            
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': True,
+                    'redirect_url': redirect_url,
+                    'message': success_message
+                })
+            
+            messages.success(request, success_message)
+            return redirect(redirect_url)
 
         except Exception as e:
-            messages.error(request, 'An error occurred during registration. Please try again.')
+            error_message = 'An error occurred during registration. Please try again.'
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'errors': [error_message]
+                })
+            messages.error(request, error_message)
             return render(request, 'LogIn_SignUp page.html')
     
     return render(request, 'LogIn_SignUp page.html')
@@ -168,18 +219,4 @@ def profile_view(request):
     return render(request, 'Profile.html', {
         'user': request.user,
         'profile': request.user.profile,
-    })
-
-def login_view(request):
-    if request.method == "POST":
-        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-            username = request.POST.get("username")
-            password = request.POST.get("password")
-            user = authenticate(request, username=username, password=password)
-
-            if user is not None:
-                login(request, user)
-                return JsonResponse({"success": True, "redirect_url": "/"})
-            else:
-                return JsonResponse({"success": False, "errors": ["Invalid username or password."]
     })
