@@ -22,7 +22,7 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 3rem;
+  margin-top: 8rem;
   margin-bottom: 70px;
 }
 
@@ -89,6 +89,12 @@ body {
 
 .user-info p {
   color: var(--brand-red);
+}
+
+.user-info .username {
+  color: var(--warm-taupe);
+  font-size: 1.4rem;
+  margin-bottom: 5px;
 }
 
 .details {

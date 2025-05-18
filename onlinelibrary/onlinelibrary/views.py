@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
-from books.models import Notification, Book
+from books.models import Notification, Book, BorrowedBook, UserProfile
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.middleware.csrf import get_token
 from django.db.models import Q
@@ -64,7 +64,12 @@ def book_admin(request):
 # User Pages
 @login_required
 def profile(request):
-    context = {**get_notifications(request)}
+    # Get or create the user's profile
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    context = {
+        'profile': profile,
+        **get_notifications(request)
+    }
     return render(request, 'profile.html', context)
 
 @login_required
@@ -228,12 +233,19 @@ def borrowed_list(request):
 
 @login_required
 def update_profile_picture(request):
-    if request.method == 'POST' and request.FILES.get('profile_picture'):
-        profile = request.user.profile
-        if profile.profile_picture:
-            # Delete old profile picture file
-            profile.profile_picture.delete()
-        profile.profile_picture = request.FILES['profile_picture']
-        profile.save()
-        messages.success(request, 'Profile picture updated successfully!')
-    return redirect('profile')
+    try:
+        if request.method == 'POST' and request.FILES.get('profile_picture'):
+            # Get or create profile
+            profile, created = UserProfile.objects.get_or_create(user=request.user)
+            
+            if profile.profile_picture:
+                # Delete old profile picture file
+                profile.profile_picture.delete()
+            
+            profile.profile_picture = request.FILES['profile_picture']
+            profile.save()
+            
+        return redirect('profile')
+    except Exception as e:
+        messages.error(request, f'Error updating profile picture: {str(e)}')
+        return redirect('profile')
