@@ -56,20 +56,20 @@ function addCarousel(title, subtitle, books, isAdmin = false) {
     </div>
   ` : '';
 
-  // const carouselHTML = `
-  //   <div class="section-wrapper">
-  //     <div class="section-header">
-  //       <h2><i class="fas fa-star"></i> ${title}</h2>
-  //       <p class="section-subtitle">${subtitle}</p>
-  //     </div>
-  //     <div class="book-carousel">
-  //       <button class="carousel-nav prev"><i class="fas fa-chevron-left"></i></button>
-  //       <div class="carousel-track">${itemsHTML}</div>
-  //       <button class="carousel-nav next"><i class="fas fa-chevron-right"></i></button>
-  //     </div>
-  //     ${adminControls}
-  //   </div>
-  // `;
+  const carouselHTML = `
+    <div class="section-wrapper">
+      <div class="section-header">
+        <h2><i class="fas fa-star"></i> ${title}</h2>
+        <p class="section-subtitle">${subtitle}</p>
+      </div>
+      <div class="book-carousel">
+        <button class="carousel-nav prev"><i class="fas fa-chevron-left"></i></button>
+        <div class="carousel-track">${itemsHTML}</div>
+        <button class="carousel-nav next"><i class="fas fa-chevron-right"></i></button>
+      </div>
+      ${adminControls}
+    </div>
+  `;
 
   container.insertAdjacentHTML('beforeend', carouselHTML);
   initializeCarousels();
