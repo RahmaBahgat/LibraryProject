@@ -283,7 +283,7 @@ def add_book(request):
                     related_book=book
                 )
             messages.success(request, 'Book added successfully!')
-            return redirect(f"{reverse('books_admin:admin_book_management')}?added=true")
+            return redirect('books_admin:admin_book_management')
     else:
         form = BookForm()
     return render(request, 'books/book_form.html', {'form': form, 'action': 'Add'})
@@ -525,6 +525,9 @@ def home_admin(request):
     # Get all books
     all_books = Book.objects.all()
 
+    # Get recent books (most recently added books)
+    recent_books = Book.objects.all().order_by('-created_at')[:10]
+
     # Get new releases (books added in the last 30 days)
     new_releases = Book.objects.filter(created_at__gte=timezone.now() - timezone.timedelta(days=30))
 
@@ -541,6 +544,7 @@ def home_admin(request):
     total_books = Book.objects.count()
     borrowed_count = BorrowedBook.objects.filter(is_returned=False).count()
     total_users = User.objects.count()
+    total_reviews = BookReview.objects.count()  # Added total reviews count
 
     # Load book cover paths from data.js
     try:
@@ -565,7 +569,7 @@ def home_admin(request):
                     cover_paths[title] = static_path
         
         # Add cover_path to each book object
-        for book_list in [new_releases, trending_books, bestsellers, highly_rated]:
+        for book_list in [recent_books, new_releases, trending_books, bestsellers, highly_rated]:
             if book_list:  # Check if the list exists and is not None
                 for book in book_list:
                     if book.title in cover_paths:
@@ -576,6 +580,7 @@ def home_admin(request):
         print(f"Error loading book cover paths: {str(e)}")
 
     context = {
+        'recent_books': recent_books,  # Added recent books to context
         'new_releases': new_releases,
         'trending_books': trending_books,
         'bestsellers': bestsellers,
@@ -583,6 +588,7 @@ def home_admin(request):
         'total_books': total_books,
         'borrowed_count': borrowed_count,
         'total_users': total_users,
+        'total_reviews': total_reviews,  # Added total reviews to context
         'notifications': Notification.objects.filter(recipient=request.user).order_by('-created_at')[:5]
     }
 
@@ -659,3 +665,48 @@ def return_book(request, borrowed_id):
         
         messages.success(request, f'You have successfully returned {book.title}')
     return redirect('borrowed-list')
+
+@login_required
+@user_passes_test(is_admin)
+def admin_book_detail(request, id):
+    book = get_object_or_404(Book, id=id)
+    
+    # Get book reviews
+    reviews = book.reviews.all().order_by('-created_at')
+    
+    # Get borrowing history
+    borrow_history = BorrowedBook.objects.filter(book=book).order_by('-borrow_date')
+    
+    # Load book cover path from data.js if available
+    try:
+        import os
+        import re
+        from django.conf import settings
+        
+        # Path to the data.js file
+        data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
+        
+        if os.path.exists(data_js_path):
+            with open(data_js_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+                # Extract book title and cover path using regex
+                pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
+                matches = re.findall(pattern, content, re.DOTALL)
+                
+                for title, cover_path in matches:
+                    if book.title == title:
+                        # Convert relative path to static path format
+                        static_path = cover_path.replace('../', '')
+                        book.cover_path = static_path
+                        break
+    except Exception as e:
+        print(f"Error loading book cover path: {str(e)}")
+    
+    context = {
+        'book': book,
+        'reviews': reviews,
+        'borrow_history': borrow_history,
+        'notifications': Notification.objects.filter(recipient=request.user).order_by('-created_at')[:5]
+    }
+    
+    return render(request, 'books/book_detail.html', context)

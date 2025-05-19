@@ -12,13 +12,13 @@
     <link rel="stylesheet" href="{% static 'css/book-card.css' %}" />
     <style>
       :root {
-        --primary-color: #72383d;
-        --secondary-color: #ff6b6b;
-        --accent-color: #ffd166;
-        --text-color: #2d3436;
-        --background-color: #f9f9f9;
-        --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        --hover-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        --primary-color: var(--dark-brown);
+        --secondary-color: var(--brand-red);
+        --accent-color: var(--cream);
+        --text-color: var(--dark-brown);
+        --background-color: var(--cream);
+        --card-shadow: 0 4px 8px rgba(50, 45, 41, 0.1);
+        --hover-shadow: 0 8px 16px rgba(50, 45, 41, 0.2);
         --transition-speed: 0.3s;
       }
 
@@ -47,19 +47,19 @@
 
       .section-header {
         margin-bottom: 1.5rem;
-        border-bottom: 2px solid var(--primary-color);
+        border-bottom: 2px solid var(--brand-red);
         padding-bottom: 0.5rem;
       }
 
       .section-header h2 {
-        color: var(--primary-color);
+        color: var(--brand-red);
         font-size: 1.8rem;
         font-weight: 700;
       }
 
       .section-header i {
         margin-right: 0.5rem;
-        color: var(--secondary-color);
+        color: var(--warm-taupe);
       }
 
       .section-subtitle {
@@ -95,8 +95,8 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: var(--primary-color);
-        color: white;
+        background: var(--brand-red);
+        color: var(--cream);
         border: none;
         cursor: pointer;
         z-index: 5;
@@ -108,7 +108,7 @@
       }
 
       .carousel-nav:hover {
-        background: var(--secondary-color);
+        background: var(--warm-taupe);
         transform: translateY(-50%) scale(1.1);
       }
 
@@ -127,7 +127,7 @@
 
       /* Welcome message */
       .container h1 {
-        color: var(--primary-color);
+        color: var(--brand-red);
         font-size: 2.5rem;
         margin-top: 2rem;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
@@ -137,17 +137,17 @@
       /* Footer styling override */
       .footer {
         margin-top: 0;
-        background-color: var(--primary-color);
-        color: white;
+        background-color: var(--dark-brown);
+        color: var(--cream);
       }
 
       .footer a {
-        color: var(--accent-color);
+        color: var(--cream);
         transition: color var(--transition-speed);
       }
 
       .footer a:hover {
-        color: white;
+        color: var(--warm-taupe);
         text-decoration: underline;
       }
 

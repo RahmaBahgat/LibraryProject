@@ -258,6 +258,16 @@ function initializeCarousels() {
 
     updateButtons();
   });
+
+  // Handle delete buttons
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const bookId = this.dataset.bookId;
+      if (confirm('Are you sure you want to delete this book?')) {
+        window.location.href = `/library-admin/books/delete/${bookId}/`;
+      }
+    });
+  });
 }
 
 function handleEditCategory() {

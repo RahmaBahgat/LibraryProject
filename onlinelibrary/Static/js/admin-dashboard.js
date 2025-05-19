@@ -164,4 +164,35 @@ document.head.insertAdjacentHTML('beforeend', `
       to { opacity: 0; transform: translateY(-20px); }
     }
   </style>
-`); 
+`);
+
+// Book deletion handling
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('delete-btn')) {
+        const bookId = e.target.dataset.bookId;
+        if (confirm('Are you sure you want to delete this book? This action cannot be undone.')) {
+            // Get CSRF token
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            // Send delete request
+            fetch(`/library-admin/books/delete/${bookId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Reload the page to show updated book list
+                    window.location.reload();
+                } else {
+                    alert('Error deleting book');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting book');
+            });
+        }
+    }
+}); 

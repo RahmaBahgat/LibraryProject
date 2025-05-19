@@ -154,7 +154,7 @@
           );
 
           if (response.ok) {
-            window.location.href = "{% url 'books_admin:admin_dashboard' %}";
+            window.location.href = "{% url 'books_admin:admin_book_management' %}";
           } else {
             alert("Error deleting book");
           }
