@@ -81,63 +81,81 @@
 
         <!-- Navigation Menu -->
         <div class="nav-menu">
-          {% if user.is_authenticated %} {% if user.is_staff %}
+          {% if user.is_authenticated %} 
+          {% if user.is_staff %}
+          {% if request.resolver_match.url_name == 'notifications' or request.resolver_match.url_name == 'admin-notifications' %}
           <div class="dropdown">
-            <a
-              href="{% url 'books_admin:admin_book_management' %}"
-              class="nav-link"
-              >Manage Books</a
-            >
+            <a href="{% url 'admin_home' %}" class="nav-link">
+              <i class="fas fa-home"></i> Home
+            </a>
           </div>
+          {% elif request.resolver_match.url_name != 'admin_book_management' %}
           <div class="dropdown">
-            <a href="{% url 'admin-notifications' %}" class="nav-link"
-              >Notifications</a
-            >
+            <a href="{% url 'books_admin:admin_book_management' %}" class="nav-link">Manage Books</a>
+          </div>
+          {% else %}
+          <div class="dropdown">
+            <a href="{% url 'admin_home' %}" class="nav-link">
+              <i class="fas fa-home"></i> Home
+            </a>
+          </div>
+          {% endif %}
+          {% if request.resolver_match.url_name != 'admin-notifications' and request.resolver_match.url_name != 'notifications' %}
+          <div class="dropdown">
+            <a href="#" class="nav-link">
+              <i class="fas fa-bell"></i> Notifications
+              {% if unread_notifications_count > 0 %}
+              <span class="notification-badge">{{ unread_notifications_count }}</span>
+              {% endif %}
+            </a>
             <div class="dropdown-content">
-              {% for notification in notifications|slice:":5" %}
-              <p class="notif">
-                {{ notification.message }}
-                <time>{{ notification.created_at|date:"F j, Y — g:i A" }}</time>
-              </p>
-              {% empty %}
-              <p class="notif">No new notifications</p>
-              {% endfor %}
-              <a class="notif" href="{% url 'admin-notifications' %}"
-                >See all notifications</a
-              >
+              <a href="{% url 'notifications' %}" class="notif">Notifications</a>
+              <a href="{% url 'admin-notifications' %}" class="notif">Manage Notifications</a>
             </div>
           </div>
+          {% endif %}
           <div class="dropdown">
             <a href="#" class="nav-link">Admin</a>
             <div class="dropdown-content">
               <a href="{% url 'profile' %}">My Profile</a>
-              <a href="{% url 'books_admin:admin_book_management' %}"
-                >Dashboard</a
-              >
+              <a href="{% url 'books_admin:admin_book_management' %}">Dashboard</a>
               <a href="{% url 'help-center' %}">Help Center</a>
               <a href="{% url 'logout' %}">Sign Out</a>
             </div>
           </div>
           {% else %}
-          <a href="{% url 'index' %}" class="nav-link">Home</a>
+          {% if request.resolver_match.url_name == 'notifications' %}
           <div class="dropdown">
-            <a href="{% url 'notifications' %}" class="nav-link"
-              >Notifications</a
-            >
+            <a href="{% url 'home' %}" class="nav-link">
+              <i class="fas fa-home"></i> Home
+            </a>
+          </div>
+          {% else %}
+          <a href="{% url 'index' %}" class="nav-link">Home</a>
+          {% endif %}
+          {% if request.resolver_match.url_name != 'notifications' and request.resolver_match.url_name != 'admin-notifications' %}
+          <div class="dropdown">
+            <a href="{% url 'notifications' %}" class="nav-link">
+              <i class="fas fa-bell"></i> Notifications
+              {% if unread_notifications_count > 0 %}
+              <span class="notification-badge">{{ unread_notifications_count }}</span>
+              {% endif %}
+            </a>
             <div class="dropdown-content">
               {% for notification in notifications|slice:":5" %}
-              <p class="notif">
+              <p class="notif {% if not notification.is_read %}unread{% endif %}">
+                <strong>{{ notification.title }}</strong>
+                <br>
                 {{ notification.message }}
                 <time>{{ notification.created_at|date:"F j, Y — g:i A" }}</time>
               </p>
               {% empty %}
               <p class="notif">No new notifications</p>
               {% endfor %}
-              <a class="notif" href="{% url 'notifications' %}"
-                >See all notifications</a
-              >
+              <a class="notif" href="{% url 'notifications' %}">See all notifications</a>
             </div>
           </div>
+          {% endif %}
           <a href="{% url 'profile' %}" class="nav-link">Profile</a>
           <a href="{% url 'logout' %}" class="nav-link">Sign Out</a>
           {% endif %} {% else %}

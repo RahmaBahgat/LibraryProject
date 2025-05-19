@@ -128,16 +128,21 @@ function errorhandle() {
 
 // Update notification badge
 function updateNotificationBadge() {
-    const unreadCount = document.querySelectorAll('.notification-card.unread').length;
+    const unreadCount = document.querySelectorAll('.notif.unread').length;
     const badge = document.querySelector('.notification-badge');
+    const navLink = document.querySelector('.nav-link i.fa-bell').parentElement;
     
-    if (badge) {
-        if (unreadCount > 0) {
+    if (unreadCount > 0) {
+        if (badge) {
             badge.textContent = unreadCount;
-            badge.style.display = 'flex';
         } else {
-            badge.style.display = 'none';
+            const newBadge = document.createElement('span');
+            newBadge.className = 'notification-badge';
+            newBadge.textContent = unreadCount;
+            navLink.appendChild(newBadge);
         }
+    } else if (badge) {
+        badge.remove();
     }
 }
 
@@ -158,6 +163,8 @@ function fetchNotifications() {
             data.notifications.forEach(notif => {
                 html += `
                     <p class="notif ${!notif.is_read ? 'unread' : ''}">
+                        <strong>${notif.title}</strong>
+                        <br>
                         ${notif.message}
                         <time>${new Date(notif.created_at).toLocaleDateString('en-US', {
                             month: 'long',
@@ -180,45 +187,38 @@ function fetchNotifications() {
     .catch(error => console.error('Error fetching notifications:', error));
 }
 
+// Initialize notifications
 document.addEventListener('DOMContentLoaded', function() {
-    // Add notification badge to navbar
-    const notificationLink = document.querySelector('a[href*="notifications"]');
-    if (notificationLink) {
-        const badge = document.createElement('span');
-        badge.className = 'notification-badge';
-        badge.style.display = 'none';
-        notificationLink.appendChild(badge);
-    }
-
+    // Initial badge update
+    updateNotificationBadge();
+    
+    // Start periodic updates
+    setInterval(fetchNotifications, 30000); // Update every 30 seconds
+    
     // Mark notifications as read when clicked
-    const notifications = document.querySelectorAll('.notification-card.unread');
-    notifications.forEach(notification => {
-        notification.addEventListener('click', function() {
+    document.querySelectorAll('.notification-card').forEach(card => {
+        card.addEventListener('click', function() {
             const notificationId = this.dataset.id;
-            fetch(`/notifications/${notificationId}/mark-read/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    this.classList.remove('unread');
-                    updateNotificationBadge();
-                }
-            })
-            .catch(error => console.error('Error:', error));
+            if (!this.classList.contains('read')) {
+                fetch(`/notifications/mark-read/${notificationId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        this.classList.remove('unread');
+                        this.classList.add('read');
+                        updateNotificationBadge();
+                    }
+                })
+                .catch(error => console.error('Error marking notification as read:', error));
+            }
         });
     });
-
-    // Initial notification count
-    updateNotificationBadge();
-
-    // Fetch notifications every 30 seconds
-    fetchNotifications();
-    setInterval(fetchNotifications, 30000);
 });
 
 // Helper function to get CSRF token from cookies

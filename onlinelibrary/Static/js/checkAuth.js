@@ -72,10 +72,8 @@ async function loginCheck() {
 
       // If user is authenticated, redirect based on role
       if (data.is_authenticated) {
-        if (data.is_superuser) {
-          window.location.href = "/library-admin/books/";
-        } else if (data.is_staff) {
-          window.location.href = "/library-admin/books/";
+        if (data.is_superuser || data.is_staff) {
+          window.location.href = "/admin-home/";
         } else {
           window.location.href = "/home/";
         }

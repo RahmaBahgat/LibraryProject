@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Books | InOtherWords{% endblock %}
+
+{% block navbar_links %}
+<div class="dropdown">
+  <a href="{% url 'admin_home' %}" class="nav-link">
+    <i class="fas fa-home"></i> Home
+  </a>
+</div>
+
+<div class="dropdown">
+  <a href="#" class="nav-link">
+    <i class="fas fa-bell"></i> Notifications
+    {% if unread_notifications_count > 0 %}
+    <span class="notification-badge">{{ unread_notifications_count }}</span>
+    {% endif %}
+  </a>
+  <div class="dropdown-content">
+    <a href="{% url 'notifications' %}" class="notif">Notifications</a>
+    <a href="{% url 'admin-notifications' %}" class="notif">Manage Notifications</a>
+  </div>
+</div>
+
+<div class="dropdown">
+  <a href="{% url 'profile' %}" class="nav-link">
+    <i class="fas fa-user-shield"></i> {{ user.first_name|default:user.username|title }}
+  </a>
+  <div class="dropdown-content">
+    <a href="{% url 'profile' %}">
+      <i class="fas fa-user-circle"></i> My Profile
+    </a>
+    <a href="{% url 'admin:index' %}">
+      <i class="fas fa-cogs"></i> Django Admin
+    </a>
+    <a href="{% url 'admin:auth_user_changelist' %}">
+      <i class="fas fa-users"></i> Manage Users
+    </a>
+    <a href="{% url 'help-center' %}">
+      <i class="fas fa-question-circle"></i> Help Center
+    </a>
+    <a href="{% url 'logout' %}">
+      <i class="fas fa-sign-out-alt"></i> Sign Out
+    </a>
+  </div>
+</div>
+
+<button id="theme" aria-label="Toggle theme">🌙</button>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin-books.css' %}">
+<style>
+  .book-management {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 6rem; /* Add space below navbar */
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .add-book-btn {
+    background-color: var(--brand-red);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s;
+  }
+
+  .add-book-btn:hover {
+    background-color: var(--warm-taupe);
+  }
+
+  .books-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .books-table th,
+  .books-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--cream);
+  }
+
+  .books-table th {
+    background-color: var(--dark-brown);
+    color: white;
+    font-weight: 600;
+  }
+
+  .books-table tr:hover {
+    background-color: var(--cream);
+  }
+
+  .book-cover {
+    width: 60px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .action-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    color: white;
+    font-size: 0.9rem;
+    transition: opacity 0.3s;
+  }
+
+  .action-btn:hover {
+    opacity: 0.9;
+  }
+
+  .edit-btn {
+    background-color: var(--brand-red);
+  }
+
+  .delete-btn {
+    background-color: #dc3545;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .empty-state i {
+    font-size: 3rem;
+    color: var(--warm-taupe);
+    margin-bottom: 1rem;
+  }
+
+  .empty-state p {
+    color: var(--dark-brown);
+    margin-bottom: 1.5rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="book-management">
+  <div class="header">
+    <h1>Manage Books</h1>
+    <a href="{% url 'books_admin:add_book' %}" class="add-book-btn">
+      <i class="fas fa-plus"></i> Add New Book
+    </a>
+  </div>
+
+  {% if books %}
+  <div class="table-responsive">
+    <table class="books-table">
+      <thead>
+        <tr>
+          <th>Cover</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th>ISBN</th>
+          <th>Stock</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in books %}
+        <tr>
+          <td>
+            {% if book.image %}
+            <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+            {% else %}
+            <div class="no-cover">No Cover</div>
+            {% endif %}
+          </td>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.isbn }}</td>
+          <td>{{ book.stock }}</td>
+          <td class="actions">
+            <a href="{% url 'books_admin:edit_book' book.id %}" class="action-btn edit-btn">
+              <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'books_admin:delete_book' book.id %}" class="action-btn delete-btn" 
+               onclick="return confirm('Are you sure you want to delete {{ book.title }}?')">
+              <i class="fas fa-trash"></i> Delete
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <i class="fas fa-books"></i>
+    <p>No books have been added to the library yet.</p>
+    <a href="{% url 'books_admin:add_book' %}" class="add-book-btn">
+      <i class="fas fa-plus"></i> Add Your First Book
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Add any additional JavaScript functionality here
+  document.addEventListener('DOMContentLoaded', function() {
+    // Example: Add sorting functionality
+    const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+    
+    const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
+      v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+
+    document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+      const table = th.closest('table');
+      const tbody = table.querySelector('tbody');
+      Array.from(tbody.querySelectorAll('tr'))
+        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+        .forEach(tr => tbody.appendChild(tr));
+    })));
+  });
+</script>
+{% endblock %} 

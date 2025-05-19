@@ -4,26 +4,53 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.core.serializers import serialize
 import json
-from .models import Book, BorrowedBook, Notification, User, Genre, BookReview
+from .models import Book, BorrowedBook, Notification, User, Genre, BookReview, UserProfile
 from .forms import BookForm
 from django.urls import reverse
 from django.utils import timezone
 from .services import BookRecommendationService
 from django.db.models import Q, Count
 from django.core.exceptions import PermissionDenied
+from datetime import timedelta
 
 def get_notifications(request):
     """Helper function to get notifications for a user"""
+    # Only return notifications for authenticated users and specific pages
+    if not request.user.is_authenticated:
+        return {}
+        
+    # List of paths where notifications should not be included
+    excluded_paths = ['/login/', '/signup/', '/about/', '/privacy/', '/terms/', '/faq/', '/help/']
+    if request.path in excluded_paths:
+        return {}
+        
+    # Only include notifications in dropdown and notification pages
+    if 'notifications' not in request.path and request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+        return {'unread_notifications_count': Notification.objects.filter(
+            Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global'),
+            is_read=False
+        ).count()}
+        
     notifications = Notification.objects.filter(
         Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global')
     ).order_by('-created_at')[:5]
-    return {'notifications': notifications}
+    
+    unread_count = Notification.objects.filter(
+        Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global'),
+        is_read=False
+    ).count()
+    
+    return {
+        'notifications': notifications,
+        'unread_notifications_count': unread_count
+    }
 
 def is_admin(user):
     return user.is_staff
 
 @login_required
 def book_detail(request, id):
+    """Rest of the function remains unchanged"""
     book = get_object_or_404(Book, id=id)
     recommendation_service = BookRecommendationService(request.user)
     similar_books = recommendation_service.get_similar_books(book)
@@ -47,51 +74,6 @@ def book_detail(request, id):
     # Check if this book is in user's favorites
     is_favorite = request.user.profile.favorite_books.filter(id=book.id).exists()
     
-    if request.method == 'POST':
-        # Handle review submission
-        rating = request.POST.get('rating')
-        review_text = request.POST.get('review_text')
-        
-        if rating and review_text:
-            if user_review:
-                user_review.rating = rating
-                user_review.review_text = review_text
-                user_review.save()
-            else:
-                BookReview.objects.create(
-                    book=book,
-                    user=request.user,
-                    rating=rating,
-                    review_text=review_text
-                )
-            messages.success(request, 'Your review has been submitted!')
-            return redirect('book_detail', id=id)
-    
-    # Load book cover paths from data.js if available
-    try:
-        import os
-        import re
-        from django.conf import settings
-        
-        # Path to the data.js file
-        data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
-        
-        if os.path.exists(data_js_path):
-            with open(data_js_path, 'r', encoding='utf-8') as file:
-                content = file.read()
-                # Extract book title and cover path using regex
-                pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
-                matches = re.findall(pattern, content, re.DOTALL)
-                
-                for title, cover_path in matches:
-                    if book.title == title:
-                        # Convert relative path to static path format
-                        static_path = cover_path.replace('../', '')
-                        book.cover_path = static_path
-                        break
-    except Exception as e:
-        print(f"Error loading book cover path: {str(e)}")
-    
     context = {
         'book': book,
         'similar_books': similar_books,
@@ -108,175 +90,20 @@ def book_detail(request, id):
 @login_required
 @user_passes_test(is_admin)
 def admin_book_management(request):
-    # Get all books
-    all_books = Book.objects.all()
-    
-    # Get books by badge
-    new_releases = all_books.filter(badge='new-release')[:10]
-    trending_books = all_books.filter(badge='trending')[:10]
-    bestsellers = all_books.filter(badge='bestseller')[:10]
-    coming_soon = all_books.filter(badge='coming-soon')[:10]
-    
-    # Get books by rating
-    highly_rated = all_books.filter(average_rating__gte=4.5).order_by('-average_rating')[:10]
-    
-    # Get books by genre - Updated to use genres field
-    fiction_books = all_books.filter(genres__name='Fiction').distinct()[:10]
-    fantasy_books = all_books.filter(genres__name='Fantasy').distinct()[:10]
-    thriller_books = all_books.filter(genres__name='Thriller').distinct()[:10]
-    
-    # Library stats
-    total_books = all_books.count()
-    borrowed_count = BorrowedBook.objects.filter(return_date__isnull=True).count()
-    total_users = User.objects.filter(is_staff=False).count()
-    recent_additions = all_books.order_by('-created_at')[:5]
-    
-    # Get recent activity
-    recent_borrows = BorrowedBook.objects.filter(is_returned=False).order_by('-borrow_date')[:5]
-    recent_returns = BorrowedBook.objects.filter(is_returned=True).order_by('-return_date')[:5]
-    
-    # Get notifications for admin
-    notifications = Notification.objects.filter(
-        Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global')
-    ).order_by('-created_at')[:10]
-    
-    # Load book cover paths from data.js
-    try:
-        import os
-        import re
-        from django.conf import settings
-        
-        # Path to the data.js file
-        data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
-        
-        if os.path.exists(data_js_path):
-            with open(data_js_path, 'r', encoding='utf-8') as file:
-                content = file.read()
-                # Extract book titles and cover paths using regex
-                pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
-                matches = re.findall(pattern, content, re.DOTALL)
-                
-                # Process all book lists
-                book_lists = [
-                    new_releases, trending_books, bestsellers, coming_soon, 
-                    highly_rated, fiction_books, fantasy_books, thriller_books, 
-                    recent_additions, all_books[:20]
-                ]
-                
-                # Add cover paths to all books
-                for book_list in book_lists:
-                    if book_list:
-                        for book in book_list:
-                            # Try to find a matching cover path
-                            for title, cover_path in matches:
-                                if book.title.strip() == title.strip():
-                                    # Convert relative path to static path format
-                                    static_path = cover_path.replace('../', '')
-                                    # Remove any leading slashes to make it relative to static root
-                                    static_path = static_path.lstrip('/')
-                                    book.cover_path = static_path
-                                    break
-    except Exception as e:
-        print(f"Error loading book cover paths: {str(e)}")
-    
+    books = Book.objects.all().order_by('-created_at')
     context = {
-        'total_books': total_books,
-        'borrowed_count': borrowed_count,
-        'total_users': total_users,
-        'recent_additions': recent_additions,
-        'recent_borrows': recent_borrows,
-        'recent_returns': recent_returns,
-        'new_releases': new_releases,
-        'trending_books': trending_books,
-        'bestsellers': bestsellers,
-        'coming_soon': coming_soon,
-        'highly_rated': highly_rated,
-        'fiction_books': fiction_books,
-        'fantasy_books': fantasy_books,
-        'thriller_books': thriller_books,
-        'all_books': all_books[:20],  # Limit to first 20 books for performance
-        'notifications': notifications,
+        'books': books,
+        **get_notifications(request)
     }
-    
-    return render(request, 'HomePage-admin.html', context)
+    return render(request, 'books/admin_book_management.html', context)
 
 @login_required
 @user_passes_test(is_admin)
 def list_books(request):
     books = Book.objects.all()
-    print("Loading book cover paths...")
-
-    # Load book cover paths from data.js
-    try:
-        import os
-        import re
-        from django.conf import settings
-        
-        # Get all available image files
-        images_dir = os.path.join(settings.BASE_DIR.parent, 'onlinelibrary', 'Static', 'images', 'books')
-        print(f"Looking for images in: {images_dir}")
-        
-        if os.path.exists(images_dir):
-            available_files = {f.lower(): f for f in os.listdir(images_dir) if f.endswith(('.jpg', '.jpeg', '.png'))}
-            print(f"Available image files: {available_files}")
-            
-            # Path to the data.js file
-            data_js_path = os.path.join(settings.BASE_DIR.parent, 'onlinelibrary', 'Static', 'js', 'data.js')
-            print(f"Looking for data.js at: {data_js_path}")
-            
-            if os.path.exists(data_js_path):
-                print("Found data.js file")
-                with open(data_js_path, 'r', encoding='utf-8') as file:
-                    content = file.read()
-                    # Extract book titles and cover paths using regex
-                    pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
-                    matches = re.findall(pattern, content, re.DOTALL)
-                    print(f"Found {len(matches)} book cover mappings")
-                    
-                    # Create a mapping of titles to cover paths
-                    cover_paths = {title.strip(): path.strip() for title, path in matches}
-                    
-                    # Add cover paths to all books
-                    for book in books:
-                        book_title = book.title.strip()
-                        print(f"\nProcessing book: {book_title}")
-                        
-                        if book_title in cover_paths:
-                            # Get the filename from the path
-                            cover_path = cover_paths[book_title]
-                            filename = os.path.basename(cover_path)
-                            print(f"Looking for file: {filename}")
-                            
-                            # Try to find the file (case-insensitive)
-                            if filename.lower() in available_files:
-                                actual_filename = available_files[filename.lower()]
-                                static_path = f"images/books/{actual_filename}"
-                                print(f"Found file: {static_path}")
-                                book.cover_path = static_path
-                            else:
-                                print(f"File not found: {filename}")
-                                book.cover_path = 'images/books/default-cover.jpg'
-                        else:
-                            print(f"No cover path found for book: {book_title}")
-                            book.cover_path = 'images/books/default-cover.jpg'
-            else:
-                print("data.js file not found!")
-                for book in books:
-                    book.cover_path = 'images/books/default-cover.jpg'
-        else:
-            print(f"Images directory not found: {images_dir}")
-            for book in books:
-                book.cover_path = 'images/books/default-cover.jpg'
-                
-    except Exception as e:
-        print(f"Error loading book cover paths: {str(e)}")
-        # Ensure all books have a default cover path
-        for book in books:
-            if not hasattr(book, 'cover_path'):
-                book.cover_path = 'images/books/default-cover.jpg'
-
     context = {
         'books': books,
+        **get_notifications(request)
     }
     return render(request, 'books/book_list.html', context)
 
@@ -286,16 +113,18 @@ def add_book(request):
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
-            book = form.save()
-            # Create notifications for all admins
-            for admin in User.objects.filter(is_staff=True):
-                Notification.objects.create(
-                    recipient=admin,
-                    title=f'Book Added: {book.title}',
-                    message=f"Admin {request.user.username} has added the book '{book.title}' to the library",
-                    notification_type='book_added',
-                    related_book=book
-                )
+            book = form.save(commit=False)
+            book.badge = 'new'  # Set the badge to 'new' for new books
+            book.save()
+            form.save_m2m()  # Save many-to-many relationships
+            
+            # Send notification for new book
+            Notification.send_book_notification(
+                notification_type='book_added',
+                book=book,
+                admin_user=request.user,
+                message=f"New book '{book.title}' has been added to the library"
+            )
             messages.success(request, 'Book added successfully!')
             return redirect('books_admin:admin_book_management')
     else:
@@ -310,15 +139,13 @@ def edit_book(request, id):
         form = BookForm(request.POST, request.FILES, instance=book)
         if form.is_valid():
             book = form.save()
-            # Create notifications for all admins
-            for admin in User.objects.filter(is_staff=True):
-                Notification.objects.create(
-                    recipient=admin,
-                    title=f'Book Updated: {book.title}',
-                    message=f"Admin {request.user.username} has updated the book '{book.title}'",
-                    notification_type='book_edited',
-                    related_book=book
-                )
+            # Send notification for book edit
+            Notification.send_book_notification(
+                notification_type='book_edited',
+                book=book,
+                admin_user=request.user,
+                message=f"Book '{book.title}' has been updated"
+            )
             messages.success(request, 'Book updated successfully!')
             return redirect('books_admin:admin_book_management')
     else:
@@ -329,16 +156,15 @@ def edit_book(request, id):
 @user_passes_test(is_admin)
 def delete_book(request, id):
     book = get_object_or_404(Book, id=id)
-    title = book.title
+    title = book.title  # Store title before deletion
     book.delete()
-    # Create notifications for all admins
-    for admin in User.objects.filter(is_staff=True):
-        Notification.objects.create(
-            recipient=admin,
-            title=f'Book Removed: {title}',
-            message=f"Admin {request.user.username} has removed the book '{title}' from the library",
-            notification_type='book_removed'
-        )
+    # Send notification for book removal
+    Notification.send_book_notification(
+        notification_type='book_removed',
+        book=None,  # Book is already deleted
+        admin_user=request.user,
+        message=f"Book '{title}' has been removed from the library"
+    )
     messages.success(request, 'Book deleted successfully!')
     return redirect('books_admin:admin_book_management')
 
@@ -450,8 +276,11 @@ def home_user(request):
     # Get user's borrowed books
     borrowed_books = BorrowedBook.objects.filter(user=request.user, is_returned=False)
     
-    # Get books by badge
-    new_releases = Book.objects.filter(badge='new').order_by('-created_at')[:10]
+    # Get books by badge and recently added books
+    new_releases = Book.objects.filter(
+        Q(badge='new') |  # Books with 'new' badge
+        Q(created_at__gte=timezone.now() - timezone.timedelta(days=30))  # Books added in last 30 days
+    ).order_by('-created_at')[:10]
     trending_books = Book.objects.filter(badge='trending')[:10]
     bestsellers = Book.objects.filter(badge='bestseller')[:10]
     
@@ -468,61 +297,6 @@ def home_user(request):
         latest_borrowed = borrowed_books.order_by('-borrow_date').first().book
         similar_books = recommendation_service.get_similar_books(latest_borrowed, limit=10)
     
-    # Get user notifications
-    notifications = Notification.objects.filter(
-        Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global')
-    ).order_by('-created_at')[:10]
-    
-    # User stats
-    total_borrowed = BorrowedBook.objects.filter(user=request.user).count()
-    currently_borrowed = borrowed_books.count()
-    favorite_genres = []
-    
-    # Calculate favorite genres based on user's history
-    if total_borrowed > 0:
-        genre_counts = {}
-        user_borrowed_books = BorrowedBook.objects.filter(user=request.user).select_related('book')
-        for borrowed in user_borrowed_books:
-            for genre in borrowed.book.genres.all():
-                genre_name = genre.name
-                if genre_name:
-                    genre_counts[genre_name] = genre_counts.get(genre_name, 0) + 1
-        
-        # Get the top 3 genres
-        if genre_counts:
-            favorite_genres = sorted(genre_counts.items(), key=lambda x: x[1], reverse=True)[:3]
-    
-    # Load book cover paths from data.js
-    try:
-        import os
-        import re
-        from django.conf import settings
-        
-        # Path to the data.js file
-        data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
-        cover_paths = {}
-        
-        if os.path.exists(data_js_path):
-            with open(data_js_path, 'r', encoding='utf-8') as file:
-                content = file.read()
-                # Extract book titles and cover paths using regex
-                pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
-                matches = re.findall(pattern, content, re.DOTALL)
-                
-                for title, cover_path in matches:
-                    # Convert relative path to static path format
-                    static_path = cover_path.replace('../', '')
-                    cover_paths[title] = static_path
-        
-        # Add cover_path to each book object
-        for book_list in [new_releases, trending_books, bestsellers, highly_rated_books, recommended_books, similar_books]:
-            if book_list:  # Check if the list exists and is not None
-                for book in book_list:
-                    if book.title in cover_paths:
-                        book.cover_path = cover_paths[book.title]
-    except Exception as e:
-        print(f"Error loading book cover paths: {str(e)}")
-    
     context = {
         'user': request.user,
         'borrowed_books': borrowed_books,
@@ -532,11 +306,7 @@ def home_user(request):
         'highly_rated_books': highly_rated_books,
         'recommended_books': recommended_books,
         'similar_books': similar_books,
-        'notifications': notifications,
-        # User stats
-        'total_borrowed': total_borrowed,
-        'currently_borrowed': currently_borrowed,
-        'favorite_genres': favorite_genres,
+        **get_notifications(request)
     }
     
     return render(request, 'HomePage-user.html', context)
@@ -546,63 +316,30 @@ def home_user(request):
 def home_admin(request):
     # Get all books
     all_books = Book.objects.all()
-
+    
     # Get recent books (most recently added books)
     recent_books = Book.objects.all().order_by('-created_at')[:10]
-
+    
     # Get new releases (books added in the last 30 days)
     new_releases = Book.objects.filter(created_at__gte=timezone.now() - timezone.timedelta(days=30))
-
+    
     # Get trending books (most borrowed recently)
     trending_books = Book.objects.filter(badge='trending')[:10]
-
+    
     # Get bestsellers
     bestsellers = Book.objects.filter(badge='bestseller')[:10]
-
+    
     # Get highly rated books
     highly_rated = Book.objects.filter(average_rating__gte=4.0).order_by('-average_rating')[:10]
-
+    
     # Get statistics
     total_books = Book.objects.count()
     borrowed_count = BorrowedBook.objects.filter(is_returned=False).count()
     total_users = User.objects.count()
-    total_reviews = BookReview.objects.count()  # Added total reviews count
-
-    # Load book cover paths from data.js
-    try:
-        import os
-        import re
-        from django.conf import settings
-        
-        # Path to the data.js file
-        data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
-        cover_paths = {}
-        
-        if os.path.exists(data_js_path):
-            with open(data_js_path, 'r', encoding='utf-8') as file:
-                content = file.read()
-                # Extract book titles and cover paths using regex
-                pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
-                matches = re.findall(pattern, content, re.DOTALL)
-                
-                for title, cover_path in matches:
-                    # Convert relative path to static path format
-                    static_path = cover_path.replace('../', '')
-                    cover_paths[title] = static_path
-        
-        # Add cover_path to each book object
-        for book_list in [recent_books, new_releases, trending_books, bestsellers, highly_rated]:
-            if book_list:  # Check if the list exists and is not None
-                for book in book_list:
-                    if book.title in cover_paths:
-                        book.cover_path = cover_paths[book.title]
-                    elif not book.image:  # If no image and no cover path found, set default
-                        book.cover_path = 'images/books/default-cover.jpg'
-    except Exception as e:
-        print(f"Error loading book cover paths: {str(e)}")
-
+    total_reviews = BookReview.objects.count()
+    
     context = {
-        'recent_books': recent_books,  # Added recent books to context
+        'recent_books': recent_books,
         'new_releases': new_releases,
         'trending_books': trending_books,
         'bestsellers': bestsellers,
@@ -610,10 +347,10 @@ def home_admin(request):
         'total_books': total_books,
         'borrowed_count': borrowed_count,
         'total_users': total_users,
-        'total_reviews': total_reviews,  # Added total reviews to context
-        'notifications': Notification.objects.filter(recipient=request.user).order_by('-created_at')[:5]
+        'total_reviews': total_reviews,
+        **get_notifications(request)
     }
-
+    
     return render(request, 'HomePage-admin.html', context)
 
 @login_required
@@ -632,13 +369,14 @@ def borrow_book(request, book_id):
         Notification.objects.create(
             recipient=request.user,
             title=f'Book Borrowed: {book.title}',
-            message=f"You have successfully borrowed '{book.title}'",
+            message=f"You have successfully borrowed '{book.title}'. Please return it by {(timezone.now() + timedelta(days=14)).strftime('%Y-%m-%d')}",
             notification_type='book_borrowed',
             related_book=book
         )
         
         # Create notification for admins
-        for admin in User.objects.filter(is_staff=True):
+        admins = User.objects.filter(is_staff=True)
+        for admin in admins:
             Notification.objects.create(
                 recipient=admin,
                 title=f'Book Borrowed: {book.title}',
@@ -667,16 +405,16 @@ def return_book(request, borrowed_id):
         book.save()
         
         # Create notification for the user
-        Notification.objects.create(
-            recipient=request.user,
-            title=f'Book Returned: {book.title}',
-            message=f"You have successfully returned '{book.title}'",
+        Notification.send_book_notification(
             notification_type='book_returned',
-            related_book=book
+            book=book,
+            admin_user=None,
+            message=f"You have successfully returned '{book.title}'. Thank you for using our library!"
         )
         
         # Create notification for admins
-        for admin in User.objects.filter(is_staff=True):
+        admins = User.objects.filter(is_staff=True)
+        for admin in admins:
             Notification.objects.create(
                 recipient=admin,
                 title=f'Book Returned: {book.title}',
@@ -699,58 +437,61 @@ def admin_book_detail(request, id):
     # Get borrowing history
     borrow_history = BorrowedBook.objects.filter(book=book).order_by('-borrow_date')
     
-    # Load book cover path from data.js if available
-    try:
-        import os
-        import re
-        from django.conf import settings
-        
-        # Path to the data.js file
-        data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
-        
-        if os.path.exists(data_js_path):
-            with open(data_js_path, 'r', encoding='utf-8') as file:
-                content = file.read()
-                # Extract book title and cover path using regex
-                pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
-                matches = re.findall(pattern, content, re.DOTALL)
-                
-                for title, cover_path in matches:
-                    if book.title == title:
-                        # Convert relative path to static path format
-                        static_path = cover_path.replace('../', '')
-                        book.cover_path = static_path
-                        break
-    except Exception as e:
-        print(f"Error loading book cover path: {str(e)}")
-    
     context = {
         'book': book,
         'reviews': reviews,
         'borrow_history': borrow_history,
-        'notifications': Notification.objects.filter(recipient=request.user).order_by('-created_at')[:5]
+        **get_notifications(request)
     }
     
     return render(request, 'books/book_detail.html', context)
 
 @login_required
 def toggle_favorite(request, book_id):
-    if request.method == 'POST':
-        book = get_object_or_404(Book, id=book_id)
-        profile = request.user.profile
+    book = get_object_or_404(Book, id=book_id)
+    user_profile = request.user.profile
+    
+    if book in user_profile.favorite_books.all():
+        user_profile.favorite_books.remove(book)
+        is_favorite = False
+        # Send notification for removing from favorites
+        Notification.objects.create(
+            recipient=request.user,
+            title='Book Removed from Favorites',
+            message=f"'{book.title}' has been removed from your favorites",
+            notification_type='personal',
+            related_book=book
+        )
+    else:
+        user_profile.favorite_books.add(book)
+        is_favorite = True
+        # Send notification for adding to favorites
+        Notification.objects.create(
+            recipient=request.user,
+            title='Book Added to Favorites',
+            message=f"'{book.title}' has been added to your favorites",
+            notification_type='personal',
+            related_book=book
+        )
         
-        if profile.favorite_books.filter(id=book_id).exists():
-            profile.favorite_books.remove(book)
-            is_favorite = False
-        else:
-            profile.favorite_books.add(book)
-            is_favorite = True
-            
-        return JsonResponse({
-            'success': True,
-            'is_favorite': is_favorite
-        })
-    return JsonResponse({'success': False}, status=400)
+        # Notify admins about popular books (optional)
+        favorite_count = UserProfile.objects.filter(favorite_books=book).count()
+        if favorite_count in [10, 50, 100]:  # Milestone numbers
+            admins = User.objects.filter(is_staff=True)
+            for admin in admins:
+                Notification.objects.create(
+                    recipient=admin,
+                    title='Popular Book Alert',
+                    message=f"'{book.title}' has reached {favorite_count} favorites!",
+                    notification_type='system',
+                    related_book=book
+                )
+    
+    return JsonResponse({
+        'success': True,
+        'is_favorite': is_favorite,
+        'message': 'Favorite status updated successfully'
+    })
 
 @login_required
 def favorites(request):
