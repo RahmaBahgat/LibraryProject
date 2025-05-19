@@ -78,7 +78,11 @@ def profile(request):
 
 @login_required
 def favorites(request):
-    context = {**get_notifications(request)}
+    user_favorites = request.user.profile.favorite_books.all()
+    context = {
+        'favorite_books': user_favorites,
+        **get_notifications(request)
+    }
     return render(request, 'FavouriteBooks.html', context)
 
 @login_required

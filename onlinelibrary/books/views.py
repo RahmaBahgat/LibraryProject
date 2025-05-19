@@ -12,6 +12,13 @@ from .services import BookRecommendationService
 from django.db.models import Q, Count
 from django.core.exceptions import PermissionDenied
 
+def get_notifications(request):
+    """Helper function to get notifications for a user"""
+    notifications = Notification.objects.filter(
+        Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global')
+    ).order_by('-created_at')[:5]
+    return {'notifications': notifications}
+
 def is_admin(user):
     return user.is_staff
 
@@ -32,8 +39,7 @@ def book_detail(request, id):
     ).exists()
     
     # Check if this book is in user's favorites
-    # This would require a FavoriteBook model - for now we'll assume it's not implemented
-    is_favorite = False  # Replace with actual favorite status check when implemented
+    is_favorite = request.user.profile.favorite_books.filter(id=book.id).exists()
     
     if request.method == 'POST':
         # Handle review submission
@@ -87,7 +93,8 @@ def book_detail(request, id):
         'reviews': book.reviews.exclude(user=request.user),
         'is_borrowed': is_borrowed,
         'is_favorite': is_favorite,
-        'notifications': Notification.objects.filter(recipient=request.user).order_by('-created_at')[:5]
+        'genre_names': book.genres.values_list('name', flat=True),
+        **get_notifications(request)
     }
     
     return render(request, 'bookPage.html', context)
@@ -719,3 +726,31 @@ def admin_book_detail(request, id):
     }
     
     return render(request, 'books/book_detail.html', context)
+
+@login_required
+def toggle_favorite(request, book_id):
+    if request.method == 'POST':
+        book = get_object_or_404(Book, id=book_id)
+        profile = request.user.profile
+        
+        if profile.favorite_books.filter(id=book_id).exists():
+            profile.favorite_books.remove(book)
+            is_favorite = False
+        else:
+            profile.favorite_books.add(book)
+            is_favorite = True
+            
+        return JsonResponse({
+            'success': True,
+            'is_favorite': is_favorite
+        })
+    return JsonResponse({'success': False}, status=400)
+
+@login_required
+def favorites(request):
+    user_favorites = request.user.profile.favorite_books.all()
+    context = {
+        'favorite_books': user_favorites,
+        **get_notifications(request)
+    }
+    return render(request, 'FavouriteBooks.html', context)

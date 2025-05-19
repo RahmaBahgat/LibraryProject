@@ -127,6 +127,9 @@ img {
   padding: 8px 16px;
   transition: all 150ms;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .details-container .btns-avl .btn:hover {
   background-color: #55292d;
@@ -145,24 +148,25 @@ img {
 }
 
 #fav-btn {
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
 #fav-btn .icon {
-  transition: transform 0.2s ease;
+  font-size: 16px;
 }
 
-#fav-btn.active {
-  background-color: var(--brand-red);
-  
+#fav-btn.favorited {
+  background-color: #55292d;
 }
 
-#fav-btn.active .icon {
-  transform: scale(1.1);
-  color: #ff4d4d;
+#fav-btn.favorited:hover {
+  background-color: #3d1e20;
+}
+
+#fav-btn .fav-text {
+  font-size: 0.9rem;
 }
 
 .avl {

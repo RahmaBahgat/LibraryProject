@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 from books.views_notifications import user_notifications, admin_notifications, mark_notification_read
-from books.views import home_user, home_admin, book_detail, borrow_book, api_featured_books, api_book_categories
+from books.views import home_user, home_admin, book_detail, borrow_book, api_featured_books, api_book_categories, toggle_favorite
 
 urlpatterns = [
     # Django Admin
@@ -38,6 +38,7 @@ urlpatterns = [
     # Book Pages
     path('library-admin/books/', include('books.urls')),
     path('book/<int:id>/', book_detail, name='book_detail'),  # Book detail page
+    path('book/<int:book_id>/toggle-favorite/', toggle_favorite, name='toggle_favorite'),
     
     # User Pages
     path('profile/', views.profile, name='profile'),
