@@ -50,6 +50,7 @@ urlpatterns = [
     path('logout/', views.logout_page, name='logout'),
     
     # Admin Pages
+    path('admin-home/', views.admin_home, name='admin_home'),
     path('library-admin/', home_admin, name='admin-home'),
     
     # Notification Pages

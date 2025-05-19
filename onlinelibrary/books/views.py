@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.utils import timezone
 from .services import BookRecommendationService
 from django.db.models import Q, Count
+from django.core.exceptions import PermissionDenied
 
 def is_admin(user):
     return user.is_staff
@@ -420,7 +421,15 @@ def api_book_categories(request):
     
     return JsonResponse({'categories': categories})
 
+def non_staff_required(function):
+    def wrap(request, *args, **kwargs):
+        if request.user.is_staff:
+            return redirect('admin_home')
+        return function(request, *args, **kwargs)
+    return wrap
+
 @login_required
+@non_staff_required
 def home_user(request):
     # Get all books
     all_books = Book.objects.all()

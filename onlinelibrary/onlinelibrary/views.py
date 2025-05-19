@@ -4,10 +4,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
-from books.models import Notification, Book, BorrowedBook, UserProfile
+from books.models import Notification, Book, BorrowedBook, UserProfile, BookReview
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.middleware.csrf import get_token
 from django.db.models import Q
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils import timezone
+from datetime import timedelta
 
 def get_notifications(request):
     if request.user.is_authenticated:
@@ -25,9 +28,10 @@ def get_notifications(request):
 def home(request):
     if request.user.is_authenticated:
         if request.user.is_staff:
-            return redirect('/library-admin/books/')
-    context = {**get_notifications(request)}
-    return render(request, 'HomePage-user.html', context)
+            return redirect('admin_home')
+        context = {**get_notifications(request)}
+        return render(request, 'HomePage-user.html', context)
+    return redirect('login')
 
 def about(request):
     context = {**get_notifications(request)}
@@ -219,7 +223,35 @@ def admin_notifications(request):
     return render(request, 'notifications-admin.html')
 
 def index(request):
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect('admin_home')
+        return redirect('home')
     return render(request, 'index.html')
+
+@staff_member_required
+def admin_home(request):
+    # Get statistics
+    total_books = Book.objects.count()
+    borrowed_count = BorrowedBook.objects.filter(is_returned=False).count()
+    total_users = User.objects.count()
+    total_reviews = BookReview.objects.count()
+    
+    # Get book lists
+    recent_additions = Book.objects.all().order_by('-created_at')[:10]
+    highly_rated = Book.objects.filter(average_rating__gte=4.0).order_by('-average_rating')[:10]
+    
+    context = {
+        'user': request.user,
+        'total_books': total_books,
+        'total_borrowed': borrowed_count,
+        'total_users': total_users,
+        'total_reviews': total_reviews,
+        'recent_additions': recent_additions,
+        'highly_rated': highly_rated,
+        **get_notifications(request)
+    }
+    return render(request, 'HomePage-admin.html', context)
 
 @login_required
 def profile_view(request):
