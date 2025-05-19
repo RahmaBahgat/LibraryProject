@@ -68,6 +68,7 @@ urlpatterns = [
     # API endpoints
     path('api/books/featured/', api_featured_books, name='api_featured_books'),
     path('api/books/categories/', api_book_categories, name='api_book_categories'),
+    path('check-auth/', views.check_auth, name='check_auth'),
 ]
 
 if settings.DEBUG:
