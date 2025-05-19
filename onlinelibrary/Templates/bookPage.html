@@ -206,9 +206,11 @@
           <h3>Similar Books You Might Enjoy</h3>
           <div class="book-carousel">
             <div class="carousel-track">
-              {% include 'includes/book_card.html' with book=similar_books.0 %}
-              {% include 'includes/book_card.html' with book=similar_books.1 %}
-              {% include 'includes/book_card.html' with book=similar_books.2 %}
+              {% for book in similar_books %}
+                {% if book %}
+                  {% include 'includes/book_card.html' with book=book %}
+                {% endif %}
+              {% endfor %}
             </div>
           </div>
         </div>

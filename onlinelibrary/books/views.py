@@ -28,6 +28,12 @@ def book_detail(request, id):
     recommendation_service = BookRecommendationService(request.user)
     similar_books = recommendation_service.get_similar_books(book)
     
+    # Ensure similar_books is a list
+    if similar_books is None:
+        similar_books = []
+    elif not isinstance(similar_books, (list, tuple)):
+        similar_books = list(similar_books)
+    
     # Get or create user review
     user_review = BookReview.objects.filter(book=book, user=request.user).first()
     
