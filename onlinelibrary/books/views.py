@@ -93,6 +93,7 @@ def book_detail(request, id):
         'reviews': book.reviews.exclude(user=request.user),
         'is_borrowed': is_borrowed,
         'is_favorite': is_favorite,
+        'genre_names': book.genres.values_list('name', flat=True),
         **get_notifications(request)
     }
     

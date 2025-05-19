@@ -20,54 +20,36 @@ body {
 
 /* Main Content Styles */
 .main-content {
-  /* max-width: 80rem; */
-  margin: 4rem auto;
-  padding: 0 1rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .books-grid {
   display: grid;
-  flex-wrap: wrap;
-  grid-template-columns: repeat(3, 0.2fr) !important;
-  gap: 1.5rem;
-  padding: 2rem;
-  justify-content: center;
-  align-items: start;
-  grid-auto-rows: min-content;
-  max-width: 1400px;
-  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
 }
 
 /* Book Card Styles */
 .book-card {
-  background: white;
-  border-radius: 0.8rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  width: 300px;
-  max-height: 400px;
-  flex-shrink: 0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
 }
 
-.book-card:hover,
-.book-card.pinned {
-    width: 700px;
-    z-index: 2;
-}
-
-.book-content {
-  display: flex;
-  min-height: 400px;
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .book-cover {
-  width: 300px;
-  height: 400px;
-  flex-shrink: 0;
-  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
 }
 
 .book-cover img {
@@ -76,74 +58,113 @@ body {
   object-fit: cover;
 }
 
-.book-details {
-  flex: 1;
-  padding: 1.5rem;
-  min-width: 400px;
-  overflow-y: auto;
-  max-height: 400px;
-}
-
-.book-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+.book-info {
+  padding: 1rem;
 }
 
 .book-title {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  color: var(--dark-brown);
+  margin: 0 0 0.5rem;
+  color: #333;
 }
 
 .book-author {
-  color: var(--brand-red);
-  margin-top: 0.25rem;
+  font-size: 1rem;
+  color: #666;
+  margin: 0 0 0.5rem;
 }
 
 .book-rating {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.star-rating {
-  display: flex;
   gap: 0.25rem;
+  margin-bottom: 1rem;
 }
 
-.star {
-  color: #fbbf24;
-  fill: #fbbf24;
+.book-rating i {
+  color: #ffd700;
 }
 
-.pin-button {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  transition: all 0.3s;
-  z-index: 2;
+.rating-count {
+  font-size: 0.9rem;
+  color: #666;
+  margin-left: 0.5rem;
 }
 
-.pin-button:hover {
-  background: var(--brand-red);
+.book-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.view-details {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #55292d;
   color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.view-details:hover {
+  background-color: #3d1d20;
+}
+
+.add-to-favorites {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-to-favorites:hover {
+  background-color: #e9ecef;
+}
+
+.add-to-favorites.favorited {
+  background-color: #ffebee;
+  border-color: #ffcdd2;
+  color: #c62828;
+}
+
+.add-to-favorites.favorited:hover {
+  background-color: #ffcdd2;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  color: #666;
+  font-size: 1.1rem;
 }
 
 /* Responsive adjustments */
 @media (max-width: 1280px) {
   .books-grid {
     display: grid;
-    grid-template-columns: repeat(2, 0.2fr) !important; 
+    grid-template-columns: repeat(2, 0.2fr) !important;
   }
 
   .book-card:hover {
@@ -157,7 +178,7 @@ body {
     display: grid;
     grid-template-columns: 1fr !important;
   }
-  
+
   .book-card:hover {
     grid-column: span 1;
     min-width: 100%;
@@ -246,7 +267,7 @@ body {
   background: #fff;
   padding: 1.5rem;
   border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-top: 1rem;
 }
 
@@ -349,11 +370,26 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: all 0.2s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .add-to-favorites:hover {
   color: var(--dark-brown);
+  background-color: rgba(139, 69, 19, 0.1);
+}
+
+.add-to-favorites.favorited {
+  color: var(--brand-red);
+  font-weight: 500;
+}
+
+.add-to-favorites.favorited:hover {
+  background-color: rgba(220, 53, 69, 0.1);
 }
 
 /* Toggle Button */
@@ -442,21 +478,22 @@ body {
 .empty-state {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
   text-align: center;
-  padding: 2rem;
   color: #666;
-  margin: auto;
 }
 
 .empty-state h2 {
   font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--dark-brown);
 }
 
 .empty-state p {
-  text-align: center;
-  color: #999;
+  color: #888;
+  font-size: 1rem;
 }
 
 /* maybe I will change this */
