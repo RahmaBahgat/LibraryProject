@@ -249,3 +249,14 @@ def update_profile_picture(request):
     except Exception as e:
         messages.error(request, f'Error updating profile picture: {str(e)}')
         return redirect('profile')
+
+@ensure_csrf_cookie
+def check_auth(request):
+    if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+    
+    return JsonResponse({
+        'is_authenticated': request.user.is_authenticated,
+        'is_staff': request.user.is_staff if request.user.is_authenticated else False,
+        'is_superuser': request.user.is_superuser if request.user.is_authenticated else False
+    })
