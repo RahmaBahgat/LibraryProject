@@ -1,7 +1,7 @@
 {% load static %}
 <div class="carousel-item">
     <div class="book-card">
-        <a href="{% if show_admin_actions %}{% url 'books_admin:book_detail' book.id %}{% else %}{% endif %}" class="book-link">
+        <a href="{% if show_admin_actions %}{% url 'books_admin:book_detail' book.id %}{% else %}{% url 'book_detail' book.id %}{% endif %}" class="book-link">
             <div class="book-cover-container">
                 {% if book.image %}
                     <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
