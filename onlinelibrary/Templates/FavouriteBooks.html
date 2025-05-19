@@ -52,9 +52,9 @@
     
         <!-- Navigation Menu -->
         <div class="nav-menu">
-          <a href="HomePage-user.html" class="nav-link">Home</a>
+          <a href="{% url 'home' %}" class="nav-link">Home</a>
           <div class="dropdown">
-            <a href="#" class="nav-link"> Notifications</a> <!-- Fixed icon -->
+            <a href="#" class="nav-link"> Notifications</a>
             <div class="dropdown-content">
               <p class="notif">Your order #1234 has been shipped.
                 <time>April 16, 2025 — 3:45 PM</time><p>
@@ -65,7 +65,7 @@
               <a class="notif" href="{% url 'notifications' %}">See all notifications</a>
             </div>
           </div>
-          <a href="profile.html" class="nav-link">Profile</a>
+          <a href="{% url 'profile' %}" class="nav-link">Profile</a>
         </div>
       </div>
     </nav>
