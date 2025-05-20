@@ -166,9 +166,15 @@
 <div class="book-management">
   <div class="header">
     <h1>Manage Books</h1>
-    <a href="{% url 'books_admin:add_book' %}" class="add-book-btn">
-      <i class="fas fa-plus"></i> Add New Book
-    </a>
+    <div class="header-actions">
+      <div class="search-container">
+        <input type="text" id="bookSearch" placeholder="Search books..." class="search-input">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+      <a href="{% url 'books_admin:add_book' %}" class="add-book-btn">
+        <i class="fas fa-plus"></i> Add New Book
+      </a>
+    </div>
   </div>
 
   {% if books %}
@@ -176,11 +182,11 @@
     <table class="books-table">
       <thead>
         <tr>
-          <th>Cover</th>
-          <th>Title</th>
-          <th>Author</th>
-          <th>ISBN</th>
-          <th>Stock</th>
+          <th data-sort="cover">Cover</th>
+          <th data-sort="title">Title</th>
+          <th data-sort="author">Author</th>
+          <th data-sort="isbn">ISBN</th>
+          <th data-sort="stock">Stock</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -189,23 +195,28 @@
         <tr>
           <td>
             {% if book.image %}
-            <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+            <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover" loading="lazy">
             {% else %}
-            <div class="no-cover">No Cover</div>
+            <div class="no-cover">
+              <i class="fas fa-book"></i>
+            </div>
             {% endif %}
           </td>
-          <td>{{ book.title }}</td>
-          <td>{{ book.author }}</td>
-          <td>{{ book.isbn }}</td>
-          <td>{{ book.stock }}</td>
+          <td class="book-title">{{ book.title }}</td>
+          <td class="book-author">{{ book.author }}</td>
+          <td>{{ book.isbn|default:"N/A" }}</td>
+          <td>
+            <span class="stock-badge {% if book.stock == 0 %}out-of-stock{% elif book.stock < 5 %}low-stock{% else %}in-stock{% endif %}">
+              {{ book.stock }}
+            </span>
+          </td>
           <td class="actions">
-            <a href="{% url 'books_admin:edit_book' book.id %}" class="action-btn edit-btn">
+            <a href="{% url 'books_admin:edit_book' book.id %}" class="action-btn edit-btn" title="Edit book">
               <i class="fas fa-edit"></i> Edit
             </a>
-            <a href="{% url 'books_admin:delete_book' book.id %}" class="action-btn delete-btn" 
-               onclick="return confirm('Are you sure you want to delete {{ book.title }}?')">
+            <button class="action-btn delete-btn" data-book-id="{{ book.id }}" data-book-title="{{ book.title }}" title="Delete book">
               <i class="fas fa-trash"></i> Delete
-            </a>
+            </button>
           </td>
         </tr>
         {% endfor %}
@@ -222,26 +233,164 @@
   </div>
   {% endif %}
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+  <div class="modal-content">
+    <h2>Confirm Deletion</h2>
+    <p>Are you sure you want to delete "<span id="bookTitle"></span>"?</p>
+    <p class="warning-text">This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button id="confirmDelete" class="action-btn delete-btn">
+        <i class="fas fa-trash"></i> Delete
+      </button>
+      <button id="cancelDelete" class="action-btn cancel-btn">
+        <i class="fas fa-times"></i> Cancel
+      </button>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-  // Add any additional JavaScript functionality here
-  document.addEventListener('DOMContentLoaded', function() {
-    // Example: Add sorting functionality
-    const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
-    
-    const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
-      v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
-    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+document.addEventListener('DOMContentLoaded', function() {
+  // Enhanced Search functionality
+  const searchInput = document.getElementById('bookSearch');
+  const tableRows = document.querySelectorAll('.books-table tbody tr');
+  let searchTimeout;
 
-    document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+  searchInput.addEventListener('input', function(e) {
+    // Clear the previous timeout
+    clearTimeout(searchTimeout);
+    
+    // Set a new timeout to prevent too many searches while typing
+    searchTimeout = setTimeout(() => {
+      const searchTerm = e.target.value.toLowerCase().trim();
+      
+      tableRows.forEach(row => {
+        const title = row.children[1].textContent.toLowerCase();
+        const author = row.children[2].textContent.toLowerCase();
+        const isbn = row.children[3].textContent.toLowerCase();
+        
+        // More flexible search that matches partial words
+        const matchesSearch = 
+          title.includes(searchTerm) || 
+          author.includes(searchTerm) || 
+          isbn.includes(searchTerm);
+        
+        row.style.display = matchesSearch ? '' : 'none';
+      });
+
+      // Show a message when no results are found
+      const visibleRows = document.querySelectorAll('.books-table tbody tr[style=""]').length;
+      let noResultsMsg = document.getElementById('noResultsMessage');
+      
+      if (visibleRows === 0 && searchTerm !== '') {
+        if (!noResultsMsg) {
+          noResultsMsg = document.createElement('div');
+          noResultsMsg.id = 'noResultsMessage';
+          noResultsMsg.className = 'no-results-message';
+          noResultsMsg.innerHTML = `
+            <i class="fas fa-search"></i>
+            <p>No books found matching "${searchTerm}"</p>
+          `;
+          document.querySelector('.table-responsive').appendChild(noResultsMsg);
+        }
+        noResultsMsg.style.display = 'block';
+      } else if (noResultsMsg) {
+        noResultsMsg.style.display = 'none';
+      }
+    }, 300); // Wait 300ms after user stops typing
+  });
+
+  // Sorting functionality
+  const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+  
+  const comparer = (idx, asc) => (a, b) => {
+    const v1 = getCellValue(asc ? a : b, idx);
+    const v2 = getCellValue(asc ? b : a, idx);
+    return v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) 
+      ? v1 - v2 
+      : v1.toString().localeCompare(v2);
+  };
+
+  document.querySelectorAll('th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
       const table = th.closest('table');
       const tbody = table.querySelector('tbody');
+      const thIndex = Array.from(th.parentNode.children).indexOf(th);
+      
+      // Remove sort classes from all headers
+      th.parentNode.querySelectorAll('th').forEach(header => {
+        header.classList.remove('sort-asc', 'sort-desc');
+      });
+      
+      // Add appropriate sort class
+      if (th.classList.contains('sort-asc')) {
+        th.classList.remove('sort-asc');
+        th.classList.add('sort-desc');
+      } else {
+        th.classList.remove('sort-desc');
+        th.classList.add('sort-asc');
+      }
+      
       Array.from(tbody.querySelectorAll('tr'))
-        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+        .sort(comparer(thIndex, th.classList.contains('sort-asc')))
         .forEach(tr => tbody.appendChild(tr));
-    })));
+    });
   });
+
+  // Delete modal functionality
+  const modal = document.getElementById('deleteModal');
+  const bookTitleSpan = document.getElementById('bookTitle');
+  const confirmDeleteBtn = document.getElementById('confirmDelete');
+  const cancelDeleteBtn = document.getElementById('cancelDelete');
+  let currentBookId = null;
+
+  // Show modal when delete button is clicked
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      currentBookId = btn.dataset.bookId;
+      bookTitleSpan.textContent = btn.dataset.bookTitle;
+      modal.style.display = 'flex';
+    });
+  });
+
+  // Hide modal when cancel is clicked
+  cancelDeleteBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  // Handle delete confirmation
+  confirmDeleteBtn.addEventListener('click', async () => {
+    try {
+      const response = await fetch(`/library-admin/books/delete/${currentBookId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+      });
+
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        alert('Error deleting book');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error deleting book');
+    }
+    modal.style.display = 'none';
+  });
+
+  // Close modal when clicking outside
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+});
 </script>
 {% endblock %} 
