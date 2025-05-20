@@ -52,20 +52,41 @@
 }
 
 .book-info {
-  padding: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: white;
+}
+
+.book-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .book-title {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  margin: 0 0 0.5rem;
   color: var(--text-color);
+  font-family: 'Playfair Display', serif;
+  line-height: 1.4;
+  margin: 0;
+  transition: color 0.3s ease;
 }
 
 .book-author {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   color: #666;
-  margin: 0 0 0.5rem;
+  font-style: italic;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.book-link:hover .book-title {
+  color: var(--brand-red);
+}
+
+.book-link:hover .book-author {
+  color: var(--warm-taupe);
 }
 
 .book-rating {
@@ -88,8 +109,10 @@
 .book-actions {
   display: flex;
   gap: 0.5rem;
-  padding: 1rem;
+  padding-top: 1rem;
+  margin-top: auto;
   border-top: 1px solid #eee;
+  justify-content: center;
 }
 
 .edit-btn, .delete-btn {
@@ -103,6 +126,7 @@
   transition: all var(--transition-speed);
   text-align: center;
   text-decoration: none;
+  max-width: 100px;
 }
 
 .edit-btn {

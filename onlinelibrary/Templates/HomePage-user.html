@@ -68,23 +68,24 @@
         margin-top: 0.5rem;
       }
 
-      /* Book carousel styling */
-      .book-carousel {
-        position: relative;
-        padding: 0 2rem;
-      }
-
+      /* Carousel styling */
       .carousel-track {
         display: flex;
         overflow-x: auto;
         scroll-behavior: smooth;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE/Edge */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
         padding: 1rem 0;
+        gap: 1rem;
       }
 
       .carousel-track::-webkit-scrollbar {
-        display: none; /* Chrome/Safari/Opera */
+        display: none;
+      }
+
+      .carousel-item {
+        flex: 0 0 auto;
+        width: 280px;
       }
 
       /* Navigation buttons */
@@ -190,47 +191,83 @@
         color: #eee;
       }
 
+      /* Book card styling */
       .book-card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 220px;
-        min-width: 220px;
-        max-width: 220px;
-        aspect-ratio: 2/3;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         background: white;
-        margin: 0 1rem;
-        transition: transform 0.3s, box-shadow 0.3s;
+        border-radius: 8px;
+        box-shadow: var(--card-shadow);
+        transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
       }
 
       .book-card:hover {
-        transform: translateY(-8px) scale(1.04);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+        transform: translateY(-5px);
+        box-shadow: var(--hover-shadow);
+      }
+
+      .book-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        height: 100%;
       }
 
       .book-cover-container {
+        position: relative;
         width: 100%;
-        height: 320px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #f5f5f5;
+        height: 380px;
+        overflow: hidden;
       }
 
       .book-cover {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        border-radius: 8px;
+        transition: transform var(--transition-speed);
+      }
+
+      .book-link:hover .book-cover {
+        transform: scale(1.05);
+      }
+
+      .book-info {
+        padding: 1.5rem;
+        text-align: center;
+        background: white;
+      }
+
+      .book-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .book-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-color);
+        font-family: 'Playfair Display', serif;
+        line-height: 1.4;
+        margin: 0;
+        transition: color 0.3s ease;
       }
 
       .book-author {
         font-size: 1.1rem;
-        margin-top: 0.7rem;
-        font-weight: 700;
+        color: #666;
+        font-style: italic;
+        margin: 0;
+        transition: color 0.3s ease;
+      }
+
+      .book-link:hover .book-title {
+        color: var(--brand-red);
+      }
+
+      .book-link:hover .book-author {
+        color: var(--warm-taupe);
       }
     </style>
 
@@ -389,19 +426,25 @@
             <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
             <div class="carousel-track">
               {% for book in recommended_books %}
-                <a href="/book/{{ book.id }}/" class="book-card" style="text-decoration: none; color: inherit;">
-                  <div class="book-cover-container">
-                    {% if book.image %}
-                      <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
-                    {% else %}
-                      <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
-                    {% endif %}
+                <div class="carousel-item">
+                  <div class="book-card">
+                    <a href="/book/{{ book.id }}/" class="book-link">
+                      <div class="book-cover-container">
+                        {% if book.image %}
+                          <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                        {% else %}
+                          <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
+                        {% endif %}
+                      </div>
+                      <div class="book-info">
+                        <div class="book-details">
+                          <h3 class="book-title">{{ book.title }}</h3>
+                          <p class="book-author">{{ book.author }}</p>
+                        </div>
+                      </div>
+                    </a>
                   </div>
-                  <div class="book-overlay">
-                    <div class="book-title">{{ book.title }}</div>
-                  </div>
-                  <div class="book-author" style="text-align:center; margin-top:0.5rem; font-weight:600;">{{ book.author }}</div>
-                </a>
+                </div>
               {% endfor %}
             </div>
             <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
@@ -420,19 +463,25 @@
             <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
             <div class="carousel-track">
               {% for book in trending_books %}
-                <a href="/book/{{ book.id }}/" class="book-card" style="text-decoration: none; color: inherit;">
-                  <div class="book-cover-container">
-                    {% if book.image %}
-                      <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
-                    {% else %}
-                      <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
-                    {% endif %}
+                <div class="carousel-item">
+                  <div class="book-card">
+                    <a href="/book/{{ book.id }}/" class="book-link">
+                      <div class="book-cover-container">
+                        {% if book.image %}
+                          <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                        {% else %}
+                          <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
+                        {% endif %}
+                      </div>
+                      <div class="book-info">
+                        <div class="book-details">
+                          <h3 class="book-title">{{ book.title }}</h3>
+                          <p class="book-author">{{ book.author }}</p>
+                        </div>
+                      </div>
+                    </a>
                   </div>
-                  <div class="book-overlay">
-                    <div class="book-title">{{ book.title }}</div>
-                  </div>
-                  <div class="book-author" style="text-align:center; margin-top:0.5rem; font-weight:600;">{{ book.author }}</div>
-                </a>
+                </div>
               {% endfor %}
             </div>
             <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
@@ -451,19 +500,25 @@
             <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
             <div class="carousel-track">
               {% for book in new_releases %}
-                <a href="/book/{{ book.id }}/" class="book-card" style="text-decoration: none; color: inherit;">
-                  <div class="book-cover-container">
-                    {% if book.image %}
-                      <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
-                    {% else %}
-                      <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
-                    {% endif %}
+                <div class="carousel-item">
+                  <div class="book-card">
+                    <a href="/book/{{ book.id }}/" class="book-link">
+                      <div class="book-cover-container">
+                        {% if book.image %}
+                          <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                        {% else %}
+                          <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
+                        {% endif %}
+                      </div>
+                      <div class="book-info">
+                        <div class="book-details">
+                          <h3 class="book-title">{{ book.title }}</h3>
+                          <p class="book-author">{{ book.author }}</p>
+                        </div>
+                      </div>
+                    </a>
                   </div>
-                  <div class="book-overlay">
-                    <div class="book-title">{{ book.title }}</div>
-                  </div>
-                  <div class="book-author" style="text-align:center; margin-top:0.5rem; font-weight:600;">{{ book.author }}</div>
-                </a>
+                </div>
               {% endfor %}
             </div>
             <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
@@ -471,7 +526,7 @@
         </div>
         {% endif %}
 
-        <!-- Similar Books Section (if user has borrowed books) -->
+        <!-- Similar Books Section -->
         {% if similar_books %}
         <div class="section-wrapper">
           <div class="section-header">
@@ -482,19 +537,25 @@
             <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
             <div class="carousel-track">
               {% for book in similar_books %}
-                <a href="/book/{{ book.id }}/" class="book-card" style="text-decoration: none; color: inherit;">
-                  <div class="book-cover-container">
-                    {% if book.image %}
-                      <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
-                    {% else %}
-                      <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
-                    {% endif %}
+                <div class="carousel-item">
+                  <div class="book-card">
+                    <a href="/book/{{ book.id }}/" class="book-link">
+                      <div class="book-cover-container">
+                        {% if book.image %}
+                          <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                        {% else %}
+                          <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
+                        {% endif %}
+                      </div>
+                      <div class="book-info">
+                        <div class="book-details">
+                          <h3 class="book-title">{{ book.title }}</h3>
+                          <p class="book-author">{{ book.author }}</p>
+                        </div>
+                      </div>
+                    </a>
                   </div>
-                  <div class="book-overlay">
-                    <div class="book-title">{{ book.title }}</div>
-                  </div>
-                  <div class="book-author" style="text-align:center; margin-top:0.5rem; font-weight:600;">{{ book.author }}</div>
-                </a>
+                </div>
               {% endfor %}
             </div>
             <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
@@ -513,19 +574,25 @@
             <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
             <div class="carousel-track">
               {% for book in highly_rated_books %}
-                <a href="/book/{{ book.id }}/" class="book-card" style="text-decoration: none; color: inherit;">
-                  <div class="book-cover-container">
-                    {% if book.image %}
-                      <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
-                    {% else %}
-                      <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
-                    {% endif %}
+                <div class="carousel-item">
+                  <div class="book-card">
+                    <a href="/book/{{ book.id }}/" class="book-link">
+                      <div class="book-cover-container">
+                        {% if book.image %}
+                          <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                        {% else %}
+                          <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
+                        {% endif %}
+                      </div>
+                      <div class="book-info">
+                        <div class="book-details">
+                          <h3 class="book-title">{{ book.title }}</h3>
+                          <p class="book-author">{{ book.author }}</p>
+                        </div>
+                      </div>
+                    </a>
                   </div>
-                  <div class="book-overlay">
-                    <div class="book-title">{{ book.title }}</div>
-                  </div>
-                  <div class="book-author" style="text-align:center; margin-top:0.5rem; font-weight:600;">{{ book.author }}</div>
-                </a>
+                </div>
               {% endfor %}
             </div>
             <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
