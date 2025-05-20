@@ -88,10 +88,7 @@ def extract_books_from_data_js():
         print(f"Error parsing data.js: {str(e)}")
         return []
 
-def copy_book_covers():
-    # Get book data from data.js
-    books_data = extract_books_from_data_js()
-    
+def import_book_covers():
     # Source directory for book cover images
     source_dir = os.path.join(settings.BASE_DIR, 'onlinelibrary', 'Static', 'images', 'books')
     
@@ -101,46 +98,49 @@ def copy_book_covers():
     # Create the destination directory if it doesn't exist
     os.makedirs(dest_dir, exist_ok=True)
     
+    # Get all books from the database
+    books = Book.objects.all()
+    
+    # Get list of available cover images
+    available_covers = [f for f in os.listdir(source_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
+    
+    print(f"Found {len(available_covers)} cover images in static directory")
+    print(f"Found {books.count()} books in database")
+    
     # Process each book
-    for book_data in books_data:
-        if 'cover_filename' not in book_data:
-            continue
-            
-        # Get the cover filename
-        cover_filename = book_data['cover_filename']
+    for book in books:
+        # Try to find a matching cover by title
+        matching_cover = None
+        for cover in available_covers:
+            # Remove file extension and compare with book title
+            cover_name = os.path.splitext(cover)[0].lower()
+            if cover_name in book.title.lower() or book.title.lower() in cover_name:
+                matching_cover = cover
+                break
         
-        # Source and destination paths
-        source_path = os.path.join(source_dir, cover_filename)
-        dest_path = os.path.join(dest_dir, cover_filename)
-        
-        # Check if source file exists
-        if os.path.exists(source_path):
-            # Copy the file
-            shutil.copy2(source_path, dest_path)
-            print(f"Copied {cover_filename} to {dest_path}")
+        if matching_cover:
+            # Source and destination paths
+            source_path = os.path.join(source_dir, matching_cover)
+            dest_path = os.path.join(dest_dir, matching_cover)
             
-            # Update the book record in the database
             try:
-                # Try to find the book by title (assuming titles are unique)
-                title = book_data.get('title')
-                if title:
-                    books = Book.objects.filter(title=title)
-                    if books.exists():
-                        book = books.first()
-                        # Update the image field to point to the copied file
-                        book.image = f'books/{cover_filename}'
-                        book.save()
-                        print(f"Updated book record for '{title}' with cover image")
-                    else:
-                        print(f"Book not found: {title}")
+                # Copy the file
+                shutil.copy2(source_path, dest_path)
+                print(f"Copied {matching_cover} to {dest_path}")
+                
+                # Update the book record
+                book.image = f'books/{matching_cover}'
+                book.save()
+                print(f"Updated book record for '{book.title}' with cover image")
+                
             except Exception as e:
-                print(f"Error updating book record: {str(e)}")
+                print(f"Error processing {book.title}: {str(e)}")
         else:
-            print(f"Source file not found: {source_path}")
+            print(f"No matching cover found for '{book.title}'")
 
 def main():
     print("Starting import of book covers...")
-    copy_book_covers()
+    import_book_covers()
     print("Import completed!")
 
 if __name__ == "__main__":

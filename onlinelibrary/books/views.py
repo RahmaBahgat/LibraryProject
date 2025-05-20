@@ -191,81 +191,32 @@ def admin_book_management(request):
 @user_passes_test(is_admin)
 def list_books(request):
     books = Book.objects.all()
-    print("Loading book cover paths...")
-
-    # Load book cover paths from data.js
-    try:
-        import os
-        import re
-        from django.conf import settings
-        
-        # Get all available image files
-        images_dir = os.path.join(settings.BASE_DIR.parent, 'onlinelibrary', 'Static', 'images', 'books')
-        print(f"Looking for images in: {images_dir}")
-        
-        if os.path.exists(images_dir):
-            available_files = {f.lower(): f for f in os.listdir(images_dir) if f.endswith(('.jpg', '.jpeg', '.png'))}
-            print(f"Available image files: {available_files}")
-            
-            # Path to the data.js file
-            data_js_path = os.path.join(settings.BASE_DIR.parent, 'onlinelibrary', 'Static', 'js', 'data.js')
-            print(f"Looking for data.js at: {data_js_path}")
-            
-            if os.path.exists(data_js_path):
-                print("Found data.js file")
-                with open(data_js_path, 'r', encoding='utf-8') as file:
-                    content = file.read()
-                    # Extract book titles and cover paths using regex
-                    pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
-                    matches = re.findall(pattern, content, re.DOTALL)
-                    print(f"Found {len(matches)} book cover mappings")
-                    
-                    # Create a mapping of titles to cover paths
-                    cover_paths = {title.strip(): path.strip() for title, path in matches}
-                    
-                    # Add cover paths to all books
-                    for book in books:
-                        book_title = book.title.strip()
-                        print(f"\nProcessing book: {book_title}")
-                        
-                        if book_title in cover_paths:
-                            # Get the filename from the path
-                            cover_path = cover_paths[book_title]
-                            filename = os.path.basename(cover_path)
-                            print(f"Looking for file: {filename}")
-                            
-                            # Try to find the file (case-insensitive)
-                            if filename.lower() in available_files:
-                                actual_filename = available_files[filename.lower()]
-                                static_path = f"images/books/{actual_filename}"
-                                print(f"Found file: {static_path}")
-                                book.cover_path = static_path
-                            else:
-                                print(f"File not found: {filename}")
-                                book.cover_path = 'images/books/default-cover.jpg'
-                        else:
-                            print(f"No cover path found for book: {book_title}")
-                            book.cover_path = 'images/books/default-cover.jpg'
-            else:
-                print("data.js file not found!")
-                for book in books:
-                    book.cover_path = 'images/books/default-cover.jpg'
+    print("Loading books from database...")
+    print(f"Total books found: {books.count()}")
+    
+    # Add cover paths to books
+    for book in books:
+        if book.image:
+            book.cover_path = book.image.url
+            print(f"Book '{book.title}' has image: {book.cover_path}")
         else:
-            print(f"Images directory not found: {images_dir}")
-            for book in books:
-                book.cover_path = 'images/books/default-cover.jpg'
-                
-    except Exception as e:
-        print(f"Error loading book cover paths: {str(e)}")
-        # Ensure all books have a default cover path
-        for book in books:
-            if not hasattr(book, 'cover_path'):
-                book.cover_path = 'images/books/default-cover.jpg'
-
-    context = {
+            book.cover_path = '/static/images/books/default-cover.jpg'
+            print(f"Book '{book.title}' using default cover")
+    
+    # Convert books to JSON for JavaScript
+    books_json = json.dumps([{
+        'id': book.id,
+        'title': book.title,
+        'author': book.author,
+        'image': book.cover_path,
+        'category': book.genre if hasattr(book, 'genre') else None
+    } for book in books])
+    
+    print("Books data prepared for JavaScript")
+    return render(request, 'books/book_list.html', {
         'books': books,
-    }
-    return render(request, 'books/book_list.html', context)
+        'books_json': books_json
+    })
 
 @login_required
 @user_passes_test(is_admin)
@@ -510,6 +461,16 @@ def home_user(request):
     except Exception as e:
         print(f"Error loading book cover paths: {str(e)}")
     
+    # Add books_json for search functionality
+    books_json = json.dumps([
+        {
+            "title": book.title,
+            "author": book.author,
+            "category": book.genre if hasattr(book, 'genre') and book.genre else "",
+            "image": book.image.url if book.image else "/static/images/books/default-cover.jpg"
+        }
+        for book in all_books
+    ])
     context = {
         'user': request.user,
         'borrowed_books': borrowed_books,
@@ -524,6 +485,7 @@ def home_user(request):
         'total_borrowed': total_borrowed,
         'currently_borrowed': currently_borrowed,
         'favorite_genres': favorite_genres,
+        'books_json': books_json,
     }
     
     return render(request, 'HomePage-user.html', context)

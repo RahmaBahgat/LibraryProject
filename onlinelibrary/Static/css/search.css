@@ -1,0 +1,98 @@
+.search-results-header {
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--dark-brown);
+}
+
+.search-results-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.search-results-header p {
+  color: var(--warm-taupe);
+  font-size: 1.1rem;
+}
+
+.search-results-carousel {
+  margin-top: 1rem;
+}
+
+.search-results-carousel .carousel-item {
+  padding: 1rem;
+}
+
+.search-results-carousel .static-card {
+  background: var(--cream);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-results-carousel .static-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.search-results-carousel .card-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.search-results-carousel img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.search-results-carousel .book-info {
+  padding: 1rem;
+  text-align: center;
+}
+
+.search-results-carousel .book-info h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--dark-brown);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.search-results-carousel .author-link {
+  color: var(--brand-red);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.search-results-carousel .author-link:hover {
+  color: var(--warm-taupe);
+  text-decoration: underline;
+}
+
+.search-results-carousel .category {
+  color: var(--warm-taupe);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .search-results-header h3 {
+    font-size: 1.5rem;
+  }
+  
+  .search-results-header p {
+    font-size: 1rem;
+  }
+  
+  .search-results-carousel img {
+    height: 200px;
+  }
+  
+  .search-results-carousel .book-info h4 {
+    font-size: 1.1rem;
+  }
+} 
