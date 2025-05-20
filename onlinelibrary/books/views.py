@@ -57,6 +57,7 @@ def get_books_json():
         books_data = []
         for book in books:
             books_data.append({
+                'id': book.id,
                 'title': book.title,
                 'author': book.author,
                 'category': book.category.name if book.category else '',
@@ -480,6 +481,7 @@ def home_user(request):
     # Add books_json for search functionality
     books_json = json.dumps([
         {
+            "id": book.id,
             "title": book.title,
             "author": book.author,
             "category": book.genre if hasattr(book, 'genre') and book.genre else "",
