@@ -47,6 +47,238 @@
       href="{% static 'images/favicon-16x16.png' %}"
       type="image/x-icon"
     />
+
+    <style>
+      /* Similar Books Section Styling */
+      .similar-books-container {
+        background-color: #f8f5f2;
+        padding: 5rem 0;
+        margin-top: 4rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .similar-books-section {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+
+      .section-header h2 {
+        color: var(--dark-brown);
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        font-family: 'Playfair Display', serif;
+      }
+
+      .section-header i {
+        color: var(--brand-red);
+        margin-right: 0.5rem;
+      }
+
+      .section-subtitle {
+        color: #666;
+        font-style: italic;
+        font-size: 1.4rem;
+      }
+
+      /* COMPLETELY NEW GRID SYSTEM */
+      .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(560px, 1fr)) !important;
+        gap: 3rem;
+        justify-items: center;
+        width: 100% !important;
+      }
+
+      .book-item {
+        width: 100% !important;
+        max-width: 650px !important;
+      }
+
+      .book-link {
+        text-decoration: none !important;
+        color: inherit !important;
+        display: block !important;
+        width: 100% !important;
+      }
+
+      /* COMPLETELY REDESIGNED BOOK CARD */
+      .book-card {
+        background: white !important;
+        border-radius: 15px !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+        transition: all 0.3s ease !important;
+        overflow: hidden !important;
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: row !important;
+        border: 1px solid #E2E8F0 !important;
+        max-width: 650px !important;
+        width: 100% !important;
+        margin: 0 !important;
+      }
+
+      .book-card:hover {
+        transform: translateY(-8px) !important;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2) !important;
+      }
+
+      .book-cover-container {
+        position: relative !important;
+        width: 200px !important;
+        min-width: 200px !important;
+        height: 280px !important;
+        overflow: hidden !important;
+      }
+
+      .book-cover {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        transition: transform 0.5s ease !important;
+      }
+
+      .book-card:hover .book-cover {
+        transform: scale(1.08) !important;
+      }
+
+      .book-info {
+        padding: 2rem !important;
+        background: white !important;
+        flex-grow: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        min-height: 230px !important;
+        width: calc(100% - 200px) !important;
+      }
+
+      .book-title {
+        font-size: 1.8rem !important;
+        font-weight: 700 !important;
+        color: #2D3748 !important;
+        margin-bottom: 1.25rem !important;
+        line-height: 1.4 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 100% !important;
+      }
+
+      .book-author {
+        font-size: 1.4rem !important;
+        color: #4A5568 !important;
+        font-style: italic !important;
+        margin-bottom: 1.25rem !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 1 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 100% !important;
+      }
+
+      .book-rating {
+        color: #ffd700 !important;
+        font-size: 1.3rem !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+      }
+
+      /* Borrow Button Styling */
+      .btn {
+        display: inline-block;
+        padding: 0.8rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-align: center;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+      }
+
+      #borrow-btn {
+        background-color: var(--brand-red);
+        color: white;
+        text-decoration: none !important;
+      }
+
+      #borrow-btn:hover {
+        background-color: #972d2d;
+        transform: translateY(-2px);
+      }
+
+      #borrow-btn.borrowed {
+        background-color: #666;
+        cursor: not-allowed;
+      }
+
+      @media (max-width: 768px) {
+        .similar-books-container {
+          padding: 4rem 1rem;
+        }
+
+        .section-header h2 {
+          font-size: 2.5rem;
+        }
+
+        .section-subtitle {
+          font-size: 1.2rem;
+        }
+
+        .books-grid {
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+          gap: 2rem;
+          padding: 0 1rem;
+        }
+
+        .book-item {
+          max-width: 450px !important;
+        }
+
+        .book-cover-container {
+          width: 140px !important;
+          min-width: 140px !important;
+          height: 200px !important;
+        }
+
+        .book-info {
+          width: calc(100% - 140px) !important;
+          padding: 1.5rem !important;
+          min-height: 180px !important;
+        }
+
+        .book-title {
+          font-size: 1.4rem !important;
+        }
+
+        .book-author {
+          font-size: 1.1rem !important;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .books-grid {
+          grid-template-columns: repeat(2, 1fr) !important;
+          max-width: 1400px !important;
+          margin: 0 auto !important;
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- Navbar -->
@@ -98,6 +330,12 @@
         </div>
       </div>
     </nav>
+
+    <br>
+    <br>
+    <br>
+    <br>
+  
 
     <!-- Book Details -->
     <section class="content">
@@ -201,17 +439,45 @@
       </div>
 
       {% if similar_books %}
-      <div class="container">
+      <div class="similar-books-container">
         <div class="similar-books-section">
-          <h3>Similar Books You Might Enjoy</h3>
-          <div class="book-carousel">
-            <div class="carousel-track">
-              {% for book in similar_books %}
-                {% if book %}
-                  {% include 'includes/book_card.html' with book=book %}
-                {% endif %}
-              {% endfor %}
-            </div>
+          <div class="section-header">
+            <h2><i class="fas fa-book-open"></i> Similar Books</h2>
+            <p class="section-subtitle">You might also enjoy these books</p>
+          </div>
+          <div class="books-grid">
+            {% for book in similar_books %}
+              {% if book %}
+              <div class="book-item">
+                <a href="{% url 'book_detail' book.id %}" class="book-link">
+                  <div class="book-card">
+                    <div class="book-cover-container">
+                      {% if book.image %}
+                        <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                      {% else %}
+                        <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
+                      {% endif %}
+                    </div>
+                    <div class="book-info">
+                      <h3 class="book-title">{{ book.title }}</h3>
+                      <p class="book-author">by {{ book.author }}</p>
+                      {% if book.average_rating %}
+                      <div class="book-rating">
+                        {% for i in "12345" %}
+                          {% if forloop.counter <= book.average_rating %}
+                            <i class="fas fa-star"></i>
+                          {% else %}
+                            <i class="far fa-star"></i>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </a>
+              </div>
+              {% endif %}
+            {% endfor %}
           </div>
         </div>
       </div>
