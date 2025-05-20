@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 from books.views_notifications import user_notifications, admin_notifications, mark_notification_read
-from books.views import home_user, home_admin, book_detail, borrow_book, api_featured_books, api_book_categories
+from books.views import home_user, home_admin, book_detail, borrow_book, api_featured_books, api_book_categories, get_books_json
 
 urlpatterns = [
     # Django Admin

@@ -1,5 +1,8 @@
 from django.urls import path
 from . import views
+from . import views as books_views
+import os
+from django.conf import settings
 
 app_name = 'books_admin'  # Changed from 'books' to 'books_admin' to match your template
 
@@ -11,7 +14,7 @@ urlpatterns = [
     path('edit/<int:id>/', views.edit_book, name='edit_book'),
     path('delete/<int:id>/', views.delete_book, name='delete_book'),
     path('book/<int:id>/', views.admin_book_detail, name='book_detail'),
-    path('api/list/', views.api_list_books, name='api_list_books'),
+    path('api/list/', books_views.api_list_books, name='api_list_books'),
     path('api/featured/', views.api_featured_books, name='api_featured_books'),
     path('api/categories/', views.api_book_categories, name='api_book_categories'),
 ]

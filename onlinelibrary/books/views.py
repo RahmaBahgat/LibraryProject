@@ -11,9 +11,30 @@ from django.utils import timezone
 from .services import BookRecommendationService
 from django.db.models import Q, Count
 from django.core.exceptions import PermissionDenied
+import os
+from django.conf import settings
 
 def is_admin(user):
     return user.is_staff
+
+def get_books_json():
+    """Helper function to get books data as JSON"""
+    try:
+        books = Book.objects.all()
+        books_data = []
+        for book in books:
+            books_data.append({
+                'title': book.title,
+                'author': book.author,
+                'category': book.category.name if book.category else '',
+                'genres': [g.name for g in book.genres.all()],
+                'image': book.image.url if book.image else '',
+                'cover_path': book.cover_path if hasattr(book, 'cover_path') else '',
+            })
+        return json.dumps(books_data)
+    except Exception as e:
+        print(f"Error getting books JSON: {str(e)}")
+        return json.dumps([])
 
 @login_required
 def book_detail(request, id):
@@ -57,26 +78,10 @@ def book_detail(request, id):
     
     # Load book cover paths from data.js if available
     try:
-        import os
         import re
-        from django.conf import settings
         
-        # Path to the data.js file
-        data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
-        
-        if os.path.exists(data_js_path):
-            with open(data_js_path, 'r', encoding='utf-8') as file:
-                content = file.read()
-                # Extract book title and cover path using regex
-                pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
-                matches = re.findall(pattern, content, re.DOTALL)
-                
-                for title, cover_path in matches:
-                    if book.title == title:
-                        # Convert relative path to static path format
-                        static_path = cover_path.replace('../', '')
-                        book.cover_path = static_path
-                        break
+        if book.title in cover_paths:
+            book.cover_path = cover_paths[book.title]
     except Exception as e:
         print(f"Error loading book cover path: {str(e)}")
     
@@ -129,9 +134,7 @@ def admin_book_management(request):
     
     # Load book cover paths from data.js
     try:
-        import os
         import re
-        from django.conf import settings
         
         # Path to the data.js file
         data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
@@ -183,6 +186,7 @@ def admin_book_management(request):
         'thriller_books': thriller_books,
         'all_books': all_books[:20],  # Limit to first 20 books for performance
         'notifications': notifications,
+        'books_json': get_books_json(),
     }
     
     return render(request, 'HomePage-admin.html', context)
@@ -194,14 +198,72 @@ def list_books(request):
     print("Loading books from database...")
     print(f"Total books found: {books.count()}")
     
-    # Add cover paths to books
-    for book in books:
-        if book.image:
-            book.cover_path = book.image.url
-            print(f"Book '{book.title}' has image: {book.cover_path}")
+    # Load book cover paths from data.js
+    try:
+        import re
+        
+        # Get all available image files
+        images_dir = os.path.join(settings.BASE_DIR.parent, 'onlinelibrary', 'Static', 'images', 'books')
+        print(f"Looking for images in: {images_dir}")
+        
+        if os.path.exists(images_dir):
+            available_files = {f.lower(): f for f in os.listdir(images_dir) if f.endswith(('.jpg', '.jpeg', '.png'))}
+            print(f"Available image files: {available_files}")
+            
+            # Path to the data.js file
+            data_js_path = os.path.join(settings.BASE_DIR.parent, 'onlinelibrary', 'Static', 'js', 'data.js')
+            print(f"Looking for data.js at: {data_js_path}")
+            
+            if os.path.exists(data_js_path):
+                print("Found data.js file")
+                with open(data_js_path, 'r', encoding='utf-8') as file:
+                    content = file.read()
+                    # Extract book titles and cover paths using regex
+                    pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
+                    matches = re.findall(pattern, content, re.DOTALL)
+                    print(f"Found {len(matches)} book cover mappings")
+                    
+                    # Create a mapping of titles to cover paths
+                    cover_paths = {title.strip(): path.strip() for title, path in matches}
+                    
+                    # Add cover paths to all books
+                    for book in books:
+                        book_title = book.title.strip()
+                        print(f"\nProcessing book: {book_title}")
+                        
+                        if book.image:
+                            book.cover_path = book.image.url
+                            print(f"Book '{book_title}' has image: {book.cover_path}")
+                        elif book_title in cover_paths:
+                            # Get the filename from the path
+                            cover_path = cover_paths[book_title]
+                            filename = os.path.basename(cover_path)
+                            print(f"Looking for file: {filename}")
+                            
+                            # Try to find the file (case-insensitive)
+                            if filename.lower() in available_files:
+                                actual_filename = available_files[filename.lower()]
+                                static_path = f"images/books/{actual_filename}"
+                                print(f"Found file: {static_path}")
+                                book.cover_path = static_path
+                            else:
+                                print(f"File not found: {filename}")
+                                book.cover_path = 'images/books/default-cover.jpg'
+                        else:
+                            print(f"No cover path found for book: {book_title}")
+                            book.cover_path = 'images/books/default-cover.jpg'
+            else:
+                print("data.js file not found!")
+                for book in books:
+                    book.cover_path = 'images/books/default-cover.jpg'
         else:
-            book.cover_path = '/static/images/books/default-cover.jpg'
-            print(f"Book '{book.title}' using default cover")
+            print("Images directory not found!")
+            for book in books:
+                book.cover_path = 'images/books/default-cover.jpg'
+    except Exception as e:
+        print(f"Error loading book cover paths: {str(e)}")
+        for book in books:
+            book.cover_path = 'images/books/default-cover.jpg'
     
     # Convert books to JSON for JavaScript
     books_json = json.dumps([{
@@ -284,6 +346,7 @@ def delete_book(request, id):
 @user_passes_test(is_admin)
 def api_list_books(request):
     books = Book.objects.all().order_by('-created_at')
+    books = [book for book in books if book.image and os.path.exists(os.path.join(settings.MEDIA_ROOT, book.image.name))]
     books_data = [{
         'id': book.id,
         'title': book.title,
@@ -382,8 +445,9 @@ def non_staff_required(function):
 @login_required
 @non_staff_required
 def home_user(request):
-    # Get all books
+    # Print all book titles loaded from the database
     all_books = Book.objects.all()
+    print([book.title for book in all_books])
     
     # Get user's borrowed books
     borrowed_books = BorrowedBook.objects.filter(user=request.user, is_returned=False)
@@ -414,9 +478,9 @@ def home_user(request):
     # User stats
     total_borrowed = BorrowedBook.objects.filter(user=request.user).count()
     currently_borrowed = borrowed_books.count()
-    favorite_genres = []
     
     # Calculate favorite genres based on user's history
+    favorite_genres = []
     if total_borrowed > 0:
         genre_counts = {}
         user_borrowed_books = BorrowedBook.objects.filter(user=request.user).select_related('book')
@@ -432,9 +496,7 @@ def home_user(request):
     
     # Load book cover paths from data.js
     try:
-        import os
         import re
-        from django.conf import settings
         
         # Path to the data.js file
         data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
@@ -472,8 +534,7 @@ def home_user(request):
         for book in all_books
     ])
     context = {
-        'user': request.user,
-        'borrowed_books': borrowed_books,
+        'all_books': all_books,
         'new_releases': new_releases,
         'trending_books': trending_books,
         'bestsellers': bestsellers,
@@ -481,7 +542,6 @@ def home_user(request):
         'recommended_books': recommended_books,
         'similar_books': similar_books,
         'notifications': notifications,
-        # User stats
         'total_borrowed': total_borrowed,
         'currently_borrowed': currently_borrowed,
         'favorite_genres': favorite_genres,
@@ -496,32 +556,27 @@ def home_admin(request):
     # Get all books
     all_books = Book.objects.all()
 
-    # Get recent books (most recently added books)
-    recent_books = Book.objects.all().order_by('-created_at')[:10]
-
-    # Get new releases (books added in the last 30 days)
-    new_releases = Book.objects.filter(created_at__gte=timezone.now() - timezone.timedelta(days=30))
-
-    # Get trending books (most borrowed recently)
+    
+    
+    # Get recent books
+    recent_books = Book.objects.order_by('-created_at')[:10]
+    
+    # Get books by badge
+    new_releases = Book.objects.filter(badge='new').order_by('-created_at')[:10]
     trending_books = Book.objects.filter(badge='trending')[:10]
-
-    # Get bestsellers
     bestsellers = Book.objects.filter(badge='bestseller')[:10]
-
+    
     # Get highly rated books
     highly_rated = Book.objects.filter(average_rating__gte=4.0).order_by('-average_rating')[:10]
-
-    # Get statistics
-    total_books = Book.objects.count()
-    borrowed_count = BorrowedBook.objects.filter(is_returned=False).count()
-    total_users = User.objects.count()
-    total_reviews = BookReview.objects.count()  # Added total reviews count
-
+    
+    # Get notifications
+    notifications = Notification.objects.filter(
+        Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global')
+    ).order_by('-created_at')[:10]
+    
     # Load book cover paths from data.js
     try:
-        import os
         import re
-        from django.conf import settings
         
         # Path to the data.js file
         data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
@@ -549,20 +604,18 @@ def home_admin(request):
                         book.cover_path = 'images/books/default-cover.jpg'
     except Exception as e:
         print(f"Error loading book cover paths: {str(e)}")
-
+    
     context = {
-        'recent_books': recent_books,  # Added recent books to context
+        'all_books': all_books,
+        'recent_books': recent_books,
         'new_releases': new_releases,
         'trending_books': trending_books,
         'bestsellers': bestsellers,
         'highly_rated': highly_rated,
-        'total_books': total_books,
-        'borrowed_count': borrowed_count,
-        'total_users': total_users,
-        'total_reviews': total_reviews,  # Added total reviews to context
-        'notifications': Notification.objects.filter(recipient=request.user).order_by('-created_at')[:5]
+        'notifications': notifications,
+        'books_json': get_books_json(),
     }
-
+    
     return render(request, 'HomePage-admin.html', context)
 
 @login_required
@@ -650,9 +703,7 @@ def admin_book_detail(request, id):
     
     # Load book cover path from data.js if available
     try:
-        import os
         import re
-        from django.conf import settings
         
         # Path to the data.js file
         data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
@@ -681,3 +732,10 @@ def admin_book_detail(request, id):
     }
     
     return render(request, 'books/book_detail.html', context)
+
+books = Book.objects.all()
+print([book.title for book in books])
+
+
+all_books = Book.objects.all()
+books_with_images = [book for book in all_books if book.image and os.path.exists(os.path.join(settings.MEDIA_ROOT, book.image.name))]

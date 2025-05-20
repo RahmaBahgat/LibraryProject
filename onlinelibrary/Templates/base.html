@@ -9,6 +9,7 @@
     <!-- Common CSS -->
     <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
     <link rel="stylesheet" href="{% static 'css/notifications.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/search.css' %}" />
     {% block extra_css %}{% endblock %}
 
     <!-- Fonts -->
@@ -28,6 +29,10 @@
     />
   </head>
   <body>
+    <div id="data-book" data-books='{{ books_json|safe }}'></div>
+    <div id="results"></div>
+    <div id="book-carousels-container"></div>
+
     <nav class="navbar">
       <div class="nav-container">
         <!-- Logo -->
@@ -278,6 +283,7 @@
     <!-- Common JS -->
     <script src="{% static 'js/Navbar_Footer.js' %}"></script>
     <script src="{% static 'js/notifications.js' %}"></script>
+    <script src="{% static 'js/search.js' %}"></script>
     {% block extra_js %}{% endblock %}
   </body>
 </html>
