@@ -11,6 +11,8 @@ from django.utils import timezone
 from .services import BookRecommendationService
 from django.db.models import Q, Count
 from django.core.exceptions import PermissionDenied
+import os
+from django.conf import settings
 from datetime import timedelta
 
 def get_notifications(request):
@@ -47,6 +49,25 @@ def get_notifications(request):
 
 def is_admin(user):
     return user.is_staff
+
+def get_books_json():
+    """Helper function to get books data as JSON"""
+    try:
+        books = Book.objects.all()
+        books_data = []
+        for book in books:
+            books_data.append({
+                'title': book.title,
+                'author': book.author,
+                'category': book.category.name if book.category else '',
+                'genres': [g.name for g in book.genres.all()],
+                'image': book.image.url if book.image else '',
+                'cover_path': book.cover_path if hasattr(book, 'cover_path') else '',
+            })
+        return json.dumps(books_data)
+    except Exception as e:
+        print(f"Error getting books JSON: {str(e)}")
+        return json.dumps([])
 
 @login_required
 def book_detail(request, id):
@@ -90,9 +111,34 @@ def book_detail(request, id):
 @login_required
 @user_passes_test(is_admin)
 def admin_book_management(request):
+    # Get all books
     books = Book.objects.all().order_by('-created_at')
+    
+    # Get statistics
+    total_books = Book.objects.count()
+    borrowed_count = BorrowedBook.objects.filter(is_returned=False).count()
+    total_users = User.objects.count()
+    total_reviews = BookReview.objects.count()
+    
+    # Get books by badge
+    new_releases = books.filter(badge='new-release')[:10]
+    trending_books = books.filter(badge='trending')[:10]
+    bestsellers = books.filter(badge='bestseller')[:10]
+    
+    # Get highly rated books
+    highly_rated = books.filter(average_rating__gte=4.0).order_by('-average_rating')[:10]
+    
     context = {
         'books': books,
+        'total_books': total_books,
+        'borrowed_count': borrowed_count,
+        'total_users': total_users,
+        'total_reviews': total_reviews,
+        'new_releases': new_releases,
+        'trending_books': trending_books,
+        'bestsellers': bestsellers,
+        'highly_rated': highly_rated,
+        'books_json': get_books_json(),
         **get_notifications(request)
     }
     return render(request, 'books/admin_book_management.html', context)
@@ -101,11 +147,90 @@ def admin_book_management(request):
 @user_passes_test(is_admin)
 def list_books(request):
     books = Book.objects.all()
-    context = {
+    print("Loading books from database...")
+    print(f"Total books found: {books.count()}")
+    
+    # Load book cover paths from data.js
+    try:
+        import re
+        
+        # Get all available image files
+        images_dir = os.path.join(settings.BASE_DIR.parent, 'onlinelibrary', 'Static', 'images', 'books')
+        print(f"Looking for images in: {images_dir}")
+        
+        if os.path.exists(images_dir):
+            available_files = {f.lower(): f for f in os.listdir(images_dir) if f.endswith(('.jpg', '.jpeg', '.png'))}
+            print(f"Available image files: {available_files}")
+            
+            # Path to the data.js file
+            data_js_path = os.path.join(settings.BASE_DIR.parent, 'onlinelibrary', 'Static', 'js', 'data.js')
+            print(f"Looking for data.js at: {data_js_path}")
+            
+            if os.path.exists(data_js_path):
+                print("Found data.js file")
+                with open(data_js_path, 'r', encoding='utf-8') as file:
+                    content = file.read()
+                    # Extract book titles and cover paths using regex
+                    pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
+                    matches = re.findall(pattern, content, re.DOTALL)
+                    print(f"Found {len(matches)} book cover mappings")
+                    
+                    # Create a mapping of titles to cover paths
+                    cover_paths = {title.strip(): path.strip() for title, path in matches}
+                    
+                    # Add cover paths to all books
+                    for book in books:
+                        book_title = book.title.strip()
+                        print(f"\nProcessing book: {book_title}")
+                        
+                        if book.image:
+                            book.cover_path = book.image.url
+                            print(f"Book '{book_title}' has image: {book.cover_path}")
+                        elif book_title in cover_paths:
+                            # Get the filename from the path
+                            cover_path = cover_paths[book_title]
+                            filename = os.path.basename(cover_path)
+                            print(f"Looking for file: {filename}")
+                            
+                            # Try to find the file (case-insensitive)
+                            if filename.lower() in available_files:
+                                actual_filename = available_files[filename.lower()]
+                                static_path = f"images/books/{actual_filename}"
+                                print(f"Found file: {static_path}")
+                                book.cover_path = static_path
+                            else:
+                                print(f"File not found: {filename}")
+                                book.cover_path = 'images/books/default-cover.jpg'
+                        else:
+                            print(f"No cover path found for book: {book_title}")
+                            book.cover_path = 'images/books/default-cover.jpg'
+            else:
+                print("data.js file not found!")
+                for book in books:
+                    book.cover_path = 'images/books/default-cover.jpg'
+        else:
+            print("Images directory not found!")
+            for book in books:
+                book.cover_path = 'images/books/default-cover.jpg'
+    except Exception as e:
+        print(f"Error loading book cover paths: {str(e)}")
+        for book in books:
+            book.cover_path = 'images/books/default-cover.jpg'
+    
+    # Convert books to JSON for JavaScript
+    books_json = json.dumps([{
+        'id': book.id,
+        'title': book.title,
+        'author': book.author,
+        'image': book.cover_path,
+        'category': book.genre if hasattr(book, 'genre') else None
+    } for book in books])
+    
+    print("Books data prepared for JavaScript")
+    return render(request, 'books/book_list.html', {
         'books': books,
-        **get_notifications(request)
-    }
-    return render(request, 'books/book_list.html', context)
+        'books_json': books_json
+    })
 
 @login_required
 @user_passes_test(is_admin)
@@ -172,6 +297,7 @@ def delete_book(request, id):
 @user_passes_test(is_admin)
 def api_list_books(request):
     books = Book.objects.all().order_by('-created_at')
+    books = [book for book in books if book.image and os.path.exists(os.path.join(settings.MEDIA_ROOT, book.image.name))]
     books_data = [{
         'id': book.id,
         'title': book.title,
@@ -270,8 +396,9 @@ def non_staff_required(function):
 @login_required
 @non_staff_required
 def home_user(request):
-    # Get all books
+    # Print all book titles loaded from the database
     all_books = Book.objects.all()
+    print([book.title for book in all_books])
     
     # Get user's borrowed books
     borrowed_books = BorrowedBook.objects.filter(user=request.user, is_returned=False)
@@ -297,16 +424,83 @@ def home_user(request):
         latest_borrowed = borrowed_books.order_by('-borrow_date').first().book
         similar_books = recommendation_service.get_similar_books(latest_borrowed, limit=10)
     
+    # Get user notifications
+    notifications = Notification.objects.filter(
+        Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global')
+    ).order_by('-created_at')[:10]
+    
+    # User stats
+    total_borrowed = BorrowedBook.objects.filter(user=request.user).count()
+    currently_borrowed = borrowed_books.count()
+    
+    # Calculate favorite genres based on user's history
+    favorite_genres = []
+    if total_borrowed > 0:
+        genre_counts = {}
+        user_borrowed_books = BorrowedBook.objects.filter(user=request.user).select_related('book')
+        for borrowed in user_borrowed_books:
+            for genre in borrowed.book.genres.all():
+                genre_name = genre.name
+                if genre_name:
+                    genre_counts[genre_name] = genre_counts.get(genre_name, 0) + 1
+        
+        # Get the top 3 genres
+        if genre_counts:
+            favorite_genres = sorted(genre_counts.items(), key=lambda x: x[1], reverse=True)[:3]
+    
+    # Load book cover paths from data.js
+    try:
+        import re
+        
+        # Path to the data.js file
+        data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
+        cover_paths = {}
+        
+        if os.path.exists(data_js_path):
+            with open(data_js_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+                # Extract book titles and cover paths using regex
+                pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
+                matches = re.findall(pattern, content, re.DOTALL)
+                
+                for title, cover_path in matches:
+                    # Convert relative path to static path format
+                    static_path = cover_path.replace('../', '')
+                    cover_paths[title] = static_path
+        
+        # Add cover_path to each book object
+        for book_list in [new_releases, trending_books, bestsellers, highly_rated_books, recommended_books, similar_books]:
+            if book_list:  # Check if the list exists and is not None
+                for book in book_list:
+                    if book.title in cover_paths:
+                        book.cover_path = cover_paths[book.title]
+    except Exception as e:
+        print(f"Error loading book cover paths: {str(e)}")
+    
+    # Add books_json for search functionality
+    books_json = json.dumps([
+        {
+            "title": book.title,
+            "author": book.author,
+            "category": book.genre if hasattr(book, 'genre') and book.genre else "",
+            "image": book.image.url if book.image else "/static/images/books/default-cover.jpg"
+        }
+        for book in all_books
+    ])
+    
     context = {
-        'user': request.user,
-        'borrowed_books': borrowed_books,
+        'all_books': all_books,
         'new_releases': new_releases,
         'trending_books': trending_books,
         'bestsellers': bestsellers,
         'highly_rated_books': highly_rated_books,
         'recommended_books': recommended_books,
         'similar_books': similar_books,
-        **get_notifications(request)
+        'notifications': notifications,
+        'total_borrowed': total_borrowed,
+        'currently_borrowed': currently_borrowed,
+        'favorite_genres': favorite_genres,
+        'books_json': books_json,
     }
     
     return render(request, 'HomePage-user.html', context)
@@ -317,38 +511,64 @@ def home_admin(request):
     # Get all books
     all_books = Book.objects.all()
     
-    # Get recent books (most recently added books)
-    recent_books = Book.objects.all().order_by('-created_at')[:10]
+    # Get recent books
+    recent_books = Book.objects.order_by('-created_at')[:10]
     
-    # Get new releases (books added in the last 30 days)
-    new_releases = Book.objects.filter(created_at__gte=timezone.now() - timezone.timedelta(days=30))
-    
-    # Get trending books (most borrowed recently)
+    # Get books by badge
+    new_releases = Book.objects.filter(badge='new').order_by('-created_at')[:10]
     trending_books = Book.objects.filter(badge='trending')[:10]
     
-    # Get bestsellers
+    # Get books by badge
     bestsellers = Book.objects.filter(badge='bestseller')[:10]
     
     # Get highly rated books
     highly_rated = Book.objects.filter(average_rating__gte=4.0).order_by('-average_rating')[:10]
     
-    # Get statistics
-    total_books = Book.objects.count()
-    borrowed_count = BorrowedBook.objects.filter(is_returned=False).count()
-    total_users = User.objects.count()
-    total_reviews = BookReview.objects.count()
+    # Get notifications
+    notifications = Notification.objects.filter(
+        Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global')
+    ).order_by('-created_at')[:10]
+    
+    # Load book cover paths from data.js
+    try:
+        import re
+        
+        # Path to the data.js file
+        data_js_path = os.path.join(settings.BASE_DIR, 'Static', 'js', 'data.js')
+        cover_paths = {}
+        
+        if os.path.exists(data_js_path):
+            with open(data_js_path, 'r', encoding='utf-8') as file:
+                content = file.read()
+                # Extract book titles and cover paths using regex
+                pattern = r'title:\s*"([^"]+)".*?cover:\s*"([^"]+)"'
+                matches = re.findall(pattern, content, re.DOTALL)
+                
+                for title, cover_path in matches:
+                    # Convert relative path to static path format
+                    static_path = cover_path.replace('../', '')
+                    cover_paths[title] = static_path
+        
+        # Add cover_path to each book object
+        for book_list in [recent_books, new_releases, trending_books, bestsellers, highly_rated]:
+            if book_list:  # Check if the list exists and is not None
+                for book in book_list:
+                    if book.title in cover_paths:
+                        book.cover_path = cover_paths[book.title]
+                    elif not book.image:  # If no image and no cover path found, set default
+                        book.cover_path = 'images/books/default-cover.jpg'
+    except Exception as e:
+        print(f"Error loading book cover paths: {str(e)}")
     
     context = {
+        'all_books': all_books,
         'recent_books': recent_books,
         'new_releases': new_releases,
         'trending_books': trending_books,
         'bestsellers': bestsellers,
         'highly_rated': highly_rated,
-        'total_books': total_books,
-        'borrowed_count': borrowed_count,
-        'total_users': total_users,
-        'total_reviews': total_reviews,
-        **get_notifications(request)
+        'notifications': notifications,
+        'books_json': get_books_json(),
     }
     
     return render(request, 'HomePage-admin.html', context)

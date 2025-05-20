@@ -168,42 +168,47 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <h2>Library Collection</h2>
-</div>
-
-<div class="books-grid">
-    {% for book in books %}
-    <div class="book-card">
-        <a href="{% url 'books_admin:book_detail' book.id %}" class="book-image">
-            {% if book.image %}
-                <img src="{{ book.image.url }}" 
-                     alt="{{ book.title }}" 
-                     loading="lazy"
-                     onerror="this.onerror=null; this.src='{% static 'images/books/default-cover.jpg' %}';">
-            {% elif book.cover_path %}
-                <img src="{% static book.cover_path %}" 
-                     alt="{{ book.title }}" 
-                     class="book-cover"
-                     loading="lazy"
-                     onerror="console.log('Failed to load image for: {{ book.title }}'); this.onerror=null; this.src='{% static 'images/books/default-cover.jpg' %}';">
-            {% else %}
-                <img src="{% static 'images/books/default-cover.jpg' %}" 
-                     alt="{{ book.title }}" 
-                     loading="lazy">
-            {% endif %}
-            <div class="book-overlay">
-                <div class="book-title">{{ book.title }}</div>
-                <div class="book-author">by {{ book.author }}</div>
+<div class="container">
+    <div id="data-book" data-books='{{ books_json|safe }}'></div>
+    <div id="results"></div>
+    <div id="book-carousels-container">
+        <div class="books-grid">
+            {% for book in books %}
+            <div class="book-card">
+                <a href="{% url 'books_admin:book_detail' book.id %}" class="book-image">
+                    <div class="book-cover-container">
+                        {% if book.image %}
+                            {% if book.image.url|startswith:'/media/' %}
+                                <img src="{{ book.image.url }}" 
+                                     alt="{{ book.title }}" 
+                                     loading="lazy"
+                                     onerror="this.onerror=null; this.src='{% static 'images/books/default-cover.jpg' %}';">
+                            {% else %}
+                                <img src="{% static 'images/books/'|add:book.image %}" 
+                                     alt="{{ book.title }}" 
+                                     loading="lazy"
+                                     onerror="this.onerror=null; this.src='{% static 'images/books/default-cover.jpg' %}';">
+                            {% endif %}
+                        {% else %}
+                            <img src="{% static 'images/books/default-cover.jpg' %}" 
+                                 alt="{{ book.title }}" 
+                                 loading="lazy">
+                        {% endif %}
+                    </div>
+                    <div class="book-overlay">
+                        <div class="book-title">{{ book.title }}</div>
+                        <div class="book-author">by {{ book.author }}</div>
+                    </div>
+                </a>
             </div>
-        </a>
+            {% empty %}
+            <div class="no-books">
+                <i class="fas fa-book fa-4x"></i>
+                <h3>No books available</h3>
+                <p>The library collection is currently empty.</p>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-    {% empty %}
-    <div class="no-books">
-        <i class="fas fa-book fa-4x"></i>
-        <h3>No books available</h3>
-        <p>The library collection is currently empty.</p>
-    </div>
-    {% endfor %}
 </div>
 {% endblock %} 

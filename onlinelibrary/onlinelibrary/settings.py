@@ -133,6 +133,10 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Create media directories if they don't exist
+os.makedirs(os.path.join(MEDIA_ROOT, 'books'), exist_ok=True)
+os.makedirs(os.path.join(MEDIA_ROOT, 'book_covers'), exist_ok=True)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

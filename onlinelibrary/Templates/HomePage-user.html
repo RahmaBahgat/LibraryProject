@@ -165,6 +165,73 @@
           padding: 0 1.5rem;
         }
       }
+
+      html[data-theme="dark"] {
+        --primary-color: #222;
+        --secondary-color: #444;
+        --accent-color: #fff;
+        --text-color: #eee;
+        --background-color: #181818;
+        --card-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        --hover-shadow: 0 8px 16px rgba(0,0,0,0.7);
+      }
+
+      html[data-theme="dark"] body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+      }
+
+      html[data-theme="dark"] .footer {
+        background-color: #111;
+        color: #eee;
+      }
+
+      html[data-theme="dark"] .footer a {
+        color: #eee;
+      }
+
+      .book-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 220px;
+        min-width: 220px;
+        max-width: 220px;
+        aspect-ratio: 2/3;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        background: white;
+        margin: 0 1rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .book-card:hover {
+        transform: translateY(-8px) scale(1.04);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+      }
+
+      .book-cover-container {
+        width: 100%;
+        height: 320px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f5f5f5;
+      }
+
+      .book-cover {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+
+      .book-author {
+        font-size: 1.1rem;
+        margin-top: 0.7rem;
+        font-weight: 700;
+      }
     </style>
 
     <!-- Fonts -->
@@ -184,8 +251,11 @@
     />
   </head>
   <body>
-    <div id="data-book" data-books=""></div>
+    <div id="data-book" data-books='{{ books_json|safe }}'></div>
     <div id="results"></div>
+    <div id="book-carousels-container">
+      <!-- This is where the search results will be rendered -->
+    </div>
 
     <nav class="navbar">
       <div class="nav-container">
@@ -319,7 +389,19 @@
             <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
             <div class="carousel-track">
               {% for book in recommended_books %}
-                {% include 'includes/book_card.html' with book=book %}
+                <a href="/book/{{ book.id }}/" class="book-card" style="text-decoration: none; color: inherit;">
+                  <div class="book-cover-container">
+                    {% if book.image %}
+                      <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                    {% else %}
+                      <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
+                    {% endif %}
+                  </div>
+                  <div class="book-overlay">
+                    <div class="book-title">{{ book.title }}</div>
+                  </div>
+                  <div class="book-author" style="text-align:center; margin-top:0.5rem; font-weight:600;">{{ book.author }}</div>
+                </a>
               {% endfor %}
             </div>
             <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
@@ -338,7 +420,19 @@
             <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
             <div class="carousel-track">
               {% for book in trending_books %}
-                {% include 'includes/book_card.html' with book=book %}
+                <a href="/book/{{ book.id }}/" class="book-card" style="text-decoration: none; color: inherit;">
+                  <div class="book-cover-container">
+                    {% if book.image %}
+                      <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                    {% else %}
+                      <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
+                    {% endif %}
+                  </div>
+                  <div class="book-overlay">
+                    <div class="book-title">{{ book.title }}</div>
+                  </div>
+                  <div class="book-author" style="text-align:center; margin-top:0.5rem; font-weight:600;">{{ book.author }}</div>
+                </a>
               {% endfor %}
             </div>
             <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
@@ -357,7 +451,19 @@
             <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
             <div class="carousel-track">
               {% for book in new_releases %}
-                {% include 'includes/book_card.html' with book=book %}
+                <a href="/book/{{ book.id }}/" class="book-card" style="text-decoration: none; color: inherit;">
+                  <div class="book-cover-container">
+                    {% if book.image %}
+                      <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                    {% else %}
+                      <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
+                    {% endif %}
+                  </div>
+                  <div class="book-overlay">
+                    <div class="book-title">{{ book.title }}</div>
+                  </div>
+                  <div class="book-author" style="text-align:center; margin-top:0.5rem; font-weight:600;">{{ book.author }}</div>
+                </a>
               {% endfor %}
             </div>
             <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
@@ -376,7 +482,19 @@
             <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
             <div class="carousel-track">
               {% for book in similar_books %}
-                {% include 'includes/book_card.html' with book=book %}
+                <a href="/book/{{ book.id }}/" class="book-card" style="text-decoration: none; color: inherit;">
+                  <div class="book-cover-container">
+                    {% if book.image %}
+                      <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                    {% else %}
+                      <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
+                    {% endif %}
+                  </div>
+                  <div class="book-overlay">
+                    <div class="book-title">{{ book.title }}</div>
+                  </div>
+                  <div class="book-author" style="text-align:center; margin-top:0.5rem; font-weight:600;">{{ book.author }}</div>
+                </a>
               {% endfor %}
             </div>
             <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
@@ -395,7 +513,19 @@
             <button class="carousel-nav prev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
             <div class="carousel-track">
               {% for book in highly_rated_books %}
-                {% include 'includes/book_card.html' with book=book %}
+                <a href="/book/{{ book.id }}/" class="book-card" style="text-decoration: none; color: inherit;">
+                  <div class="book-cover-container">
+                    {% if book.image %}
+                      <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                    {% else %}
+                      <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
+                    {% endif %}
+                  </div>
+                  <div class="book-overlay">
+                    <div class="book-title">{{ book.title }}</div>
+                  </div>
+                  <div class="book-author" style="text-align:center; margin-top:0.5rem; font-weight:600;">{{ book.author }}</div>
+                </a>
               {% endfor %}
             </div>
             <button class="carousel-nav next" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
@@ -526,23 +656,108 @@
       </div>
     </footer>
 
-    <script src="{% static 'js/data.js' %}"></script>
-    <script src="{% static 'js/Book Carousel.js' %}"></script>
+    <script src="{% static 'js/darkTheme.js' %}"></script>
+    <script src="{% static 'js/carousel.js' %}"></script>
     <script src="{% static 'js/Navbar_Footer.js' %}"></script>
     <script src="{% static 'js/search.js' %}"></script>
-    <!-- <script src="{% static 'js/checkAuth.js' %}"></script> -->
     <script>
+      // Prevent default form submission for search
+      document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.getElementById('searchForm');
+        if (searchForm) {
+          searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+          });
+        }
+      });
+
       check(false, 0);
 
       const signOutBtn = document.getElementById("signOut-btn");
-      signOutBtn.addEventListener("click", () => {
-        console.log("sign out");
-        localStorage.removeItem("loggedIn");
-        window.location.pathname = "";
-      });
+      if (signOutBtn) {
+        signOutBtn.addEventListener("click", () => {
+          console.log("sign out");
+          localStorage.removeItem("loggedIn");
+          window.location.pathname = "";
+        });
+      }
 
       const userName = document.getElementById("user-name");
-      userName.innerHTML = userData.firstName;
+      if (userName && typeof userData !== "undefined") {
+        userName.innerHTML = userData.firstName;
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchBar');
+        const bookCards = document.getElementById('data-book');
+        const bookCarouselsContainer = document.getElementById('book-carousels-container');
+        let originalCarouselsHTML = bookCarouselsContainer ? bookCarouselsContainer.innerHTML : '';
+
+        let allBooks = [];
+        try {
+          const booksData = bookCards ? bookCards.getAttribute('data-books') : '[]';
+          allBooks = JSON.parse(booksData);
+          console.log('ALL BOOKS:', allBooks);
+        } catch (error) {
+          console.error('Error loading books data:', error);
+        }
+
+        function performSearch(searchValue) {
+          if (!searchValue) {
+            if (bookCarouselsContainer) {
+              bookCarouselsContainer.innerHTML = originalCarouselsHTML;
+            }
+            return;
+          }
+
+          const matchingBooks = allBooks.filter(book => {
+            const searchFields = [
+              book.title,
+              book.author,
+              book.category,
+              ...(book.genres || [])
+            ].filter(Boolean).map(field => String(field).toLowerCase());
+            return searchFields.some(field => field.includes(searchValue.toLowerCase()));
+          });
+
+          // Render results
+          if (bookCarouselsContainer) {
+            if (matchingBooks.length === 0) {
+              bookCarouselsContainer.innerHTML = '<div style="padding:2rem;text-align:center;"><h3>No books found.</h3></div>';
+              return;
+            }
+            bookCarouselsContainer.innerHTML = `
+              <div class="section-wrapper">
+                <div class="section-header"><h2>Search Results</h2></div>
+                <div class="book-carousel">
+                  <div class="carousel-track">
+                    ${matchingBooks.map(book => `
+                      <div class="carousel-item">
+                        <div class="book-card">
+                          <div class="book-cover-container">
+                            <img src="${book.image ? (book.image.startsWith('/') ? book.image : '/media/' + book.image) : (book.cover_path ? '/static/' + book.cover_path : '/static/images/books/default-cover.jpg')}" alt="${book.title}" class="book-cover" onerror="this.onerror=null;this.src='/static/images/books/default-cover.jpg';">
+                          </div>
+                          <div class="book-info">
+                            <h3 class="book-title">${book.title}</h3>
+                            <p class="book-author">by ${book.author}</p>
+                            <p class="book-category">${book.category || ''}</p>
+                          </div>
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        if (searchInput) {
+          searchInput.addEventListener('input', function() {
+            performSearch(this.value.trim());
+          });
+        }
+      });
     </script>
   </body>
 </html>
