@@ -283,14 +283,17 @@ def edit_book(request, id):
 def delete_book(request, id):
     book = get_object_or_404(Book, id=id)
     title = book.title  # Store title before deletion
-    book.delete()
-    # Send notification for book removal
-    Notification.send_book_notification(
-        notification_type='book_removed',
-        book=None,  # Book is already deleted
-        admin_user=request.user,
-        message=f"Book '{title}' has been removed from the library"
+    
+    # Create notification before deleting the book
+    Notification.objects.create(
+        recipient=request.user,
+        title=f'Book Removed: {title}',
+        message=f"Book '{title}' has been removed from the library",
+        notification_type='book_removed'
     )
+    
+    # Now delete the book
+    book.delete()
     messages.success(request, 'Book deleted successfully!')
     return redirect('books_admin:admin_book_management')
 
