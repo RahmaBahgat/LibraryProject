@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from . import views
 from books.views_notifications import user_notifications, admin_notifications, mark_notification_read
 # from books.views import home_user, home_admin, book_detail, borrow_book, api_featured_books, api_book_categories
-from books.views import home_user, home_admin, book_detail, borrow_book, api_featured_books, api_book_categories, toggle_favorite
+from books.views import home_user, home_admin, book_detail, borrow_book, api_featured_books, api_book_categories, toggle_favorite, toggle_borrow
 
 urlpatterns = [
     # Django Admin
@@ -39,12 +39,17 @@ urlpatterns = [
     # Book Pages
     path('library-admin/books/', include('books.urls')),
     path('book/<int:id>/', book_detail, name='book_detail'),  # Book detail page
+    
+    # Favorites Related
+    path('favorites/', views.favorites, name='favorites'),
     path('book/<int:book_id>/toggle-favorite/', toggle_favorite, name='toggle_favorite'),
+    
+    # Borrowed Books Related
+    path('borrowed/', views.borrowed_list, name='borrowed-list'),
+    path('book/<int:book_id>/toggle-borrow/', toggle_borrow, name='toggle_borrow'),
     
     # User Pages
     path('profile/', views.profile, name='profile'),
-    path('favorites/', views.favorites, name='favorites'),
-    path('borrowed/', views.borrowed_list, name='borrowed-list'),
     
     # Auth Pages
     path('login/', views.login_page, name='login'),
@@ -64,9 +69,6 @@ urlpatterns = [
     # Profile pages
     path('profile/', views.profile, name='profile'),
     path('profile/update-picture/', views.update_profile_picture, name='update_profile_picture'),
-    
-    # Book actions
-    path('book/<int:book_id>/borrow/', borrow_book, name='borrow_book'),
     
     # API endpoints
     path('api/books/featured/', api_featured_books, name='api_featured_books'),
