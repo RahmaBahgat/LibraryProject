@@ -156,41 +156,93 @@ function createRelatedBooks(bookId) {
   return relatedBooksElement;
 }
 
-document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("add-to-favorites")) {
-    const bookId = e.target.dataset.bookId;
-    const book = books.find((b) => b.id === bookId);
-    const wasFavorite = book.isFavorite;
-
-    // Toggle favorite status
-    book.isFavorite = !book.isFavorite;
-    
-    // Force boolean value
-    book.isFavorite = Boolean(book.isFavorite);
-    
-    localStorage.setItem('books', JSON.stringify(books));
-
-    // Update all buttons
-    document.querySelectorAll(`[data-book-id="${bookId}"]`).forEach((button) => {
-      button.textContent = book.isFavorite 
-        ? "❤️ Remove Favorite" 
-        : "♡ Add to Favorites";
-    });
-
-    // If on favorites page and removing
-    if (window.location.pathname.includes('FavouriteBooks') && !book.isFavorite) {
-      const bookCard = document.querySelector(`.book-card[data-book-id="${bookId}"]`);
-      if (bookCard) {
-        bookCard.style.transform = "translateX(-100%)";
-        bookCard.style.opacity = "0";
-        setTimeout(() => {
-          bookCard.remove();
-        }, 300);
+// Get CSRF token from cookie
+function getCSRFToken() {
+  const name = "csrftoken";
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
       }
     }
-    initializePage(); // Re-check empty state
   }
-});
+  return cookieValue;
+}
+
+// Toggle favorite status
+async function toggleFavorite(bookId) {
+  try {
+    const response = await fetch(`/book/${bookId}/toggle-favorite/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": getCSRFToken(),
+        "Content-Type": "application/json",
+      },
+      credentials: "same-origin",
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.success) {
+      // Update UI
+      const favoriteButtons = document.querySelectorAll(
+        `[data-book-id="${bookId}"]`
+      );
+      favoriteButtons.forEach((button) => {
+        if (data.is_favorite) {
+          button.innerHTML = "❤️ Remove from Favorites";
+          button.classList.add("favorited");
+        } else {
+          button.innerHTML = "♡ Add to Favorites";
+          button.classList.remove("favorited");
+        }
+      });
+
+      // If on favorites page and removing
+      if (window.location.pathname.includes("favorites") && !data.is_favorite) {
+        const bookCard = document.querySelector(
+          `.book-card[data-book-id="${bookId}"]`
+        );
+        if (bookCard) {
+          bookCard.style.transform = "translateX(-100%)";
+          bookCard.style.opacity = "0";
+          setTimeout(() => {
+            bookCard.remove();
+            checkEmptyState();
+          }, 300);
+        }
+      }
+    } else {
+      throw new Error(data.message || "Failed to toggle favorite status");
+    }
+  } catch (error) {
+    console.error("Error toggling favorite:", error);
+    alert("Failed to update favorite status. Please try again.");
+  }
+}
+
+// Check if the favorites list is empty
+function checkEmptyState() {
+  const booksContainer = document.getElementById("booksContainer");
+  const bookCards = booksContainer.querySelectorAll(".book-card");
+
+  if (bookCards.length === 0) {
+    booksContainer.innerHTML = `
+            <div class="empty-state">
+                <h2>No Favorite Books Found</h2>
+                <p>Books you mark as favorite will appear here</p>
+            </div>
+        `;
+  }
+}
 
 function calculateExpansionSpace(card) {
   const container = booksContainer;
@@ -301,12 +353,10 @@ function initializeReviewForm(form) {
     starsContainer.appendChild(star);
   }
 
- 
   form.querySelector(".btn-cancel").addEventListener("click", () => {
     form.remove();
   });
 
-  
   form.querySelector(".btn-submit").addEventListener("click", (e) => {
     e.preventDefault();
     const reviewText = textarea.value.trim();
@@ -322,12 +372,10 @@ function initializeReviewForm(form) {
       rating: currentRating,
     };
 
-
     const bookId = form.closest(".book-card").dataset.bookId;
     const book = books.find((b) => b.id === bookId);
     book.reviews.push(review);
 
-    
     const reviewsList = form
       .closest(".reviews-section")
       .querySelector(".reviews-list");
@@ -540,37 +588,22 @@ const plusIconSVG = `
 
 // Initialize the page
 function initializePage() {
-  // Always get fresh data from localStorage
-  const storedBooks = localStorage.getItem('books');
-  books = storedBooks ? JSON.parse(storedBooks) : [];
-  
-  // Filter only TRULY favorite books
-  const favoriteBooks = books.filter(book => Boolean(book.isFavorite));
-  
-  // Clear existing content
-  booksContainer.innerHTML = '';
-
-  // Add empty state if no favorites
-  if (favoriteBooks.length === 0) {
-    booksContainer.innerHTML = `
-      <div class="empty-state">
-        <h2>No Favorite Books Found</h2>
-        <p>Books you mark as favorite will appear here</p>
-      </div>
-    `;
-    return;
-  }
-
-  // Create cards only for favorite books
-  favoriteBooks.forEach(book => {
-    // Double-check favorite status
-    if (book.isFavorite) {
-      const bookCard = createBookCard(book);
-      booksContainer.appendChild(bookCard);
-    }
+  // Set up event listeners for favorite buttons
+  document.querySelectorAll(".add-to-favorites").forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const bookId = e.target.closest("[data-book-id]").dataset.bookId;
+      toggleFavorite(bookId);
+    });
   });
 
+  // Set up event listeners for view details buttons
+  document.querySelectorAll(".view-details").forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const bookId = e.target.closest("[data-book-id]").dataset.bookId;
+      window.location.href = `/book/${bookId}/`;
+    });
+  });
 }
 
-// Start
+// Initialize the page when the DOM is loaded
 document.addEventListener("DOMContentLoaded", initializePage);

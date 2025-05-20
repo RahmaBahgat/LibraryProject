@@ -25,6 +25,7 @@ def user_notifications(request, get_latest=False):
         return JsonResponse({
             'notifications': [{
                 'id': notif.id,
+                'title': notif.title,
                 'message': notif.message,
                 'created_at': notif.created_at.isoformat(),
                 'is_read': notif.is_read,
@@ -32,8 +33,15 @@ def user_notifications(request, get_latest=False):
             } for notif in latest_notifications]
         })
     
+    # Get unread count
+    unread_count = notifications.filter(is_read=False).count()
+    
+    # Mark notifications as read when viewing the page
+    notifications.filter(is_read=False).update(is_read=True)
+    
     return render(request, 'notifications.html', {
-        'notifications': notifications
+        'notifications': notifications,
+        'unread_notifications_count': unread_count
     })
 
 @user_passes_test(is_admin)
@@ -81,10 +89,17 @@ def admin_notifications(request):
         Q(notification_type__in=['book_added', 'book_edited', 'book_removed', 'book_borrowed', 'book_returned'])  # Book-related notifications
     ).order_by('-created_at')
     
+    # Get unread count
+    unread_count = notifications.filter(is_read=False).count()
+    
+    # Mark notifications as read when viewing the page
+    notifications.filter(is_read=False).update(is_read=True)
+    
     users = User.objects.filter(is_staff=False)  # Get non-staff users for recipient selection
     
     return render(request, 'notifications-admin.html', {
         'notifications': notifications,
+        'unread_notifications_count': unread_count,
         'users': users
     })
 

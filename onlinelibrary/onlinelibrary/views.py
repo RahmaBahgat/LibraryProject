@@ -13,16 +13,36 @@ from django.utils import timezone
 from datetime import timedelta
 
 def get_notifications(request):
-    if request.user.is_authenticated:
-        if request.user.is_staff:
-            return {
-                'admin_notifications': Notification.objects.filter(notification_type='admin').order_by('-created_at')[:5]
-            }
-        else:
-            return {
-                'user_notifications': Notification.objects.filter(recipient=request.user).order_by('-created_at')[:5]
-            }
-    return {}
+    """Helper function to get notifications for a user"""
+    # Only return notifications for authenticated users and specific pages
+    if not request.user.is_authenticated:
+        return {}
+        
+    # List of paths where notifications should not be included
+    excluded_paths = ['/login/', '/signup/', '/about/', '/privacy/', '/terms/', '/faq/', '/help/']
+    if request.path in excluded_paths:
+        return {}
+        
+    # Only include notifications in dropdown and notification pages
+    if 'notifications' not in request.path and request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+        return {'unread_notifications_count': Notification.objects.filter(
+            Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global'),
+            is_read=False
+        ).count()}
+        
+    notifications = Notification.objects.filter(
+        Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global')
+    ).order_by('-created_at')[:5]
+    
+    unread_count = Notification.objects.filter(
+        Q(recipient=request.user) | Q(recipient__isnull=True, notification_type='global'),
+        is_read=False
+    ).count()
+    
+    return {
+        'notifications': notifications,
+        'unread_notifications_count': unread_count
+    }
 
 # Public Pages
 def home(request):
@@ -78,7 +98,11 @@ def profile(request):
 
 @login_required
 def favorites(request):
-    context = {**get_notifications(request)}
+    user_favorites = request.user.profile.favorite_books.all()
+    context = {
+        'favorite_books': user_favorites,
+        **get_notifications(request)
+    }
     return render(request, 'FavouriteBooks.html', context)
 
 @login_required
@@ -110,12 +134,21 @@ def login_page(request):
         
         if user is not None:
             login(request, user)
-            redirect_url = '/library-admin/books/' if user.is_staff else '/home/'
+            
+            # Create login notification
+            Notification.objects.create(
+                recipient=user,
+                title='Welcome Back!',
+                message=f'You have successfully logged in to your account.',
+                notification_type='system'
+            )
+            
+            redirect_url = 'admin_home' if user.is_staff else 'home'
             
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return JsonResponse({
                     'success': True,
-                    'redirect_url': redirect_url
+                    'redirect_url': redirect(redirect_url).url
                 })
             return redirect(redirect_url)
         else:
@@ -181,17 +214,36 @@ def signup_page(request):
                 user.is_staff = True
                 user.save()
             
+            # Create welcome notification for new user
+            Notification.objects.create(
+                recipient=user,
+                title='Welcome to InOtherWords Library!',
+                message='Thank you for joining our community. Start exploring our collection of books today!',
+                notification_type='system'
+            )
+            
+            # Notify admins about new user registration
+            if not user.is_staff:  # Don't notify about admin registrations
+                admins = User.objects.filter(is_staff=True)
+                for admin in admins:
+                    Notification.objects.create(
+                        recipient=admin,
+                        title='New User Registration',
+                        message=f'New user {username} has joined InOtherWords Library.',
+                        notification_type='system'
+                    )
+            
             # Log the user in
             login(request, user)
             
             # Determine redirect URL based on role
-            redirect_url = '/library-admin/books/' if user.is_staff else '/home/'
+            redirect_url = 'admin_home' if user.is_staff else 'home'
             success_message = 'Welcome! ' + ('You have been registered as an administrator.' if user.is_staff else 'Your account has been created successfully.')
             
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return JsonResponse({
                     'success': True,
-                    'redirect_url': redirect_url,
+                    'redirect_url': redirect(redirect_url).url,
                     'message': success_message
                 })
             

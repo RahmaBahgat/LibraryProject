@@ -457,25 +457,21 @@
           </div>
 
           <div class="dropdown">
-            <a href="{% url 'books_admin:list_books' %}" class="nav-link">
+            <a href="{% url 'books_admin:admin_book_management' %}" class="nav-link">
               <i class="fas fa-book"></i> Manage Books
             </a>
           </div>
 
           <div class="dropdown">
-            <a href="{% url 'admin-notifications' %}" class="nav-link">
+            <a href="#" class="nav-link">
               <i class="fas fa-bell"></i> Notifications
+              {% if unread_notifications_count > 0 %}
+              <span class="notification-badge">{{ unread_notifications_count }}</span>
+              {% endif %}
             </a>
             <div class="dropdown-content">
-              {% for notification in notifications|slice:":5" %}
-                <p class="notif">
-                  {{ notification.message }}
-                  <time>{{ notification.created_at|date:"F j, Y — g:i A" }}</time>
-                </p>
-              {% empty %}
-                <p class="notif">No new notifications</p>
-              {% endfor %}
-              <a class="notif" href="{% url 'admin-notifications' %}">See all notifications</a>
+              <a href="{% url 'notifications' %}" class="notif">Notifications</a>
+              <a href="{% url 'admin-notifications' %}" class="notif">Manage Notifications</a>
             </div>
           </div>
 
@@ -537,10 +533,10 @@
         </div>
 
         <center style="margin: 2rem 0;">
-          <a href="{% url 'books_admin:list_books' %}" class="manage-books-btn">
+          <a href="{% url 'books_admin:admin_book_management' %}" class="manage-books-btn">
             <i class="fas fa-cog"></i> Manage Library
           </a>
-          <a href="/library-admin/books/add/" class="manage-books-btn add-book" style="margin-left: 1rem; font-weight: bold; font-size: 1.1rem; padding: 1rem 1.8rem;">
+          <a href="{% url 'books_admin:add_book' %}" class="manage-books-btn add-book" style="margin-left: 1rem; font-weight: bold; font-size: 1.1rem; padding: 1rem 1.8rem;">
             <i class="fas fa-plus"></i> Add New Book
           </a>
         </center>
