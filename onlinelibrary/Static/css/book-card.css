@@ -96,8 +96,14 @@
   margin-bottom: 0.5rem;
 }
 
-.book-rating i {
-  color: var(--accent-color);
+.book-rating i.fas {
+  color: #ffd700;
+  font-size: 1rem;
+}
+
+.book-rating i.far {
+  color: #ddd;
+  font-size: 1rem;
 }
 
 .rating-count {

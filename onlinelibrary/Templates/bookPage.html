@@ -22,8 +22,8 @@
     <!-- FontAwesome -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
@@ -667,8 +667,10 @@
 
             <div class="book-rating">
               {% for i in "12345"|make_list %}
-                {% if forloop.counter <= book.average_rating|floatformat:"0" %}
+                {% if forloop.counter <= book.average_rating %}
                   <i class="fas fa-star"></i>
+                {% elif forloop.counter|add:"-1" < book.average_rating %}
+                  <i class="fas fa-star-half-alt"></i>
                 {% else %}
                   <i class="far fa-star"></i>
                 {% endif %}
@@ -751,8 +753,10 @@
                     {% if book.average_rating %}
                     <div class="book-rating">
                       {% for i in "12345"|make_list %}
-                        {% if forloop.counter <= book.average_rating|floatformat:"0" %}
+                        {% if forloop.counter <= book.average_rating %}
                           <i class="fas fa-star"></i>
+                        {% elif forloop.counter|add:"-1" < book.average_rating %}
+                          <i class="fas fa-star-half-alt"></i>
                         {% else %}
                           <i class="far fa-star"></i>
                         {% endif %}

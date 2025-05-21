@@ -9,6 +9,14 @@
       name="description"
       content="InOtherWords - Where Every Page Tells a Story. Discover your next favorite book in our curated library collection."
     />
+    <!-- FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="{% static 'css/index-style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
     <style>
@@ -881,20 +889,17 @@
       // Function to create star rating HTML
       function getStarRating(rating) {
         const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 >= 0.5;
-        let stars = '';
+        let html = '';
         
-        for (let i = 0; i < 5; i++) {
-          if (i < fullStars) {
-            stars += '★';
-          } else if (i === fullStars && hasHalfStar) {
-            stars += '½';
+        for (let i = 1; i <= 5; i++) {
+          if (i <= fullStars) {
+            html += '<i class="fas fa-star"></i>';
           } else {
-            stars += '☆';
+            html += '<i class="far fa-star"></i>';
           }
         }
         
-        return stars;
+        return html;
       }
 
       // Update the carousel HTML structure
