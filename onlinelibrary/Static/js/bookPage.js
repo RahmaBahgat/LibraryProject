@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function getBookIdFromUrl() {
   const pathParts = window.location.pathname.split("/");
   // Find the index of 'book' and get the next part
-  const bookIndex = pathParts.findIndex(part => part === 'book');
+  const bookIndex = pathParts.findIndex((part) => part === "book");
   if (bookIndex !== -1 && bookIndex + 1 < pathParts.length) {
     return pathParts[bookIndex + 1];
   }
