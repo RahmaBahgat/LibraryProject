@@ -701,6 +701,8 @@
                   id="fav-btn"
                   class="btn {% if is_favorite %}favorited{% endif %}"
                   type="button"
+                  onclick="handleFavorite(this)"
+                  data-book-id="{{ book.id }}"
                 >
                   <span class="fav-text">
                     {% if is_favorite %}Remove from Favorites{% else %}Add to
@@ -943,6 +945,54 @@
       document.querySelector(".current-year").textContent =
         new Date().getFullYear();
 
+      // Favorite functionality
+      function handleFavorite(button) {
+        const bookId = button.dataset.bookId;
+        const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+        fetch(`/book/${bookId}/toggle-favorite/`, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrfToken,
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          credentials: 'same-origin'
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.success) {
+              // Update button appearance
+              button.classList.toggle("favorited");
+              const textSpan = button.querySelector(".fav-text");
+              const iconSpan = button.querySelector(".icon");
+              
+              if (data.is_favorite) {
+                textSpan.textContent = "Remove from Favorites";
+                iconSpan.textContent = "❤️";
+              } else {
+                textSpan.textContent = "Add to Favorites";
+                iconSpan.textContent = "♡";
+              }
+
+              // Show success message
+              alert(data.message || "Favorite status updated successfully!");
+            } else {
+              // Show error message
+              alert(data.message || "Failed to update favorite status. Please try again.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred while updating favorite status.");
+          });
+      }
+
       // Simple Star Rating Interaction
       document.addEventListener("DOMContentLoaded", function () {
         const stars = document.querySelectorAll(
@@ -1019,9 +1069,6 @@
 
               // Show success message
               alert(data.message || "Book borrowed successfully!");
-
-              // Redirect to borrowed books page
-              window.location.href = '/borrowed/';
             } else {
               // Show error message
               alert(data.message || "Failed to borrow book. Please try again.");
