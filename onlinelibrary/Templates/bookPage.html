@@ -687,12 +687,9 @@
                   Borrowed
                 </button>
                 {% else %}
-                <a
-                  href="{% url 'books_admin:toggle_borrow' book.id %}"
-                  id="borrow-btn"
-                  class="btn"
-                  >Borrow</a
-                >
+                <button id="borrow-btn" class="btn" onclick="borrowBook()">
+                  Borrow
+                </button>
                 {% endif %}
 
                 <button
@@ -724,10 +721,7 @@
           <div class="books-grid">
             {% for book in similar_books %} {% if book %}
             <div class="book-item">
-              <a
-                href="{% url 'book_detail' book.id %}"
-                class="book-link"
-              >
+              <a href="{% url 'book_detail' book.id %}" class="book-link">
                 <div class="book-card">
                   <div class="book-cover-container">
                     {% if book.image %}

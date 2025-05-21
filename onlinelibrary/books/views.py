@@ -731,26 +731,26 @@ def admin_book_detail(request, id):
 
 @login_required
 def toggle_borrow(request, book_id):
+    if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': False,
+            'message': 'Invalid request type'
+        }, status=400)
+
     book = get_object_or_404(Book, id=book_id)
     
     # Check if book is already borrowed by user
-    borrowed = BorrowedBook.objects.filter(
-        book=book,
-        user=request.user,
-        is_returned=False
-    ).first()
+    borrowed_book = BorrowedBook.objects.filter(user=request.user, book=book, is_returned=False).first()
     
-    if borrowed:
+    if borrowed_book:
         # Return the book
-        borrowed.is_returned = True
-        borrowed.return_date = timezone.now()
-        borrowed.save()
+        borrowed_book.is_returned = True
+        borrowed_book.return_date = timezone.now()
+        borrowed_book.save()
         
-        # Update book stock
         book.stock += 1
         book.save()
         
-        is_borrowed = False
         # Send notification for returning book
         Notification.objects.create(
             recipient=request.user,
@@ -759,6 +759,12 @@ def toggle_borrow(request, book_id):
             notification_type='personal',
             related_book=book
         )
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Book returned successfully',
+            'is_borrowed': False
+        })
     else:
         # Check if book is available
         if book.stock > 0:
@@ -770,7 +776,6 @@ def toggle_borrow(request, book_id):
             book.stock -= 1
             book.save()
             
-            is_borrowed = True
             # Send notification for borrowing book
             Notification.objects.create(
                 recipient=request.user,
@@ -790,17 +795,18 @@ def toggle_borrow(request, book_id):
                     notification_type='system',
                     related_book=book
                 )
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Book borrowed successfully',
+                'is_borrowed': True
+            })
         else:
             return JsonResponse({
                 'success': False,
-                'message': 'Book is out of stock'
+                'message': 'Book is out of stock',
+                'is_borrowed': False
             })
-    
-    return JsonResponse({
-        'success': True,
-        'is_borrowed': is_borrowed,
-        'message': 'Borrow status updated successfully'
-    })
 
 @login_required
 def borrowed_list(request):

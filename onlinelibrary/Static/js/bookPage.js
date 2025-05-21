@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function getBookIdFromUrl() {
   const pathParts = window.location.pathname.split("/");
   // Find the index of 'book' and get the next part
-  const bookIndex = pathParts.findIndex(part => part === 'book');
+  const bookIndex = pathParts.findIndex((part) => part === "book");
   if (bookIndex !== -1 && bookIndex + 1 < pathParts.length) {
     return pathParts[bookIndex + 1];
   }
@@ -214,28 +214,45 @@ function borrowBook() {
   const bookId = getBookIdFromUrl();
   if (!bookId) return;
 
-  // Send request to borrow the book
-  fetch(`/book/${bookId}/borrow/`, {
+  const borrowBtn = document.getElementById("borrow-btn");
+  const isCurrentlyBorrowed = borrowBtn.classList.contains("borrowed");
+
+  // Send request to borrow/return the book
+  fetch(`/library-admin/books/book/${bookId}/toggle-borrow/`, {
     method: "POST",
     headers: {
       "X-CSRFToken": getCSRFToken(),
       "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
     },
+    credentials: "same-origin",
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
     .then((data) => {
       if (data.success) {
-        // Update the borrow button
-        const borrowBtn = document.getElementById("borrow-btn");
-        borrowBtn.textContent = "Borrowed";
-        borrowBtn.classList.add("borrowed");
-        borrowBtn.disabled = true;
+        // Update the borrow button based on the new state
+        if (data.is_borrowed) {
+          borrowBtn.textContent = "Borrowed";
+          borrowBtn.classList.add("borrowed");
+          borrowBtn.disabled = true;
+        } else {
+          borrowBtn.textContent = "Borrow";
+          borrowBtn.classList.remove("borrowed");
+          borrowBtn.disabled = false;
+        }
 
         // Show success message
-        alert(data.message || `Book has been borrowed successfully!`);
+        alert(data.message);
       } else {
         // Show error message
-        alert(data.message || "Failed to borrow the book. Please try again.");
+        alert(
+          data.message || "Failed to process the request. Please try again."
+        );
       }
     })
     .catch((error) => {
