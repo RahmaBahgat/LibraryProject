@@ -14,6 +14,7 @@ from django.core.exceptions import PermissionDenied
 import os
 from django.conf import settings
 from datetime import timedelta
+from django.db import models
 
 def get_notifications(request):
     """Helper function to get notifications for a user"""
@@ -281,18 +282,78 @@ def edit_book(request, id):
 @login_required
 @user_passes_test(is_admin)
 def delete_book(request, id):
-    book = get_object_or_404(Book, id=id)
-    title = book.title  # Store title before deletion
-    book.delete()
-    # Send notification for book removal
-    Notification.send_book_notification(
-        notification_type='book_removed',
-        book=None,  # Book is already deleted
-        admin_user=request.user,
-        message=f"Book '{title}' has been removed from the library"
-    )
-    messages.success(request, 'Book deleted successfully!')
-    return redirect('books_admin:admin_book_management')
+    if request.method != 'POST':
+        return JsonResponse({
+            'success': False,
+            'message': 'Only POST method is allowed'
+        }, status=405)
+
+    try:
+        book = get_object_or_404(Book, id=id)
+        title = book.title  # Store title before deletion
+        
+        # First check if there are any borrowed books not returned
+        active_borrows = BorrowedBook.objects.filter(book=book, is_returned=False).exists()
+        if active_borrows:
+            return JsonResponse({
+                'success': False,
+                'message': 'Cannot delete book: There are active borrowers'
+            }, status=400)
+
+        try:
+            # Clear all relationships
+            book.favorited_by.clear()  # Clear favorite relationships
+            book.reviews.all().delete()  # Delete all reviews
+            BorrowedBook.objects.filter(book=book).delete()  # Delete borrowed records
+            
+            # Create notification before deleting the book
+            Notification.objects.create(
+                recipient=request.user,
+                title='Book Deleted',
+                message=f"Book '{title}' has been removed from the library",
+                notification_type='system'
+            )
+            
+            # Also notify all admins except the current user
+            admins = User.objects.filter(is_staff=True).exclude(id=request.user.id)
+            for admin in admins:
+                Notification.objects.create(
+                    recipient=admin,
+                    title='Book Deleted',
+                    message=f"Book '{title}' was removed from the library by {request.user.username}",
+                    notification_type='system'
+                )
+            
+            # Now delete the book
+            book.delete()
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Book deleted successfully!'
+            })
+            
+        except Exception as e:
+            import traceback
+            print(f"Error while deleting book {id}: {str(e)}")
+            print(traceback.format_exc())
+            return JsonResponse({
+                'success': False,
+                'message': f'Error while deleting book: {str(e)}'
+            }, status=500)
+            
+    except Book.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'message': 'Book not found'
+        }, status=404)
+    except Exception as e:
+        import traceback
+        print(f"Unexpected error while deleting book {id}: {str(e)}")
+        print(traceback.format_exc())
+        return JsonResponse({
+            'success': False,
+            'message': 'An unexpected error occurred'
+        }, status=500)
 
 @login_required
 @user_passes_test(is_admin)

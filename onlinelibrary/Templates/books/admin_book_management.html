@@ -192,7 +192,7 @@
       </thead>
       <tbody>
         {% for book in books %}
-        <tr>
+        <tr data-book-id="{{ book.id }}">
           <td>
             {% if book.image %}
             <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover" loading="lazy">
@@ -214,7 +214,7 @@
             <a href="{% url 'books_admin:edit_book' book.id %}" class="action-btn edit-btn" title="Edit book">
               <i class="fas fa-edit"></i> Edit
             </a>
-            <button class="action-btn delete-btn" data-book-id="{{ book.id }}" data-book-title="{{ book.title }}" title="Delete book">
+            <button class="action-btn delete-btn" onclick="showDeleteModal('{{ book.id }}', '{{ book.title|escapejs }}')" title="Delete book">
               <i class="fas fa-trash"></i> Delete
             </button>
           </td>
@@ -241,10 +241,11 @@
     <p>Are you sure you want to delete "<span id="bookTitle"></span>"?</p>
     <p class="warning-text">This action cannot be undone.</p>
     <div class="modal-actions">
-      <button id="confirmDelete" class="action-btn delete-btn">
+      {% csrf_token %}
+      <button type="button" id="confirmDelete" class="action-btn delete-btn">
         <i class="fas fa-trash"></i> Delete
       </button>
-      <button id="cancelDelete" class="action-btn cancel-btn">
+      <button type="button" id="cancelDelete" class="action-btn cancel-btn">
         <i class="fas fa-times"></i> Cancel
       </button>
     </div>
@@ -348,15 +349,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const cancelDeleteBtn = document.getElementById('cancelDelete');
   let currentBookId = null;
 
-  // Show modal when delete button is clicked
-  document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      currentBookId = btn.dataset.bookId;
-      bookTitleSpan.textContent = btn.dataset.bookTitle;
-      modal.style.display = 'flex';
-    });
-  });
+  // Function to get CSRF token
+  function getCsrfToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+  }
+
+  // Function to show delete modal
+  window.showDeleteModal = function(bookId, bookTitle) {
+    currentBookId = bookId;
+    bookTitleSpan.textContent = bookTitle;
+    modal.style.display = 'flex';
+  };
 
   // Hide modal when cancel is clicked
   cancelDeleteBtn.addEventListener('click', () => {
@@ -365,24 +368,62 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Handle delete confirmation
   confirmDeleteBtn.addEventListener('click', async () => {
+    if (!currentBookId) {
+      alert('No book selected for deletion');
+      return;
+    }
+
     try {
+      confirmDeleteBtn.disabled = true;
+      confirmDeleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+
       const response = await fetch(`/library-admin/books/delete/${currentBookId}/`, {
         method: 'POST',
         headers: {
-          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-        }
+          'X-CSRFToken': getCsrfToken(),
+        },
+        credentials: 'same-origin'
       });
 
-      if (response.ok) {
-        window.location.reload();
+      let result;
+      try {
+        result = await response.json();
+      } catch (e) {
+        throw new Error('Server returned an invalid response');
+      }
+
+      if (!response.ok) {
+        throw new Error(result.message || `HTTP error! status: ${response.status}`);
+      }
+
+      if (result.success) {
+        // Fade out the deleted row
+        const row = document.querySelector(`tr[data-book-id="${currentBookId}"]`);
+        if (row) {
+          row.style.transition = 'opacity 0.5s';
+          row.style.opacity = '0';
+          setTimeout(() => {
+            row.remove();
+            // Check if we need to show empty state
+            const remainingRows = document.querySelectorAll('.books-table tbody tr').length;
+            if (remainingRows === 0) {
+              location.reload();
+            }
+          }, 500);
+        } else {
+          location.reload();
+        }
       } else {
-        alert('Error deleting book');
+        throw new Error(result.message || 'Failed to delete book');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error deleting book');
+      alert(error.message || 'Error deleting book. Please try again.');
+    } finally {
+      modal.style.display = 'none';
+      confirmDeleteBtn.disabled = false;
+      confirmDeleteBtn.innerHTML = '<i class="fas fa-trash"></i> Delete';
     }
-    modal.style.display = 'none';
   });
 
   // Close modal when clicking outside
