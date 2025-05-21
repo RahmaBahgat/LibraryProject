@@ -4,64 +4,91 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Favorite Books</title>
-    <link rel="stylesheet" href="{% static 'css/FavouriteBooks.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/borrowedList.css' %}" />
     <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
     <link rel="stylesheet" href="{% static 'css/notifications.css' %}" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Merriweather:wgh@400;700&family=Playfair+Display:wght@700&display=swap"
-      trel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
     />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-      <link rel="icon" href="{% static 'images/favicon-16x16.png' %}" type="image/x-icon">
-      <link rel="shortcut icon" href="{% static 'images/favicon-16x16.png' %}" type="image/x-icon">
+    />
+    <link
+      rel="icon"
+      href="{% static 'images/favicon-16x16.png' %}"
+      type="image/x-icon"
+    />
+    <link
+      rel="shortcut icon"
+      href="{% static 'images/favicon-16x16.png' %}"
+      type="image/x-icon"
     />
   </head>
   <body>
+    {% csrf_token %}
     <nav class="navbar">
       <div class="nav-container">
-        <!-- Logo -->
         <div class="nav-logo">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="logo-icon"
+          >
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
           </svg>
           <span>InOtherWords</span>
         </div>
-    
-        <!-- Search Bar -->
         <div class="nav-search">
           <form id="searchForm">
-            <input type="text" placeholder="Search books..." aria-label="Search books">
+            <input
+              type="text"
+              placeholder="Search books..."
+              aria-label="Search books"
+            />
             <button type="submit" aria-label="Search">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="M21 21l-4.35-4.35"></path>
               </svg>
             </button>
           </form>
         </div>
-    
-        <!-- Mobile Menu Toggle -->
         <button class="nav-toggle" aria-label="Toggle navigation">
           <span></span>
           <span></span>
           <span></span>
         </button>
-    
-        <!-- Navigation Menu -->
         <div class="nav-menu">
           <a href="{% url 'home' %}" class="nav-link">Home</a>
+          <a href="{% url 'borrowed-list' %}" class="nav-link">My Books</a>
+          <a href="{% url 'favorites' %}" class="nav-link">Favorites</a>
           <div class="dropdown">
-            <a href="#" class="nav-link"> Notifications</a>
+            <a href="{% url 'notifications' %}" class="nav-link">Notifications</a>
             <div class="dropdown-content">
-              <p class="notif">Your order #1234 has been shipped.
-                <time>April 16, 2025 — 3:45 PM</time><p>
-              <p class="notif">"The Alchemist" is now 50% off!
-                <time>April 16, 2025 — 1:12 PM</time></a>
-              <p class="notif">A book on your wishlist is back in stock.
-                <time>April 15, 2025 — 10:05 AM</time><p>
+              {% for notification in notifications|slice:":3" %}
+              <p class="notif">
+                {{ notification.title }}
+                <time>{{ notification.created_at|date:"F j, Y — g:i A" }}</time>
+              </p>
+              {% empty %}
+              <p class="notif">No new notifications</p>
+              {% endfor %}
               <a class="notif" href="{% url 'notifications' %}">See all notifications</a>
             </div>
           </div>
@@ -70,24 +97,25 @@
       </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="main-content">
+      <h1>My Favorite Books</h1>
+
       <div class="books-grid" id="booksContainer">
         {% if favorite_books %}
           {% for book in favorite_books %}
             <div class="book-card" data-book-id="{{ book.id }}">
               <div class="book-cover">
                 {% if book.image %}
-                  <img src="{{ book.image.url }}" alt="{{ book.title }}">
+                  <img src="{{ book.image.url }}" alt="{{ book.title }}" />
                 {% elif book.cover_path %}
-                  <img src="{% static book.cover_path %}" alt="{{ book.title }}">
+                  <img src="{% static book.cover_path %}" alt="{{ book.title }}" />
                 {% else %}
-                  <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}">
+                  <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" />
                 {% endif %}
               </div>
               <div class="book-info">
                 <h3 class="book-title">{{ book.title }}</h3>
-                <p class="book-author">{{ book.author }}</p>
+                <p class="book-author">by {{ book.author }}</p>
                 <div class="book-rating">
                   {% for i in "12345"|make_list %}
                     {% if forloop.counter <= book.average_rating|floatformat:"0" %}
@@ -100,8 +128,12 @@
                 </div>
                 <div class="book-actions">
                   <a href="{% url 'book_detail' book.id %}" class="view-details">View Details</a>
-                  <button class="add-to-favorites favorited" data-book-id="{{ book.id }}">
-                    ❤️ Remove from Favorites
+                  <button
+                    class="return-book"
+                    data-book-id="{{ book.id }}"
+                    onclick="handleRemoveFavorite(this)"
+                  >
+                    Remove from Favorites
                   </button>
                 </div>
               </div>
@@ -116,52 +148,89 @@
       </div>
     </main>
 
-    <!-- Review Form Template -->
-    <template id="reviewFormTemplate">
-      <div class="review-form">
-        <div class="rating-stars">
-          <div class="star-rating" data-rating="0">
-            <!-- Stars will be injected here by JavaScript -->
-          </div>
-          <span class="rating-text">0/5 Stars</span>
-        </div>
-        <textarea placeholder="Write your review..." rows="3"></textarea>
-        <div class="review-form-actions">
-          <button type="button" class="btn-cancel">Cancel</button>
-          <button type="submit" class="btn-submit">Submit</button>
-        </div>
-      </div>
-    </template>
-    
-    <!-- Book Details Modal -->
-    <div id="bookModal" class="modal">
-      <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <div class="modal-body"></div>
-      </div>
-    </div>
-
-    <!-- Footer -->
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-brand">
           <div class="footer-logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="logo-icon"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="logo-icon"
+            >
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
             <span>InOtherWords</span>
           </div>
-          <p>Connecting readers with stories that matter since 2025. Our community is built on a shared love of literature.</p>
+          <p>
+            Connecting readers with stories that matter since 2025. Our
+            community is built on a shared love of literature.
+          </p>
           <div class="social-links">
             <a href="#" aria-label="Facebook">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg>
             </a>
             <a href="#" aria-label="Twitter">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+              </svg>
             </a>
             <a href="#" aria-label="Instagram">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+              </svg>
             </a>
             <a href="#" aria-label="Email">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+              </svg>
             </a>
           </div>
         </div>
@@ -192,11 +261,53 @@
     </footer>
 
     <script src="{% static 'js/Navbar_Footer.js' %}"></script>
-    <script src="{% static 'js/FavouriteBooks.js' %}"></script>
     <script src="{% static 'js/notifications.js' %}"></script>
-    <!-- <script src="{% static 'js/checkAuth.js' %}"></script> -->
     <script>
-      check(false, 0);
+      document.querySelector(".current-year").textContent = new Date().getFullYear();
+
+      // Remove from favorites functionality
+      function handleRemoveFavorite(button) {
+        const bookId = button.dataset.bookId;
+        const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+        fetch(`/book/${bookId}/toggle-favorite/`, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrfToken,
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          credentials: 'same-origin'
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Remove the book card from the UI
+              const bookCard = button.closest(".book-card");
+              bookCard.remove();
+
+              // Show success message
+              alert(data.message || "Book removed from favorites successfully!");
+
+              // If no books left, show empty state
+              const booksContainer = document.getElementById("booksContainer");
+              if (!booksContainer.querySelector(".book-card")) {
+                booksContainer.innerHTML = `
+                  <div class="empty-state">
+                    <h2>No Favorite Books Found</h2>
+                    <p>Books you mark as favorite will appear here</p>
+                  </div>
+                `;
+              }
+            } else {
+              alert(data.message || "Failed to remove book from favorites. Please try again.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred while processing your request.");
+          });
+      }
     </script>
   </body>
 </html>
