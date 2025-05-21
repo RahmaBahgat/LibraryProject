@@ -129,7 +129,8 @@
                       <i class="far fa-star"></i>
                     {% endif %}
                   {% endfor %}
-                  <span class="rating-count">({{ book.reviews.count }})</span>
+                  <span class="rating-value">{{ book.average_rating|floatformat:1 }}</span>
+                  <span class="rating-count">({{ book.reviews.count }} reviews)</span>
                 </div>
                 <div class="book-actions">
                   <a href="{% url 'book_detail' book.id %}" class="view-details">View Details</a>
