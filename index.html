@@ -10,6 +10,149 @@
     />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="./css/Navbar_Footer.css" />
+    <style>
+      /* Updated Carousel Styles */
+      .carousel-section {
+        padding: 4rem 0;
+        margin: 2rem auto;
+        max-width: 1200px;
+        background: var(--cream, #f5f5f5);
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .section-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        color: var(--dark-brown, #2c1810);
+      }
+
+      .decorative-star {
+        color: var(--brand-red, #9e2a2b);
+        font-size: 1.5rem;
+      }
+
+      .carousel-container {
+        position: relative;
+        padding: 0 60px;
+        margin: 0 auto;
+        max-width: 1400px;
+      }
+
+      .carousel-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        padding: 1rem;
+      }
+
+      .book-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+      }
+
+      .book-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+      }
+
+      .book-cover {
+        width: 180px;
+        height: 270px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      }
+
+      .book-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0.5rem 0;
+        color: var(--dark-brown, #2c1810);
+      }
+
+      .book-author {
+        font-size: 1rem;
+        color: var(--warm-taupe, #785964);
+        margin-bottom: 0.75rem;
+      }
+
+      .book-rating {
+        color: var(--brand-red, #9e2a2b);
+        font-size: 1.1rem;
+      }
+
+      .carousel-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--brand-red, #9e2a2b);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        z-index: 2;
+        transition: all 0.3s ease;
+        opacity: 0.9;
+      }
+
+      .carousel-arrow:hover {
+        background: var(--dark-brown, #2c1810);
+        opacity: 1;
+      }
+
+      .carousel-arrow.prev {
+        left: 0;
+      }
+
+      .carousel-arrow.next {
+        right: 0;
+      }
+
+      @media (max-width: 1200px) {
+        .carousel-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      @media (max-width: 900px) {
+        .carousel-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 600px) {
+        .carousel-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .section-header h2 {
+          font-size: 2rem;
+        }
+        
+        .book-cover {
+          width: 160px;
+          height: 240px;
+        }
+      }
+    </style>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
@@ -117,42 +260,16 @@
         <!-- Book Carousel Section -->
         <section class="carousel-section">
           <div class="section-header">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
-              ></path>
-            </svg>
+            <span class="decorative-star">✧</span>
             <h2>New Books</h2>
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
-              ></path>
-            </svg>
+            <span class="decorative-star">✧</span>
           </div>
           <div class="carousel-container">
-            <button class="carousel-arrow prev">&lt;</button>
-            <div class="carousel-grid">
-              <!-- Book cards will be injected here -->
+            <button class="carousel-arrow prev" aria-label="Previous books">&lt;</button>
+            <div class="carousel-grid" id="bookCarousel">
+              <!-- Book cards will be dynamically added here -->
             </div>
-            <button class="carousel-arrow next">&gt;</button>
+            <button class="carousel-arrow next" aria-label="Next books">&gt;</button>
           </div>
         </section>
       </section>
@@ -313,6 +430,124 @@
     <script src="{% static 'js/checkAuth.js' %}"></script>
     <script>
       loginCheck();
+    </script>
+
+    <script>
+      // Updated sample books data with trending books
+      const featuredBooks = [
+        {
+          title: "Iron Flame",
+          author: "Rebecca Yarros",
+          cover: "./Static/images/books/Iron Flame Cover.jpeg",
+          rating: 4.8,
+          trending: true
+        },
+        {
+          title: "Fourth Wing",
+          author: "Rebecca Yarros",
+          cover: "./Static/images/books/Fourth Wing Cover.jpeg",
+          rating: 4.7,
+          trending: true
+        },
+        {
+          title: "Never Lie",
+          author: "Freida McFadden",
+          cover: "./Static/images/books/Never Lie.jpeg",
+          rating: 4.3,
+          trending: true
+        },
+        {
+          title: "Reckless",
+          author: "Lauren Roberts",
+          cover: "./Static/images/books/Reckless.jpeg",
+          rating: 4.5,
+          trending: true
+        },
+        {
+          title: "The Great Gatsby",
+          author: "F. Scott Fitzgerald",
+          cover: "./Static/images/books/The Great Gatsby.jpeg",
+          rating: 4.7,
+          trending: false
+        },
+        {
+          title: "Pride and Prejudice",
+          author: "Jane Austen",
+          cover: "./Static/images/books/Pride and Prejudice.jpeg",
+          rating: 4.9,
+          trending: false
+        }
+      ];
+
+      // Function to create star rating HTML
+      function getStarRating(rating) {
+        const fullStars = Math.floor(rating);
+        const hasHalfStar = rating % 1 >= 0.5;
+        let stars = '';
+        
+        for (let i = 0; i < 5; i++) {
+          if (i < fullStars) {
+            stars += '★';
+          } else if (i === fullStars && hasHalfStar) {
+            stars += '½';
+          } else {
+            stars += '☆';
+          }
+        }
+        
+        return stars;
+      }
+
+      // Function to create book cards
+      function createBookCard(book) {
+        return `
+          <div class="book-card" onclick="redirectToSignup()">
+            <img src="${book.cover}" alt="${book.title}" class="book-cover" onerror="this.src='./Static/images/books/default-cover.jpg'">
+            <h3 class="book-title">${book.title}</h3>
+            <p class="book-author">by ${book.author}</p>
+            <div class="book-rating">${getStarRating(book.rating)}</div>
+          </div>
+        `;
+      }
+
+      // Function to redirect to signup page
+      function redirectToSignup() {
+        window.location.href = './html/LogIn_SignUp page.html';
+      }
+
+      // Initialize carousel
+      const carousel = document.getElementById('bookCarousel');
+      let currentPage = 0;
+      const booksPerPage = 4;
+
+      // Filter trending books
+      const trendingBooks = featuredBooks.filter(book => book.trending);
+
+      function updateCarousel() {
+        const start = currentPage * booksPerPage;
+        const end = start + booksPerPage;
+        const visibleBooks = trendingBooks.slice(start, end);
+        
+        carousel.innerHTML = visibleBooks.map(book => createBookCard(book)).join('');
+      }
+
+      // Add event listeners for carousel navigation
+      document.querySelector('.carousel-arrow.prev').addEventListener('click', () => {
+        if (currentPage > 0) {
+          currentPage--;
+          updateCarousel();
+        }
+      });
+
+      document.querySelector('.carousel-arrow.next').addEventListener('click', () => {
+        if ((currentPage + 1) * booksPerPage < trendingBooks.length) {
+          currentPage++;
+          updateCarousel();
+        }
+      });
+
+      // Initialize the carousel
+      updateCarousel();
     </script>
   </body>
 </html>

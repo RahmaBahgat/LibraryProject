@@ -11,6 +11,443 @@
     />
     <link rel="stylesheet" href="{% static 'css/index-style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/Navbar_Footer.css' %}" />
+    <style>
+      /* Updated Background and Carousel Styles */
+      .background {
+        background: linear-gradient(45deg, var(--cream) 40%, var(--warm-taupe) 70%);
+        padding-bottom: 4rem;
+      }
+
+      .carousel-section {
+        padding: 4rem 2rem;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 100%;
+        background: transparent;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+      }
+
+      .section-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.8rem;
+        color: var(--dark-brown, #2c1810);
+      }
+
+      .decorative-star {
+        color: var(--brand-red, #9e2a2b);
+        font-size: 2rem;
+      }
+
+      .carousel-container {
+        position: relative;
+        padding: 0 4rem;
+        margin: 0 auto;
+        width: calc(100% - 8rem);
+        max-width: 1800px;
+        overflow: hidden;
+      }
+
+      .carousel-track {
+        display: flex;
+        gap: 2rem;
+        padding: 1rem;
+        transition: transform 0.5s ease-in-out;
+      }
+
+      .carousel-item {
+        flex: 0 0 calc(25% - 1.5rem);
+        min-width: calc(25% - 1.5rem);
+      }
+
+      .book-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .book-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+      }
+
+      .book-cover {
+        width: 200px;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      }
+
+      .book-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0.5rem 0;
+        color: var(--dark-brown, #2c1810);
+        line-height: 1.4;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      .book-author {
+        font-size: 1rem;
+        color: var(--warm-taupe, #785964);
+        margin-bottom: 0.75rem;
+        font-style: italic;
+      }
+
+      .book-rating {
+        color: var(--brand-red, #9e2a2b);
+        font-size: 1.1rem;
+        margin-top: auto;
+      }
+
+      .carousel-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3rem;
+        height: 3rem;
+        background: var(--brand-red, #9e2a2b);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        cursor: pointer;
+        opacity: 0.9;
+        transition: all 0.3s ease;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .carousel-arrow:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      .carousel-arrow:not(:disabled):hover {
+        opacity: 1;
+        background: var(--dark-brown, #2c1810);
+      }
+
+      .carousel-arrow.prev {
+        left: 1rem;
+      }
+
+      .carousel-arrow.next {
+        right: 1rem;
+      }
+
+      @media (max-width: 1400px) {
+        .carousel-item {
+          flex: 0 0 calc(33.333% - 1.33rem);
+          min-width: calc(33.333% - 1.33rem);
+        }
+      }
+
+      @media (max-width: 1100px) {
+        .carousel-item {
+          flex: 0 0 calc(50% - 1rem);
+          min-width: calc(50% - 1rem);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .carousel-item {
+          flex: 0 0 100%;
+          min-width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .background {
+          padding-bottom: 2rem;
+        }
+        .carousel-track {
+          grid-template-columns: 1fr;
+        }
+        .section-header h2 {
+          font-size: 1.8rem;
+        }
+        .carousel-container {
+          padding: 0 2rem;
+          width: calc(100% - 4rem);
+        }
+        .book-cover {
+          width: 180px;
+          height: 270px;
+        }
+      }
+
+      /* About Section Styles */
+      .about-section {
+        padding: 6rem 2rem;
+        background: var(--cream);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .about-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100px;
+        background: linear-gradient(to bottom, var(--warm-taupe) 0%, transparent 100%);
+        opacity: 0.1;
+      }
+
+      .about-section h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.8rem;
+        color: var(--dark-brown);
+        margin-bottom: 1.5rem;
+        position: relative;
+        display: inline-block;
+      }
+
+      .about-section h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: var(--brand-red);
+      }
+
+      .about-intro {
+        max-width: 800px;
+        margin: 0 auto 4rem;
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: var(--dark-brown);
+        font-style: italic;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .feature-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: left;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .feature-icon {
+        font-size: 2.5rem;
+        color: var(--brand-red);
+        margin-bottom: 1rem;
+      }
+
+      .feature-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem;
+        color: var(--dark-brown);
+        margin-bottom: 1rem;
+      }
+
+      .feature-description {
+        color: var(--warm-taupe);
+        line-height: 1.6;
+        font-size: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .about-section {
+          padding: 4rem 1.5rem;
+        }
+
+        .about-section h2 {
+          font-size: 2.2rem;
+        }
+
+        .about-intro {
+          font-size: 1.1rem;
+          padding: 0 1rem;
+        }
+
+        .features-grid {
+          grid-template-columns: 1fr;
+          padding: 1rem;
+        }
+      }
+
+      /* Testimonials Section Styles */
+      .testimonials {
+        padding: 6rem 2rem;
+        background: linear-gradient(135deg, var(--cream) 0%, var(--warm-taupe) 100%);
+        text-align: center;
+        position: relative;
+      }
+
+      .testimonials h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.8rem;
+        color: var(--dark-brown);
+        margin-bottom: 3rem;
+        position: relative;
+        display: inline-block;
+      }
+
+      .testimonials h2::after {
+        content: '"';
+        position: absolute;
+        top: -20px;
+        right: -30px;
+        font-size: 4rem;
+        color: var(--brand-red);
+        opacity: 0.3;
+      }
+
+      .testimonials-container {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+        overflow: hidden;
+        padding: 0 4rem;
+      }
+
+      .testimonials-track {
+        display: flex;
+        transition: transform 0.5s ease;
+        gap: 2rem;
+      }
+
+      .testimonial-card {
+        flex: 0 0 calc(33.333% - 1.33rem);
+        min-width: calc(33.333% - 1.33rem);
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-align: left;
+        position: relative;
+      }
+
+      .testimonial-content {
+        font-style: italic;
+        color: var(--dark-brown);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+      }
+
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        padding-top: 1rem;
+      }
+
+      .author-info {
+        flex-grow: 1;
+      }
+
+      .author-name {
+        font-weight: 600;
+        color: var(--dark-brown);
+        margin-bottom: 0.2rem;
+        font-size: 1.1rem;
+      }
+
+      .author-title {
+        font-size: 0.9rem;
+        color: var(--warm-taupe);
+        font-style: italic;
+      }
+
+      .testimonial-quote {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        color: var(--brand-red);
+        opacity: 0.2;
+        font-size: 2rem;
+      }
+
+      .testimonial-rating {
+        color: #ffd700;
+        margin-bottom: 1rem;
+      }
+
+      .testimonials .carousel-arrow {
+        background: var(--dark-brown);
+      }
+
+      .testimonials .carousel-arrow:hover {
+        background: var(--brand-red);
+      }
+
+      @media (max-width: 1200px) {
+        .testimonial-card {
+          flex: 0 0 calc(50% - 1rem);
+          min-width: calc(50% - 1rem);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .testimonials {
+          padding: 4rem 1.5rem;
+        }
+
+        .testimonials h2 {
+          font-size: 2.2rem;
+        }
+
+        .testimonial-card {
+          flex: 0 0 100%;
+          min-width: 100%;
+        }
+
+        .testimonials-container {
+          padding: 0 3rem;
+        }
+      }
+    </style>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Source+Sans+3:wght@300;400;500;600&display=swap"
@@ -67,42 +504,29 @@
         <!-- Book Carousel Section -->
         <section class="carousel-section">
           <div class="section-header">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
-              ></path>
-            </svg>
+            <span class="decorative-star">✧</span>
             <h2>New Books</h2>
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
-              ></path>
-            </svg>
+            <span class="decorative-star">✧</span>
           </div>
           <div class="carousel-container">
-            <button class="carousel-arrow prev">&lt;</button>
-            <div class="carousel-grid">
-              <!-- Book cards will be injected here -->
+            <button class="carousel-arrow prev" aria-label="Previous books">&lt;</button>
+            <div class="carousel-track" id="bookCarousel">
+              {% for book in trending_books %}
+                <div class="carousel-item">
+                  <div class="book-card" onclick="redirectToSignup()">
+                    {% if book.image %}
+                      <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
+                    {% else %}
+                      <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
+                    {% endif %}
+                    <h3 class="book-title">{{ book.title }}</h3>
+                    <p class="book-author">by {{ book.author }}</p>
+                    <div class="book-rating">{{ book.rating_stars }}</div>
+                  </div>
+                </div>
+              {% endfor %}
             </div>
-            <button class="carousel-arrow next">&gt;</button>
+            <button class="carousel-arrow next" aria-label="Next books">&gt;</button>
           </div>
         </section>
       </section>
@@ -112,24 +536,153 @@
     <section class="about-section">
       <h2>About InOtherWords</h2>
       <p class="about-intro">
-        Born from a passion for stories that transport, transform, and
-        transcend, InOtherWords is more than just a digital library, it's a
-        community of book lovers.
+        Born from a passion for stories that transport, transform, and transcend, 
+        InOtherWords is more than just a digital library—it's a vibrant community 
+        where book lovers come together to explore, share, and celebrate the magic of literature.
       </p>
-      <div class="features-grid"></div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-book-reader"></i>
+          </div>
+          <h3 class="feature-title">Vast Collection</h3>
+          <p class="feature-description">
+            Explore our extensive library of books across all genres, from timeless classics 
+            to contemporary masterpieces, carefully curated for our community.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3 class="feature-title">Community Driven</h3>
+          <p class="feature-description">
+            Join a thriving community of readers who share your passion for books. 
+            Discuss, review, and discover new reads through fellow book lovers.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-star"></i>
+          </div>
+          <h3 class="feature-title">Personalized Experience</h3>
+          <p class="feature-description">
+            Get tailored book recommendations based on your reading preferences and 
+            history, helping you discover your next favorite book.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <h3 class="feature-title">Read Anywhere</h3>
+          <p class="feature-description">
+            Access your library anytime, anywhere. Our platform is designed to provide 
+            a seamless reading experience across all your devices.
+          </p>
+        </div>
+      </div>
     </section>
 
     <!-- Testimonials -->
     <section class="testimonials">
       <h2>What Our Readers Say</h2>
       <div class="testimonials-container">
-        <button class="carousel-arrow prev" aria-label="Previous testimonial">
-          &lt;
-        </button>
-        <div class="testimonials-grid"></div>
-        <button class="carousel-arrow next" aria-label="Next testimonial">
-          &gt;
-        </button>
+        <button class="carousel-arrow prev" aria-label="Previous testimonial">&lt;</button>
+        <div class="testimonials-track">
+          <div class="testimonial-card">
+            <div class="testimonial-quote">
+              <i class="fas fa-quote-right"></i>
+            </div>
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-content">
+              "InOtherWords has completely transformed my reading experience. The personalized recommendations 
+              are spot-on, and I've discovered so many amazing books I wouldn't have found otherwise!"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-info">
+                <div class="author-name">Someone</div>
+                <div class="author-title">Book Enthusiast</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-quote">
+              <i class="fas fa-quote-right"></i>
+            </div>
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <p class="testimonial-content">
+              "The community here is incredible! I love discussing books with fellow readers and getting 
+              different perspectives. It's like having a book club that's always open."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-info">
+                <div class="author-name">Person</div>
+                <div class="author-title">Regular Reader</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-quote">
+              <i class="fas fa-quote-right"></i>
+            </div>
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-content">
+              "As a busy professional, having access to my library anywhere is fantastic. The mobile 
+              experience is seamless, and I can always pick up right where I left off."
+            </p>
+            <div class="testimonial-author">
+              <div class="author-info">
+                <div class="author-name">Folan</div>
+                <div class="author-title">Avid Reader</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-quote">
+              <i class="fas fa-quote-right"></i>
+            </div>
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-content">
+              "The curated collections and reading challenges have reignited my love for reading. 
+              I've explored genres I never thought I'd enjoy!"
+            </p>
+            <div class="testimonial-author">
+              <div class="author-info">
+                <div class="author-name">Folana</div>
+                <div class="author-title">Book Lover</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-arrow next" aria-label="Next testimonial">&gt;</button>
       </div>
     </section>
 
@@ -263,6 +816,149 @@
 
     <script>
       loginCheck();
+
+      function redirectToSignup() {
+        window.location.href = "{% url 'login' %}";
+      }
+
+      // Carousel Navigation
+      document.addEventListener('DOMContentLoaded', function() {
+        const carousel = document.querySelector('.carousel-track');
+        const prevBtn = document.querySelector('.carousel-arrow.prev');
+        const nextBtn = document.querySelector('.carousel-arrow.next');
+        const items = carousel.querySelectorAll('.carousel-item');
+        let currentPosition = 0;
+        let itemsPerPage = getItemsPerPage();
+
+        function getItemsPerPage() {
+          if (window.innerWidth >= 1400) return 4;
+          if (window.innerWidth >= 1100) return 3;
+          if (window.innerWidth >= 768) return 2;
+          return 1;
+        }
+
+        function updateCarousel() {
+          const itemWidth = carousel.querySelector('.carousel-item').offsetWidth;
+          const maxPosition = -(items.length - itemsPerPage) * itemWidth;
+          
+          carousel.style.transform = `translateX(${currentPosition}px)`;
+          
+          // Update button states
+          prevBtn.disabled = currentPosition >= 0;
+          nextBtn.disabled = currentPosition <= maxPosition;
+        }
+
+        function slideCarousel(direction) {
+          const itemWidth = carousel.querySelector('.carousel-item').offsetWidth;
+          const maxPosition = -(items.length - itemsPerPage) * itemWidth;
+          
+          if (direction === 'prev' && currentPosition < 0) {
+            currentPosition += itemWidth;
+          } else if (direction === 'next' && currentPosition > maxPosition) {
+            currentPosition -= itemWidth;
+          }
+          
+          updateCarousel();
+        }
+
+        prevBtn.addEventListener('click', () => slideCarousel('prev'));
+        nextBtn.addEventListener('click', () => slideCarousel('next'));
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+          const newItemsPerPage = getItemsPerPage();
+          if (newItemsPerPage !== itemsPerPage) {
+            itemsPerPage = newItemsPerPage;
+            currentPosition = 0;
+            updateCarousel();
+          }
+        });
+
+        // Initialize carousel
+        updateCarousel();
+      });
+
+      // Function to create star rating HTML
+      function getStarRating(rating) {
+        const fullStars = Math.floor(rating);
+        const hasHalfStar = rating % 1 >= 0.5;
+        let stars = '';
+        
+        for (let i = 0; i < 5; i++) {
+          if (i < fullStars) {
+            stars += '★';
+          } else if (i === fullStars && hasHalfStar) {
+            stars += '½';
+          } else {
+            stars += '☆';
+          }
+        }
+        
+        return stars;
+      }
+
+      // Update the carousel HTML structure
+      document.addEventListener('DOMContentLoaded', function() {
+        // Wrap each book card in a carousel item div
+        const carousel = document.querySelector('.carousel-track');
+        const bookCards = carousel.querySelectorAll('.book-card');
+        bookCards.forEach(card => {
+          const item = document.createElement('div');
+          item.className = 'carousel-item';
+          card.parentNode.insertBefore(item, card);
+          item.appendChild(card);
+        });
+      });
+
+      // Add this to your existing DOMContentLoaded event listener
+      document.addEventListener('DOMContentLoaded', function() {
+        // Testimonials carousel
+        const testimonialTrack = document.querySelector('.testimonials-track');
+        const testimonialPrev = document.querySelector('.testimonials .prev');
+        const testimonialNext = document.querySelector('.testimonials .next');
+        const testimonialCards = document.querySelectorAll('.testimonial-card');
+        let testimonialPosition = 0;
+
+        function getTestimonialsPerPage() {
+          if (window.innerWidth >= 1200) return 3;
+          if (window.innerWidth >= 768) return 2;
+          return 1;
+        }
+
+        function updateTestimonialCarousel() {
+          const cardWidth = testimonialTrack.querySelector('.testimonial-card').offsetWidth;
+          const maxPosition = -(testimonialCards.length - getTestimonialsPerPage()) * cardWidth;
+          
+          testimonialTrack.style.transform = `translateX(${testimonialPosition}px)`;
+          
+          testimonialPrev.disabled = testimonialPosition >= 0;
+          testimonialNext.disabled = testimonialPosition <= maxPosition;
+        }
+
+        function slideTestimonials(direction) {
+          const cardWidth = testimonialTrack.querySelector('.testimonial-card').offsetWidth;
+          const maxPosition = -(testimonialCards.length - getTestimonialsPerPage()) * cardWidth;
+          
+          if (direction === 'prev' && testimonialPosition < 0) {
+            testimonialPosition += cardWidth;
+          } else if (direction === 'next' && testimonialPosition > maxPosition) {
+            testimonialPosition -= cardWidth;
+          }
+          
+          updateTestimonialCarousel();
+        }
+
+        testimonialPrev.addEventListener('click', () => slideTestimonials('prev'));
+        testimonialNext.addEventListener('click', () => slideTestimonials('next'));
+
+        window.addEventListener('resize', () => {
+          testimonialPosition = 0;
+          updateTestimonialCarousel();
+        });
+
+        // Initialize testimonials carousel
+        updateTestimonialCarousel();
+      });
     </script>
   </body>
 </html>

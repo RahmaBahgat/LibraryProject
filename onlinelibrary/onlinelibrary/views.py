@@ -7,7 +7,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from books.models import Notification, Book, BorrowedBook, UserProfile, BookReview
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.middleware.csrf import get_token
-from django.db.models import Q
+from django.db.models import Q, Avg
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils import timezone
 from datetime import timedelta
@@ -279,7 +279,21 @@ def index(request):
         if request.user.is_staff:
             return redirect('admin_home')
         return redirect('home')
-    return render(request, 'index.html')
+    
+    # Get trending books (books with highest average rating)
+    trending_books = Book.objects.filter(
+        average_rating__isnull=False
+    ).order_by('-average_rating')[:8]  # Get top 8 rated books
+
+    # Add rating stars for each book
+    for book in trending_books:
+        rating = book.average_rating or 0
+        full_stars = '★' * int(rating)
+        half_star = '½' if rating % 1 >= 0.5 else ''
+        empty_stars = '☆' * (5 - int(rating) - (1 if half_star else 0))
+        book.rating_stars = f"{full_stars}{half_star}{empty_stars}"
+
+    return render(request, 'index.html', {'trending_books': trending_books})
 
 @staff_member_required
 def admin_home(request):
