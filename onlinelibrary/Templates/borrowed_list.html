@@ -27,6 +27,7 @@
     />
   </head>
   <body>
+    {% csrf_token %}
     <nav class="navbar">
       <div class="nav-container">
         <div class="nav-logo">
@@ -48,9 +49,20 @@
         </div>
         <div class="nav-search">
           <form id="searchForm">
-            <input type="text" placeholder="Search books..." aria-label="Search books">
+            <input
+              type="text"
+              placeholder="Search books..."
+              aria-label="Search books"
+            />
             <button type="submit" aria-label="Search">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="M21 21l-4.35-4.35"></path>
               </svg>
@@ -67,7 +79,9 @@
           <a href="{% url 'borrowed-list' %}" class="nav-link">My Books</a>
           <a href="{% url 'favorites' %}" class="nav-link">Favorites</a>
           <div class="dropdown">
-            <a href="{% url 'notifications' %}" class="nav-link">Notifications</a>
+            <a href="{% url 'notifications' %}" class="nav-link"
+              >Notifications</a
+            >
             <div class="dropdown-content">
               {% for notification in notifications|slice:":3" %}
               <p class="notif">
@@ -77,7 +91,9 @@
               {% empty %}
               <p class="notif">No new notifications</p>
               {% endfor %}
-              <a class="notif" href="{% url 'notifications' %}">See all notifications</a>
+              <a class="notif" href="{% url 'notifications' %}"
+                >See all notifications</a
+              >
             </div>
           </div>
           <a href="{% url 'profile' %}" class="nav-link">Profile</a>
@@ -89,57 +105,67 @@
       <h1>My Borrowed Books</h1>
 
       <div class="borrow-counter">
-        Borrowed Books: <span id="borrow-count">{{ borrowed_books|length }}</span>/5
+        Borrowed Books:
+        <span id="borrow-count">{{ borrowed_books|length }}</span>/5
       </div>
 
-      <div id="limit-warning" class="limit-warning {% if borrowed_books|length >= 5 %}show{% else %}hide{% endif %}">
-        You cannot borrow more than 5 books. Please return a book to borrow a new one.
+      <div
+        id="limit-warning"
+        class="limit-warning {% if borrowed_books|length >= 5 %}show{% else %}hide{% endif %}"
+      >
+        You cannot borrow more than 5 books. Please return a book to borrow a
+        new one.
       </div>
 
       <div class="books-grid" id="booksContainer">
-        {% if borrowed_books %}
-          {% for borrowed in borrowed_books %}
-            <div class="book-card" data-book-id="{{ borrowed.book.id }}">
-              <div class="book-cover">
-                {% if borrowed.book.image %}
-                  <img src="{{ borrowed.book.image.url }}" alt="{{ borrowed.book.title }}">
-                {% elif borrowed.book.cover_path %}
-                  <img src="{% static borrowed.book.cover_path %}" alt="{{ borrowed.book.title }}">
-                {% else %}
-                  <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ borrowed.book.title }}">
-                {% endif %}
-              </div>
-              <div class="book-info">
-                <h3 class="book-title">{{ borrowed.book.title }}</h3>
-                <p class="book-author">by {{ borrowed.book.author }}</p>
-                <div class="book-rating">
-                  {% for i in "12345"|make_list %}
-                    {% if forloop.counter <= borrowed.book.average_rating|floatformat:"0" %}
-                      <i class="fas fa-star"></i>
-                    {% else %}
-                      <i class="far fa-star"></i>
-                    {% endif %}
-                  {% endfor %}
-                  <span class="rating-count">({{ borrowed.book.reviews.count }})</span>
-                </div>
-                <div class="borrow-info">
-                  <p>Borrowed on: {{ borrowed.borrow_date|date:"F j, Y" }}</p>
-                  <p>Due by: {{ borrowed.due_date|date:"F j, Y" }}</p>
-                </div>
-                <div class="book-actions">
-                  <a href="{% url 'book_detail' borrowed.book.id %}" class="view-details">View Details</a>
-                  <button class="return-book" data-book-id="{{ borrowed.book.id }}">
-                    Return Book
-                  </button>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-        {% else %}
-          <div class="empty-state">
-            <h2>No Borrowed Books Found</h2>
-            <p>Books you borrow will appear here</p>
+        {% if borrowed_books %} {% for borrowed in borrowed_books %}
+        <div class="book-card" data-book-id="{{ borrowed.book.id }}">
+          <div class="book-cover">
+            {% if borrowed.book.image %}
+            <img
+              src="{{ borrowed.book.image.url }}"
+              alt="{{ borrowed.book.title }}"
+            />
+            {% elif borrowed.book.cover_path %}
+            <img
+              src="{% static borrowed.book.cover_path %}"
+              alt="{{ borrowed.book.title }}"
+            />
+            {% else %}
+            <img
+              src="{% static 'images/books/default-cover.jpg' %}"
+              alt="{{ borrowed.book.title }}"
+            />
+            {% endif %}
           </div>
+          <div class="book-info">
+            <h3 class="book-title">{{ borrowed.book.title }}</h3>
+            <p class="book-author">by {{ borrowed.book.author }}</p>
+            <div class="borrow-info">
+              <p>Borrowed on: {{ borrowed.borrow_date|date:"F j, Y" }}</p>
+              <p>Due by: {{ borrowed.due_date|date:"F j, Y" }}</p>
+            </div>
+            <div class="book-actions">
+              <a
+                href="{% url 'book_detail' borrowed.book.id %}"
+                class="view-details"
+                >View Details</a
+              >
+              <button
+                class="return-book"
+                data-book-id="{{ borrowed.book.id }}"
+                onclick="handleReturn(this)"
+              >
+                Return Book
+              </button>
+            </div>
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <div class="empty-state">
+          <h2>No Borrowed Books Found</h2>
+          <p>Books you borrow will appear here</p>
+        </div>
         {% endif %}
       </div>
     </main>
@@ -269,7 +295,59 @@
     <script src="{% static 'js/Navbar_Footer.js' %}"></script>
     <script src="{% static 'js/notifications.js' %}"></script>
     <script>
-      document.querySelector(".current-year").textContent = new Date().getFullYear();
+      document.querySelector(".current-year").textContent =
+        new Date().getFullYear();
+
+      // Return functionality
+      function handleReturn(button) {
+        const bookId = button.dataset.bookId;
+        const csrfToken = document.querySelector(
+          "[name=csrfmiddlewaretoken]"
+        ).value;
+
+        fetch(`/book/${bookId}/toggle-borrow/`, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrfToken,
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Remove the book card from the UI
+              const bookCard = button.closest(".book-card");
+              bookCard.remove();
+
+              // Update borrow count
+              const borrowCount = document.getElementById("borrow-count");
+              const currentCount = parseInt(borrowCount.textContent);
+              borrowCount.textContent = currentCount - 1;
+
+              // Show success message
+              alert(data.message);
+
+              // If no books left, show empty state
+              if (currentCount - 1 === 0) {
+                const booksContainer =
+                  document.getElementById("booksContainer");
+                booksContainer.innerHTML = `
+                <div class="empty-state">
+                  <h2>No Borrowed Books Found</h2>
+                  <p>Books you borrow will appear here</p>
+                </div>
+              `;
+              }
+            } else {
+              alert(data.message);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred while processing your request.");
+          });
+      }
     </script>
   </body>
 </html>

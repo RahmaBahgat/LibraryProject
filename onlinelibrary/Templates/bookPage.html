@@ -73,7 +73,7 @@
         font-size: 3rem;
         font-weight: 700;
         margin-bottom: 1rem;
-        font-family: 'Playfair Display', serif;
+        font-family: "Playfair Display", serif;
       }
 
       .section-header i {
@@ -118,7 +118,7 @@
         height: 100% !important;
         display: flex !important;
         flex-direction: row !important;
-        border: 1px solid #E2E8F0 !important;
+        border: 1px solid #e2e8f0 !important;
         max-width: 650px !important;
         width: 100% !important;
         margin: 0 !important;
@@ -165,7 +165,7 @@
       .book-title {
         font-size: 1.8rem !important;
         font-weight: 700 !important;
-        color: #2D3748 !important;
+        color: #2d3748 !important;
         margin-bottom: 1.25rem !important;
         line-height: 1.4 !important;
         display: -webkit-box !important;
@@ -178,7 +178,7 @@
 
       .book-author {
         font-size: 1.4rem !important;
-        color: #4A5568 !important;
+        color: #4a5568 !important;
         font-style: italic !important;
         margin-bottom: 1.25rem !important;
         display: -webkit-box !important;
@@ -241,7 +241,10 @@
         }
 
         .books-grid {
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+          grid-template-columns: repeat(
+            auto-fit,
+            minmax(300px, 1fr)
+          ) !important;
           gap: 2rem;
           padding: 0 1rem;
         }
@@ -297,7 +300,7 @@
       }
 
       .reviews-header h2 {
-        font-family: 'Playfair Display', serif;
+        font-family: "Playfair Display", serif;
         font-size: 2.5rem;
         color: var(--dark-brown);
         margin-bottom: 1rem;
@@ -622,11 +625,10 @@
       </div>
     </nav>
 
-    <br>
-    <br>
-    <br>
-    <br>
-  
+    <br />
+    <br />
+    <br />
+    <br />
 
     <!-- Book Details -->
     <section class="content">
@@ -663,16 +665,14 @@
             <h4 class="book-author">{{ book.author }}</h4>
 
             <div class="book-rating">
-              {% for i in "12345" %}
-                {% if i|add:"0" <= book.average_rating %}
+              {% for i in "12345"|make_list %}
+                {% if forloop.counter <= book.average_rating|floatformat:"0" %}
                   <i class="fas fa-star"></i>
                 {% else %}
                   <i class="far fa-star"></i>
                 {% endif %}
               {% endfor %}
-              <span class="rating-count">
-                {% if book.reviews.count > 0 %} ({{ book.reviews.count }}) {% else %} (No reviews yet) {% endif %}
-              </span>
+              <span class="rating-count">({{ book.reviews.count }})</span>
             </div>
           </div>
 
@@ -722,38 +722,48 @@
             <p class="section-subtitle">You might also enjoy these books</p>
           </div>
           <div class="books-grid">
-            {% for book in similar_books %}
-              {% if book %}
-              <div class="book-item">
-                <a href="{% url 'books_admin:book_detail' book.id %}" class="book-link">
-                  <div class="book-card">
-                    <div class="book-cover-container">
-                      {% if book.image %}
-                        <img src="{{ book.image.url }}" alt="{{ book.title }}" class="book-cover">
-                      {% else %}
-                        <img src="{% static 'images/books/default-cover.jpg' %}" alt="{{ book.title }}" class="book-cover">
-                      {% endif %}
-                    </div>
-                    <div class="book-info">
-                      <h3 class="book-title">{{ book.title }}</h3>
-                      <p class="book-author">by {{ book.author }}</p>
-                      {% if book.average_rating %}
-                      <div class="book-rating">
-                        {% for i in "12345" %}
-                          {% if forloop.counter <= book.average_rating %}
-                            <i class="fas fa-star"></i>
-                          {% else %}
-                            <i class="far fa-star"></i>
-                          {% endif %}
-                        {% endfor %}
-                      </div>
-                      {% endif %}
-                    </div>
+            {% for book in similar_books %} {% if book %}
+            <div class="book-item">
+              <a
+                href="{% url 'books_admin:book_detail' book.id %}"
+                class="book-link"
+              >
+                <div class="book-card">
+                  <div class="book-cover-container">
+                    {% if book.image %}
+                    <img
+                      src="{{ book.image.url }}"
+                      alt="{{ book.title }}"
+                      class="book-cover"
+                    />
+                    {% else %}
+                    <img
+                      src="{% static 'images/books/default-cover.jpg' %}"
+                      alt="{{ book.title }}"
+                      class="book-cover"
+                    />
+                    {% endif %}
                   </div>
-                </a>
-              </div>
-              {% endif %}
-            {% endfor %}
+                  <div class="book-info">
+                    <h3 class="book-title">{{ book.title }}</h3>
+                    <p class="book-author">by {{ book.author }}</p>
+                    {% if book.average_rating %}
+                    <div class="book-rating">
+                      {% for i in "12345"|make_list %}
+                        {% if forloop.counter <= book.average_rating|floatformat:"0" %}
+                          <i class="fas fa-star"></i>
+                        {% else %}
+                          <i class="far fa-star"></i>
+                        {% endif %}
+                      {% endfor %}
+                      <span class="rating-count">({{ book.reviews.count }})</span>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+            </div>
+            {% endif %} {% endfor %}
           </div>
         </div>
       </div>
@@ -771,45 +781,63 @@
         {% if messages %}
         <div class="messages">
           {% for message in messages %}
-            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-              {{ message }}
-            </div>
+          <div
+            class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}"
+          >
+            {{ message }}
+          </div>
           {% endfor %}
         </div>
         {% endif %}
 
         <!-- Review Form -->
-        <form class="review-form" method="POST" action="{% url 'books_admin:submit_review' book.id %}">
+        <form
+          class="review-form"
+          method="POST"
+          action="{% url 'books_admin:submit_review' book.id %}"
+        >
           {% csrf_token %}
           <div class="form-group">
             <label>Your Rating <span class="required">*</span></label>
             <div class="star-rating-container">
               <div class="star-rating">
-                <input type="radio" id="star5" name="rating" value="5">
+                <input type="radio" id="star5" name="rating" value="5" />
                 <label for="star5" title="5 stars">★</label>
-                <input type="radio" id="star4" name="rating" value="4">
+                <input type="radio" id="star4" name="rating" value="4" />
                 <label for="star4" title="4 stars">★</label>
-                <input type="radio" id="star3" name="rating" value="3">
+                <input type="radio" id="star3" name="rating" value="3" />
                 <label for="star3" title="3 stars">★</label>
-                <input type="radio" id="star2" name="rating" value="2">
+                <input type="radio" id="star2" name="rating" value="2" />
                 <label for="star2" title="2 stars">★</label>
-                <input type="radio" id="star1" name="rating" value="1" required>
+                <input
+                  type="radio"
+                  id="star1"
+                  name="rating"
+                  value="1"
+                  required
+                />
                 <label for="star1" title="1 star">★</label>
               </div>
             </div>
           </div>
           <div class="form-group">
-            <label for="review-text">Your Review <span class="required">*</span></label>
+            <label for="review-text"
+              >Your Review <span class="required">*</span></label
+            >
             <div class="review-textarea-wrapper">
-              <textarea 
-                id="review-text" 
-                name="review_text" 
-                class="review-textarea" 
-                placeholder="Share your thoughts about this book... What did you like or dislike? Would you recommend it to others?" 
+              <textarea
+                id="review-text"
+                name="review_text"
+                class="review-textarea"
+                placeholder="Share your thoughts about this book... What did you like or dislike? Would you recommend it to others?"
                 required
                 maxlength="1000"
               ></textarea>
-              <div class="character-count"><span id="current-count">0</span>/<span id="max-count">1000</span></div>
+              <div class="character-count">
+                <span id="current-count">0</span>/<span id="max-count"
+                  >1000</span
+                >
+              </div>
             </div>
           </div>
           <button type="submit" class="submit-review">Submit Review</button>
@@ -818,32 +846,35 @@
         <!-- Existing Reviews -->
         <div class="reviews-list">
           {% for review in book.reviews.all %}
-            <div class="review-card">
-              <div class="review-header">
-                <div class="reviewer-info">
-                  <div>
-                    <div class="reviewer-name">{{ review.user.username }}</div>
-                    <div class="review-date">{{ review.created_at|date:"F j, Y" }}</div>
+          <div class="review-card">
+            <div class="review-header">
+              <div class="reviewer-info">
+                <div>
+                  <div class="reviewer-name">{{ review.user.username }}</div>
+                  <div class="review-date">
+                    {{ review.created_at|date:"F j, Y" }}
                   </div>
                 </div>
-                <div class="review-rating">
-                  {% for i in "12345" %}
-                    {% if i|add:"0" <= review.rating %}
-                      <i class="fas fa-star"></i>
-                    {% else %}
-                      <i class="far fa-star"></i>
-                    {% endif %}
-                  {% endfor %}
-                </div>
               </div>
-              <p class="review-content">{{ review.text }}</p>
+              <div class="review-rating">
+                {% for i in "12345" %} {% if i|add:"0" <= review.rating %}
+                <i class="fas fa-star"></i>
+                {% else %}
+                <i class="far fa-star"></i>
+                {% endif %} {% endfor %}
+              </div>
             </div>
+            <p class="review-content">{{ review.text }}</p>
+          </div>
           {% empty %}
-            <div class="review-card">
-              <p class="review-content" style="text-align: center; font-style: italic;">
-                No reviews yet. Be the first to share your thoughts!
-              </p>
-            </div>
+          <div class="review-card">
+            <p
+              class="review-content"
+              style="text-align: center; font-style: italic"
+            >
+              No reviews yet. Be the first to share your thoughts!
+            </p>
+          </div>
           {% endfor %}
         </div>
       </div>
@@ -915,23 +946,25 @@
         new Date().getFullYear();
 
       // Simple Star Rating Interaction
-      document.addEventListener('DOMContentLoaded', function() {
-        const stars = document.querySelectorAll('.star-rating input[type="radio"]');
-        stars.forEach(star => {
-          star.addEventListener('change', () => {
+      document.addEventListener("DOMContentLoaded", function () {
+        const stars = document.querySelectorAll(
+          '.star-rating input[type="radio"]'
+        );
+        stars.forEach((star) => {
+          star.addEventListener("change", () => {
             const rating = parseInt(star.value);
-            console.log('Selected rating:', rating);
+            console.log("Selected rating:", rating);
           });
         });
       });
 
       // Character count functionality
-      document.addEventListener('DOMContentLoaded', function() {
-        const textarea = document.getElementById('review-text');
-        const currentCount = document.getElementById('current-count');
-        const maxCount = document.getElementById('max-count');
-        const charCount = document.querySelector('.character-count');
-        const maxLength = parseInt(textarea.getAttribute('maxlength'));
+      document.addEventListener("DOMContentLoaded", function () {
+        const textarea = document.getElementById("review-text");
+        const currentCount = document.getElementById("current-count");
+        const maxCount = document.getElementById("max-count");
+        const charCount = document.querySelector(".character-count");
+        const maxLength = parseInt(textarea.getAttribute("maxlength"));
 
         function updateCharCount() {
           const current = textarea.value.length;
@@ -939,23 +972,23 @@
 
           // Update styling based on remaining characters
           if (current >= maxLength) {
-            charCount.classList.add('limit-reached');
-            charCount.classList.remove('limit-near');
+            charCount.classList.add("limit-reached");
+            charCount.classList.remove("limit-near");
           } else if (current >= maxLength * 0.8) {
-            charCount.classList.add('limit-near');
-            charCount.classList.remove('limit-reached');
+            charCount.classList.add("limit-near");
+            charCount.classList.remove("limit-reached");
           } else {
-            charCount.classList.remove('limit-near', 'limit-reached');
+            charCount.classList.remove("limit-near", "limit-reached");
           }
         }
 
-        textarea.addEventListener('input', updateCharCount);
-        textarea.addEventListener('keyup', updateCharCount);
+        textarea.addEventListener("input", updateCharCount);
+        textarea.addEventListener("keyup", updateCharCount);
 
         // Auto-expand textarea
-        textarea.addEventListener('input', function() {
-          this.style.height = 'auto';
-          this.style.height = (this.scrollHeight) + 'px';
+        textarea.addEventListener("input", function () {
+          this.style.height = "auto";
+          this.style.height = this.scrollHeight + "px";
         });
       });
     </script>

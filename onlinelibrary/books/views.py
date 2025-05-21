@@ -810,6 +810,11 @@ def borrowed_list(request):
         is_returned=False
     ).select_related('book')
     
+    print(f"User: {request.user}")
+    print(f"Borrowed books count: {user_borrowed.count()}")
+    for borrowed in user_borrowed:
+        print(f"Book: {borrowed.book.title}")
+    
     # Calculate due dates (14 days from borrow date)
     for borrowed in user_borrowed:
         borrowed.due_date = borrowed.borrow_date + timedelta(days=14)
