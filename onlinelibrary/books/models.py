@@ -75,17 +75,26 @@ class UserProfile(models.Model):
             'favorite_authors': [item['book__author'] for item in favorite_authors]
         }
 
-class BookReview(models.Model):
+class Review(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='reviews')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
-    review_text = models.TextField()
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)], null=False)
+    text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('book', 'user')
+        unique_together = ('book', 'user')  # One review per book per user
+        ordering = ['-created_at']  # Most recent reviews first
+
+    def __str__(self):
+        return f'Review by {self.user.username} for {self.book.title}'
 
     def save(self, *args, **kwargs):
+        # Ensure rating is between 1 and 5
+        if self.rating < 1:
+            self.rating = 1
+        elif self.rating > 5:
+            self.rating = 5
         super().save(*args, **kwargs)
         self.book.update_average_rating()
 

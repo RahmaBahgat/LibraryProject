@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
-from books.models import Notification, Book, BorrowedBook, UserProfile, BookReview
+from books.models import Notification, Book, BorrowedBook, UserProfile, Review
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.middleware.csrf import get_token
 from django.db.models import Q, Avg
@@ -301,7 +301,7 @@ def admin_home(request):
     total_books = Book.objects.count()
     borrowed_count = BorrowedBook.objects.filter(is_returned=False).count()
     total_users = User.objects.count()
-    total_reviews = BookReview.objects.count()
+    total_reviews = Review.objects.count()
     
     # Get book lists
     recent_additions = Book.objects.all().order_by('-created_at')[:10]

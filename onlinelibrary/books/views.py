@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.core.serializers import serialize
 import json
-from .models import Book, BorrowedBook, Notification, User, Genre, BookReview, UserProfile
+from .models import Book, BorrowedBook, Notification, User, Genre, UserProfile, Review
 from .forms import BookForm
 from django.urls import reverse
 from django.utils import timezone
@@ -85,7 +85,7 @@ def book_detail(request, id):
         similar_books = list(similar_books)
     
     # Get or create user review
-    user_review = BookReview.objects.filter(book=book, user=request.user).first()
+    user_review = Review.objects.filter(book=book, user=request.user).first()
     
     # Check if this book is borrowed by the user
     is_borrowed = BorrowedBook.objects.filter(
@@ -120,7 +120,7 @@ def admin_book_management(request):
     total_books = Book.objects.count()
     borrowed_count = BorrowedBook.objects.filter(is_returned=False).count()
     total_users = User.objects.count()
-    total_reviews = BookReview.objects.count()
+    total_reviews = Review.objects.count()
     
     # Get books by badge
     new_releases = books.filter(badge='new-release')[:10]
@@ -303,7 +303,7 @@ def delete_book(request, id):
         try:
             # Clear all relationships
             book.favorited_by.clear()  # Clear favorite relationships
-            book.reviews.all().delete()  # Delete all reviews
+            Review.objects.filter(book=book).delete()  # Delete all reviews
             BorrowedBook.objects.filter(book=book).delete()  # Delete borrowed records
             
             # Create notification before deleting the book
@@ -715,7 +715,7 @@ def admin_book_detail(request, id):
     book = get_object_or_404(Book, id=id)
     
     # Get book reviews
-    reviews = book.reviews.all().order_by('-created_at')
+    reviews = Review.objects.filter(book=book).order_by('-created_at')
     
     # Get borrowing history
     borrow_history = BorrowedBook.objects.filter(book=book).order_by('-borrow_date')
@@ -951,33 +951,102 @@ def remove_favorite(request, book_id):
     })
 
 @login_required
-def return_book(request, book_id):
-    book = get_object_or_404(Book, id=book_id)
-    borrowed = get_object_or_404(
-        BorrowedBook,
-        book=book,
-        user=request.user,
-        is_returned=False
-    )
+def submit_review(request, book_id):
+    if request.method == 'POST':
+        book = get_object_or_404(Book, id=book_id)
+        rating = request.POST.get('rating')
+        review_text = request.POST.get('review_text')
+        
+        # Validate rating
+        try:
+            rating = int(rating)
+            if not 1 <= rating <= 5:
+                messages.error(request, 'Rating must be between 1 and 5 stars.')
+                return redirect('books_admin:book_detail', id=book_id)
+        except (TypeError, ValueError):
+            messages.error(request, 'Please select a rating before submitting.')
+            return redirect('books_admin:book_detail', id=book_id)
+        
+        # Validate review text
+        if not review_text or not review_text.strip():
+            messages.error(request, 'Please write a review before submitting.')
+            return redirect('books_admin:book_detail', id=book_id)
+        
+        # Check if user has already reviewed this book
+        existing_review = Review.objects.filter(book=book, user=request.user).first()
+        
+        try:
+            if existing_review:
+                # Update existing review
+                existing_review.rating = rating
+                existing_review.text = review_text
+                existing_review.save()
+                messages.success(request, 'Your review has been updated!')
+                
+                # Send notification for updating review
+                Notification.objects.create(
+                    recipient=request.user,
+                    title='Review Updated',
+                    message=f"Your review for '{book.title}' has been updated successfully.",
+                    notification_type='personal',
+                    related_book=book
+                )
+                
+                # Notify admins about review update
+                admins = User.objects.filter(is_staff=True)
+                for admin in admins:
+                    Notification.objects.create(
+                        recipient=admin,
+                        title='Review Updated',
+                        message=f"User {request.user.username} has updated their review for '{book.title}'",
+                        notification_type='system',
+                        related_book=book
+                    )
+            else:
+                # Create new review
+                Review.objects.create(
+                    book=book,
+                    user=request.user,
+                    rating=rating,
+                    text=review_text
+                )
+                messages.success(request, 'Your review has been submitted!')
+                
+                # Send notification for new review
+                Notification.objects.create(
+                    recipient=request.user,
+                    title='Review Submitted',
+                    message=f"Your review for '{book.title}' has been submitted successfully.",
+                    notification_type='personal',
+                    related_book=book
+                )
+                
+                # Notify admins about new review
+                admins = User.objects.filter(is_staff=True)
+                for admin in admins:
+                    Notification.objects.create(
+                        recipient=admin,
+                        title='New Review',
+                        message=f"User {request.user.username} has submitted a new review for '{book.title}'",
+                        notification_type='system',
+                        related_book=book
+                    )
+                
+                # If this is a milestone review count (5th, 10th, 25th, etc.), notify admins
+                review_count = Review.objects.filter(book=book).count()
+                if review_count in [5, 10, 25, 50, 100]:
+                    for admin in admins:
+                        Notification.objects.create(
+                            recipient=admin,
+                            title='Review Milestone',
+                            message=f"'{book.title}' has reached {review_count} reviews!",
+                            notification_type='system',
+                            related_book=book
+                        )
+        except Exception as e:
+            messages.error(request, f'An error occurred while saving your review: {str(e)}')
+            return redirect('books_admin:book_detail', id=book_id)
+        
+        return redirect('books_admin:book_detail', id=book_id)
     
-    borrowed.is_returned = True
-    borrowed.return_date = timezone.now()
-    borrowed.save()
-    
-    # Update book stock
-    book.stock += 1
-    book.save()
-    
-    # Send notification for returning book
-    Notification.objects.create(
-        recipient=request.user,
-        title='Book Returned',
-        message=f"'{book.title}' has been returned successfully",
-        notification_type='personal',
-        related_book=book
-    )
-    
-    return JsonResponse({
-        'success': True,
-        'message': 'Book returned successfully'
-    })
+    return redirect('books_admin:book_detail', id=book_id)

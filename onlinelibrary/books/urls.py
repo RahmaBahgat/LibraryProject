@@ -14,7 +14,9 @@ urlpatterns = [
     path('delete/<int:id>/', views.delete_book, name='delete_book'),
     path('book/<int:id>/', views.admin_book_detail, name='book_detail'),
     path('book/<int:book_id>/toggle-favorite/', views.toggle_favorite, name='toggle_favorite'),
+    path('book/<int:book_id>/toggle-borrow/', views.toggle_borrow, name='toggle_borrow'),
     path('api/list/', views.api_list_books, name='api_list_books'),
     path('api/featured/', views.api_featured_books, name='api_featured_books'),
     path('api/categories/', views.api_book_categories, name='api_book_categories'),
+    path('book/<int:book_id>/submit-review/', views.submit_review, name='submit_review'),
 ]
