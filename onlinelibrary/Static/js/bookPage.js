@@ -1,16 +1,11 @@
 // Book Page Controller
 document.addEventListener("DOMContentLoaded", function () {
   // The book data is already loaded from Django view into the template
-  // Just setup the event listeners
   document.getElementById("fav-btn")?.addEventListener("click", toggleFavorite);
-  document.getElementById("borrow-btn")?.addEventListener("click", borrowBook);
-
+  
   // If the book data wasn't properly rendered in the template, try to get it from the URL
   const bookId = getBookIdFromUrl();
-  if (
-    bookId &&
-    document.querySelector(".book-title").textContent === "Book Title"
-  ) {
+  if (bookId && document.querySelector(".book-title").textContent === "Book Title") {
     // This means the template didn't receive the book data
     fetchBookData(bookId);
   }
@@ -210,36 +205,52 @@ async function toggleFavorite() {
   }
 }
 
-function borrowBook() {
-  const bookId = getBookIdFromUrl();
-  if (!bookId) return;
+function handleBorrow(button) {
+  const bookId = button.dataset.bookId;
+  const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
-  // Send request to borrow the book
-  fetch(`/book/${bookId}/borrow/`, {
+  console.log('Attempting to borrow book:', bookId);
+  console.log('CSRF Token:', csrfToken ? 'Present' : 'Missing');
+
+  fetch(`/book/${bookId}/toggle-borrow/`, {
     method: "POST",
     headers: {
-      "X-CSRFToken": getCSRFToken(),
+      "X-CSRFToken": csrfToken,
       "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
     },
+    credentials: 'same-origin'
   })
-    .then((response) => response.json())
+    .then((response) => {
+      console.log('Response status:', response.status);
+      if (!response.ok) {
+        return response.text().then(text => {
+          console.error('Error response:', text);
+          throw new Error(`HTTP error! status: ${response.status}`);
+        });
+      }
+      return response.json();
+    })
     .then((data) => {
+      console.log('Success response:', data);
       if (data.success) {
-        // Update the borrow button
-        const borrowBtn = document.getElementById("borrow-btn");
-        borrowBtn.textContent = "Borrowed";
-        borrowBtn.classList.add("borrowed");
-        borrowBtn.disabled = true;
+        // Update button state
+        button.textContent = "Borrowed";
+        button.classList.add("borrowed");
+        button.disabled = true;
 
         // Show success message
-        alert(data.message || `Book has been borrowed successfully!`);
+        alert(data.message || "Book borrowed successfully!");
+
+        // Redirect to borrowed books page
+        window.location.href = '/borrowed/';
       } else {
         // Show error message
-        alert(data.message || "Failed to borrow the book. Please try again.");
+        throw new Error(data.message || "Failed to borrow book. Please try again.");
       }
     })
     .catch((error) => {
-      console.error("Error:", error);
-      alert("An error occurred. Please try again.");
+      console.error('Error details:', error);
+      alert(error.message || "An error occurred while processing your request.");
     });
 }

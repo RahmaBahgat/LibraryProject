@@ -731,76 +731,100 @@ def admin_book_detail(request, id):
 
 @login_required
 def toggle_borrow(request, book_id):
-    book = get_object_or_404(Book, id=book_id)
-    
-    # Check if book is already borrowed by user
-    borrowed = BorrowedBook.objects.filter(
-        book=book,
-        user=request.user,
-        is_returned=False
-    ).first()
-    
-    if borrowed:
-        # Return the book
-        borrowed.is_returned = True
-        borrowed.return_date = timezone.now()
-        borrowed.save()
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
+
+    try:
+        book = get_object_or_404(Book, id=book_id)
+        print(f"Processing borrow request for book: {book.title} by user: {request.user.username}")
         
-        # Update book stock
-        book.stock += 1
-        book.save()
+        # Check if book is already borrowed by user
+        borrowed = BorrowedBook.objects.filter(
+            book=book,
+            user=request.user,
+            is_returned=False
+        ).first()
         
-        is_borrowed = False
-        # Send notification for returning book
-        Notification.objects.create(
-            recipient=request.user,
-            title='Book Returned',
-            message=f"'{book.title}' has been returned successfully",
-            notification_type='personal',
-            related_book=book
-        )
-    else:
-        # Check if book is available
-        if book.stock > 0:
-            # Borrow the book
-            BorrowedBook.objects.create(
-                user=request.user,
-                book=book
-            )
-            book.stock -= 1
+        if borrowed:
+            print(f"Book already borrowed, returning it")
+            # Return the book
+            borrowed.is_returned = True
+            borrowed.return_date = timezone.now()
+            borrowed.save()
+            
+            # Update book stock
+            book.stock += 1
             book.save()
             
-            is_borrowed = True
-            # Send notification for borrowing book
-            Notification.objects.create(
-                recipient=request.user,
-                title='Book Borrowed',
-                message=f"'{book.title}' has been borrowed successfully",
-                notification_type='personal',
-                related_book=book
-            )
-            
-            # Notify admins about book being borrowed
-            admins = User.objects.filter(is_staff=True)
-            for admin in admins:
+            is_borrowed = False
+            message = f"'{book.title}' has been returned successfully"
+        else:
+            print(f"Attempting to borrow book. Current stock: {book.stock}")
+            # Check if book is available
+            if book.stock > 0:
+                # Check if user has reached borrow limit (5 books)
+                current_borrows = BorrowedBook.objects.filter(
+                    user=request.user,
+                    is_returned=False
+                ).count()
+                
+                if current_borrows >= 5:
+                    print(f"User has reached borrow limit. Current borrows: {current_borrows}")
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'You cannot borrow more than 5 books at a time'
+                    })
+                
+                # Borrow the book
+                BorrowedBook.objects.create(
+                    user=request.user,
+                    book=book
+                )
+                book.stock -= 1
+                book.save()
+                
+                is_borrowed = True
+                message = f"'{book.title}' has been borrowed successfully"
+                print(f"Book borrowed successfully. New stock: {book.stock}")
+                
+                # Send notification for borrowing book
                 Notification.objects.create(
-                    recipient=admin,
+                    recipient=request.user,
                     title='Book Borrowed',
-                    message=f"User {request.user.username} has borrowed '{book.title}'",
-                    notification_type='system',
+                    message=message,
+                    notification_type='personal',
                     related_book=book
                 )
-        else:
-            return JsonResponse({
-                'success': False,
-                'message': 'Book is out of stock'
-            })
-    
-    return JsonResponse({
-        'success': True,
-        'is_borrowed': is_borrowed,
-        'message': 'Borrow status updated successfully'
-    })
+                
+                # Notify admins about book being borrowed
+                admins = User.objects.filter(is_staff=True)
+                for admin in admins:
+                    Notification.objects.create(
+                        recipient=admin,
+                        title='Book Borrowed',
+                        message=f"User {request.user.username} has borrowed '{book.title}'",
+                        notification_type='system',
+                        related_book=book
+                    )
+            else:
+                print(f"Book is out of stock")
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Book is out of stock'
+                })
+        
+        return JsonResponse({
+            'success': True,
+            'is_borrowed': is_borrowed,
+            'message': message
+        })
+        
+    except Exception as e:
+        print(f"Error in toggle_borrow: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'message': str(e)
+        }, status=500)
 
 @login_required
 def borrowed_list(request):
