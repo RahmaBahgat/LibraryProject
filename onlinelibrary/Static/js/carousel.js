@@ -17,75 +17,71 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function getCategories(books, isAdmin) {
-  if (isAdmin) {
-    return [
-      {
-        title: "New Arrivals",
-        subtitle: "The Latest Additions to Your Journey",
-        items: books.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 10).map(book => ({
-          type: "book",
-          id: book.id,
-          customBook: {
-            id: book.id,
-            title: book.title,
-            cover: book.image || "/static/images/default-cover.jpg",
-            badge: getBookBadge(book)
-          }
-        })),
-        editable: true
-      },
-      {
-        title: "Most Borrowed This Month",
-        subtitle: "Treasures in High Demand",
-        items: books.filter(book => book.stock < 5).map(book => ({
-          type: "book",
-          id: book.id,
-          customBook: {
-            id: book.id,
-            title: book.title,
-            cover: book.image || "/static/images/default-cover.jpg",
-            badge: "trending"
-          }
-        })),
-        editable: true
-      },
-      {
-  title: "Coming Soon",
-  subtitle: "Get Ready for These Upcoming Reads",
-  items: books
-    .filter(book => getBookBadge(book) === "coming-soon")
-    .map(book => ({
-      type: "book",
-      id: book.id,
-      customBook: {
+  return [
+    {
+      title: "New Arrivals",
+      subtitle: "The Latest Additions to Your Journey",
+      items: books.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 10).map(book => ({
+        type: "book",
         id: book.id,
-        title: book.title,
-        cover: book.image || "/static/images/default-cover.jpg",
-        badge: "coming-soon"
-      }
-    })),
-  editable: true
-},
-
-      {
-        title: "Books Needing Review",
-        subtitle: "Waiting for Your Thoughts",
-        items: books.slice(0, 4).map(book => ({
+        customBook: {
+          id: book.id,
+          title: book.title,
+          cover: book.image || "/static/images/default-cover.jpg",
+          badge: getBookBadge(book)
+        }
+      })),
+      editable: isAdmin
+    },
+    {
+      title: "Most Borrowed This Month",
+      subtitle: "Treasures in High Demand",
+      items: books.filter(book => book.stock < 5).map(book => ({
+        type: "book",
+        id: book.id,
+        customBook: {
+          id: book.id,
+          title: book.title,
+          cover: book.image || "/static/images/default-cover.jpg",
+          badge: "trending"
+        }
+      })),
+      editable: isAdmin
+    },
+    {
+      title: "Coming Soon",
+      subtitle: "Get Ready for These Upcoming Reads",
+      items: books
+        .filter(book => getBookBadge(book) === "coming-soon")
+        .map(book => ({
           type: "book",
           id: book.id,
           customBook: {
             id: book.id,
             title: book.title,
-            cover: book.image || "/static/images/default-cover.jpg"
+            cover: book.image || "/static/images/default-cover.jpg",
+            badge: "coming-soon"
           }
         })),
-        editable: true
-      }
-    ];
-  }
-  // Return user categories if not admin
-  return getDefaultCategories(false);
+      editable: isAdmin
+    },
+    {
+      title: "Books Needing Review",
+      subtitle: "Waiting for Your Thoughts",
+      items: books.slice(0, 4).map(book => ({
+        type: "book",
+        id: book.id,
+        customBook: {
+          id: book.id,
+          title: book.title,
+          cover: book.image || "/static/images/default-cover.jpg"
+        }
+      })),
+      editable: isAdmin
+    }
+  ];
 }
+
 
 function getBookBadge(book) {
   const daysSinceCreation = (new Date() - new Date(book.created_at)) / (1000 * 60 * 60 * 24);
