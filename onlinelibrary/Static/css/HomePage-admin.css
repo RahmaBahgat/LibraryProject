@@ -373,7 +373,7 @@ body {
   gap: 12px;
 }
 .section-header h2 i {
-  color: var(--brand-red);
+  color: var();
   font-size: 1.5rem;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   display: inline-block;

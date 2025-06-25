@@ -49,23 +49,6 @@ function getCategories(books, isAdmin) {
       editable: isAdmin
     },
     {
-      title: "Coming Soon",
-      subtitle: "Get Ready for These Upcoming Reads",
-      items: books
-        .filter(book => getBookBadge(book) === "coming-soon")
-        .map(book => ({
-          type: "book",
-          id: book.id,
-          customBook: {
-            id: book.id,
-            title: book.title,
-            cover: book.image || "/static/images/default-cover.jpg",
-            badge: "coming-soon"
-          }
-        })),
-      editable: isAdmin
-    },
-    {
       title: "Books Needing Review",
       subtitle: "Waiting for Your Thoughts",
       items: books.slice(0, 4).map(book => ({
