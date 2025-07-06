@@ -1,123 +1,125 @@
 # Online Library Website
- 
- ## Project Overview
- The Online Library Website allows users to browse and borrow books online. It features two user roles: Admin and User.
- 
- Admins can manage books (add, edit, delete).
- 
- Users can search, view, and borrow available books.
- 
- The website includes essential features like authentication, book management, and a dynamic navigation bar based on user roles.
- 
- ## Features
- ### Admin Functionalities
- - Sign up & Login
- - Add new books (ID, title, author, category, description)
- - View all available books
- - Edit book details
- - Delete books
- 
- ### User Functionalities
- - Sign up & Login
- - Search books by title, author, or category
- - View book details
- - Borrow available books
- - View borrowed books list
- 
- ### General Features
- - Responsive Navigation Bar (changes based on user role)
- - User Profile Management
- - Book Review System (Users can review books)
- 
- ## Team Members:
- 
- - Mariam
- 
- - Rahma
- 
- - Doha
- 
- - Maya
- 
- - Mazen 
- 
- - Zeyad
 
-# Library Management System
+> ⚠️ **Important Note:** This repository is a personal mirror of a collaborative team project originally developed during our internship.  
+> The original team repository is hosted [here](https://github.com/original-owner/original-repo) *(replace with actual link)*.  
+> All team members are fully acknowledged below, and this version showcases my personal contributions and setup.
+
+---
+
+## 🧑‍💻 Team Members:
+- Mariam  
+- Rahma (me)  
+- Doha  
+- Maya  
+- Mazen  
+- Zeyad
+
+---
+
+## ✨  My Contributions (Rahma)
+Designed and implemented the User Homepage (HomePage-user.html, CSS)
+Designed and implemented the Admin Dashboard (HomePage-admin.html, CSS, JS)
+Updated the Borrowed Books List Page (BorrowedList.js)
+Set up Book Carousel and later updated it to support dynamic Django data (Book-Carousel.js)
+Worked on Book Management Page for Admins (Book-admin.js) – added book search & management logic
+Integrated Favicon and UI identity (Favicon.html)
+Handled User Authentication setup and login page flow
+Configured Django backend framework and linked it with frontend pages
+Implemented Search functionality for managing books (title, author, category)
+Collaborated actively in connecting frontend components to Django templates and views
+
+---
+
+## 📚 Project Overview
+
+The Online Library Website allows users to browse and borrow books online.  
+It features two main roles: **Admin** and **User**.
+
+- **Admins** can manage books (add, edit, delete)
+- **Users** can search, view, and borrow available books
+
+The website includes essential features like authentication, role-based navigation, and user feedback systems.
+
+---
+
+## 💡 Features
+
+### 🔐 Admin Functionalities
+- Sign up & Login
+- Add new books (ID, title, author, category, description)
+- View all books
+- Edit book details
+- Delete books
+
+### 👤 User Functionalities
+- Sign up & Login
+- Search books by title, author, or category
+- View book details
+- Borrow available books
+- View list of borrowed books
+
+### 🧩 General Features
+- Responsive Navigation Bar based on user roles
+- User Profile Management
+- Book Review System (Users can review books)
+
+---
+
+# 📦 Library Management System
 
 A Django-based library management system with book management, user notifications, and admin features.
 
-## Setup Instructions
+---
 
-### Windows Users:
-1. Clone the repository
-2. Double-click `setup.bat` or run it from command prompt:
-   ```cmd
-   setup.bat
-   ```
+## ⚙️ Setup Instructions
 
-### Mac/Linux Users:
-1. Clone the repository
-2. Make the setup script executable and run it:
-   ```bash
-   chmod +x setup.sh
-   ./setup.sh
-   ```
+### For Windows:
 
-### Manual Setup:
-If the setup scripts don't work, follow these steps:
+setup.bat
+For Mac/Linux:
+bash
+Copy
+Edit
+chmod +x setup.sh
+./setup.sh
+Manual Setup:
+bash
+Copy
+Edit
+python -m venv venv
+# On Windows:
+venv\Scripts\activate
+# On Mac/Linux:
+source venv/bin/activate
 
-1. Create and activate a virtual environment:
-   ```bash
-   python -m venv venv
-   # On Windows:
-   venv\Scripts\activate
-   # On Mac/Linux:
-   source venv/bin/activate
-   ```
+pip install -r requirements.txt
+cd onlinelibrary
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser  # optional
+python manage.py runserver
+🏗️ Project Structure
+onlinelibrary/ – Main Django project
 
-2. Install requirements:
-   ```bash
-   pip install -r requirements.txt
-   ```
+books/ – Book management app
 
-3. Navigate to the project directory:
-   ```bash
-   cd onlinelibrary
-   ```
+static/ – Static files (CSS, JS, images)
 
-4. Run migrations:
-   ```bash
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
+templates/ – HTML templates
 
-5. Create a superuser (optional):
-   ```bash
-   python manage.py createsuperuser
-   ```
+media/ – User-uploaded files
 
-6. Run the development server:
-   ```bash
-   python manage.py runserver
-   ```
+💌 Contributing
+Fork this repository
 
-## Features
-- Book management (add, edit, delete)
-- User notifications
-- Admin dashboard
-- Responsive design
+Create a feature branch
 
-## Project Structure
-- `onlinelibrary/` - Main Django project directory
-  - `books/` - Book management app
-  - `static/` - Static files (CSS, JS, images)
-  - `templates/` - HTML templates
-  - `media/` - User-uploaded files
+Commit your changes
 
-## Contributing
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a new Pull Request
+Push to your fork
+
+Create a Pull Request
+
+🏁 Final Note
+This repo mirrors our collaborative project for educational and portfolio purposes.
+All rights, credits, and contributions are respected and acknowledged.
