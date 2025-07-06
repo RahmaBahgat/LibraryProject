@@ -1,7 +1,7 @@
 # Online Library Website
 
 > ⚠️ **Important Note:** This repository is a personal mirror of a collaborative team project originally developed during our internship.  
-> The original team repository is hosted [here](https://github.com/original-owner/original-repo) *(replace with actual link)*.  
+> The original team repository is hosted [here](https://github.com/Marria-m/LibraryProject).  
 > All team members are fully acknowledged below, and this version showcases my personal contributions and setup.
 
 ---
